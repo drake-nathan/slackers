@@ -3,7 +3,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIO = require('socket.io');
-const { disconnect } = require('process');
 
 const channelRouter = require('./routes/channel-router');
 const directMessageRouter = require('./routes/direct-message-router');
