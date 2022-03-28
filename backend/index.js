@@ -13,8 +13,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // routes
-app.use('/api/channels');
-app.use('/api/direct-messages');
+app.use('/api/channels', channelRouter);
+app.use('/api/direct-messages', directMessageRouter);
 
 // Server Setup
 const port = process.env.PORT || 8000;
