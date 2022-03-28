@@ -5,19 +5,24 @@ const http = require('http');
 const socketIO = require('socket.io');
 const { disconnect } = require('process');
 
+const channelRouter = require('./routes/channel-router');
+const directMessageRouter = require('./routes/direct-message-router');
+
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// app routes will go here
+// routes
+app.use('/api/channels', channelRouter);
+app.use('/api/direct-messages', directMessageRouter);
 
 // Server Setup
 const port = process.env.PORT || 8000;
 const server = http.createServer(app);
 // socket.io gets attached here
-// the socket represents the connection between the server and a particular client
+// the socket object represents the connection between the server and a particular client
 const io = socketIO(server);
 // attach socket listeners here
 io.on('connection', (socket) => {
@@ -28,3 +33,5 @@ io.on('connection', (socket) => {
 });
 server.listen(port);
 console.log('Server listening on:', port);
+
+module.exports = app;
