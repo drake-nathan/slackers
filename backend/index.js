@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // routes
+app.get('/test', (req, res) => res.send('Beers, Beets, Battlestar Gallactica'));
 app.use('/api/channels', channelRouter);
 app.use('/api/direct-messages', directMessageRouter);
 
