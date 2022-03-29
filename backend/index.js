@@ -20,16 +20,36 @@ app.use('/api/direct-messages', directMessageRouter);
 // Server Setup
 const port = process.env.PORT || 8000;
 const server = http.createServer(app);
+
 // socket.io gets attached here
 // the socket object represents the connection between the server and a particular client
-const io = socketIO(server);
+const io = new socketIO.Server(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+  },
+});
+
+// you can insert middleware that gets to use the socket when a client connects or an event is received from the client.
+io.use((socket, next) => {
+  console.log('hit it');
+  next();
+});
+
 // attach socket listeners here
 io.on('connection', (socket) => {
   console.log(socket.id);
+  socket.on('message_sent', ({ message, channelID }) => {
+    socket.to(channelID).emit('new_message', message);
+    // any fetching, creating, or updating to the db can be done here.
+  });
+  socket.on('join_channel', (channelID) => {
+    socket.join(channelID);
+  });
   socket.on('disconnect', () => {
     console.log('User disconnected ', socket.id);
   });
 });
+
 server.listen(port);
 console.log('Server listening on:', port);
 
