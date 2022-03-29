@@ -31,11 +31,11 @@ const io = new socketIO.Server(server, {
 
 // you can insert middleware that gets to use the socket when a client connects or an event is received from the client.
 io.use((socket, next) => {
-  console.log('hit it');
+  console.log('middleware');
   next();
 });
 
-// attach socket listeners here
+// attach socket listeners here. You can also export the io object and use it in your routes.
 io.on('connection', (socket) => {
   console.log(socket.id);
   socket.on('message_sent', ({ message, channelID }) => {
@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
     // any fetching, creating, or updating to the db can be done here.
   });
   socket.on('join_channel', (channelID) => {
+    console.log(`${socket.id} joined channel ${channelID}`);
     socket.join(channelID);
   });
   socket.on('disconnect', () => {
