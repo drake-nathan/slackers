@@ -39,8 +39,8 @@ io.use((socket, next) => {
 io.on('connection', (socket) => {
   console.log(socket.id);
   socket.on('message_sent', ({ message, channelID }) => {
-    socket.to(channelID).emit('new_message', message);
     // any fetching, creating, or updating to the db can be done here.
+    socket.to(channelID).emit('new_message', message);
   });
   socket.on('join_channel', (channelID) => {
     console.log(`${socket.id} joined channel ${channelID}`);
