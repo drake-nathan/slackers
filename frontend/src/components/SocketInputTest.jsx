@@ -6,15 +6,17 @@ const socket = io.connect('http://localhost:8000'); // back end server
 const MessageInputTest = () => {
   const [message, setMessage] = useState('');
   const [channel, setChannel] = useState('1');
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     socket.on('new_message', (data) => {
-      // do stuff here when data comes back from the server
+      console.log(data);
+      setMessages([...messages, data]);
     });
-  }, [socket]);
+  }, []);
 
   const handleClick = (e) => {
-    socket.emit('message_sent', message);
+    socket.emit('message_sent', message, channel);
   };
 
   const joinChannel = (e) => {
@@ -23,6 +25,11 @@ const MessageInputTest = () => {
 
   return (
     <>
+      <ul>
+        {messages.map((m, index) => (
+          <li key={index}>{m}</li>
+        ))}
+      </ul>
       <button onClick={joinChannel} type="button">
         Join Channel 1
       </button>

@@ -4,18 +4,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIO = require('socket.io');
 
-const channelRouter = require('./routes/channel-router');
-const directMessageRouter = require('./routes/direct-message-router');
-
 const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// routes
-app.use('/api/channels', channelRouter);
-app.use('/api/direct-messages', directMessageRouter);
 
 // Server Setup
 const port = process.env.PORT || 8000;
@@ -29,26 +18,26 @@ const io = new socketIO.Server(server, {
   },
 });
 
+const channelRouter = require('./routes/channel-router');
+const directMessageRouter = require('./routes/direct-message-router');
+
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  req.io = io;
+  return next();
+});
+
+// routes
+app.use('/api/channels', channelRouter);
+app.use('/api/direct-messages', directMessageRouter);
+
 // you can insert middleware that gets to use the socket when a client connects or an event is received from the client.
 io.use((socket, next) => {
   console.log('middleware');
   next();
-});
-
-// attach socket listeners here. You can also export the io object and use it in your routes.
-io.on('connection', (socket) => {
-  console.log(socket.id);
-  socket.on('message_sent', ({ message, channelID }) => {
-    // any fetching, creating, or updating to the db can be done here.
-    socket.to(channelID).emit('new_message', message);
-  });
-  socket.on('join_channel', (channelID) => {
-    console.log(`${socket.id} joined channel ${channelID}`);
-    socket.join(channelID);
-  });
-  socket.on('disconnect', () => {
-    console.log('User disconnected ', socket.id);
-  });
 });
 
 server.listen(port);
