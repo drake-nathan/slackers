@@ -1,6 +1,7 @@
 // instructions to setting up test database below
 // https://parsity-fulltime-3.atlassian.net/jira/software/projects/PFTC3AP/boards/1?selectedIssue=PFTC3AP-9
 const { Pool, Client } = require('pg');
+const serverPassword = require('./serverPass');
 
 const client = new Client({
   database: 'test',
@@ -10,7 +11,7 @@ const pool = new Pool({
   user: 'me',
   host: 'localhost',
   database: 'api',
-  password: '',
+  password: serverPassword,
   port: 5432,
 });
 
