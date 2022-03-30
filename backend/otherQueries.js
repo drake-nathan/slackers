@@ -1,14 +1,14 @@
 // instructions to setting up test database below
 // https://parsity-fulltime-3.atlassian.net/jira/software/projects/PFTC3AP/boards/1?selectedIssue=PFTC3AP-9
-const { Pool } = require('pg');
+// const { Pool } = require('pg');
 
-const pool = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: 'api',
-  password: serverPassword,
-  port: 5432,
-});
+// const pool = new Pool({
+//   user: 'me',
+//   host: 'localhost',
+//   database: 'api',
+//   password: serverPassword,
+//   port: 5432,
+// });
 
 const getThreadUsers = (req, res, next) => {
   const { threadId } = req.params;
