@@ -1,25 +1,11 @@
 // instructions to setting up test database below
 // https://parsity-fulltime-3.atlassian.net/jira/software/projects/PFTC3AP/boards/1?selectedIssue=PFTC3AP-9
 const { Pool, Client } = require('pg');
-const 
+const parser = require('pg-connection-string').parse;
 
-const client = new Client({
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  host:
-    process.env.NODE_ENV === 'production' ? process.env.DB_HOST : 'localhost',
-  password: process.env.DB_PASSWORD,
-  port: process.env.NODE_ENV === 'production' ? process.env.DB_PORT : 5432,
-});
+const client = new Client(parser(process.env.DATABASE_URL));
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host:
-    process.env.NODE_ENV === 'production' ? process.env.DB_HOST : 'localhost',
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.NODE_ENV === 'production' ? process.env.DB_PORT : 5432,
-});
+const pool = new Pool(parser(process.env.DATABASE_URL));
 
 const allUsers = () => `SELECT * FROM "slacker_users"`;
 const oneUser = (email, encryptedPassword) => ({

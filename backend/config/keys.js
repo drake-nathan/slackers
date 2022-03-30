@@ -1,5 +1,5 @@
-const keys = {
-  TOKEN_SECRET: 'batmanAndrobin',
-};
-
-module.exports = keys;
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./prod');
+} else {
+  module.exports = require('./dev');
+}
