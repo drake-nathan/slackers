@@ -160,7 +160,7 @@ const Underline = styled.hr`
   background-color: rgba(60, 21, 214);
   opacity: 50%;
   border: none;
-  width: 60%;
+  width: 50%;
   margin-top: -3rem;
   margin-bottom: 0.2rem;
   height: 0.5rem;
