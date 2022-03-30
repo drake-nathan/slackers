@@ -6,21 +6,19 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local');
 const keys = require('../config/keys');
 const dummyUsers = require('../test-data.js').users;
+const { client, strings } = require('../queries');
+
 // const {parseEncrypted} = require('../db/models')
 
 const localLogin = new LocalStrategy(
-  { userameField: 'email' },
+  { usernameField: 'email' },
   (email, password, done) => {
     // TODO search the db for this username and password, and call done with that user if found.
     // TODO make a decrypt passwords function to use with the database and encrypt the data.
-    const user = dummyUsers.find(
-      (u) => u.password === password && u.email === email
-    );
-    if (user) {
-      done(null, user);
-    } else {
-      done(null, false);
-    }
+    client.connect();
+    client.query(strings.allUsers(), (err, results) => {
+      console.log(results);
+    });
   }
 );
 
