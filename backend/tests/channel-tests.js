@@ -22,9 +22,9 @@ describe('Channels', () => {
 
   describe('/POST api/channels/:channel/posts', () => {});
 
-  describe('/GET api/channels/:channel/users', () => {});
-
   describe('/DELETE api/channels/:channel/posts', () => {});
 
-  describe('/POST api/channels/:channel/posts', () => {});
+  describe('/GET api/channels/:channel/users', () => {});
+
+  describe('/POST api/channels/:channel/users', () => {});
 });
