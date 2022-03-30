@@ -10,9 +10,10 @@ import * as AiIcons from 'react-icons/ai';
 // import * as HiIcons from 'react-icons/hi';
 import { SidebarData } from './SidebarData';
 import SubMenu from './SubMenu';
+import SearchBar from './SearchBar';
 
 const Nav = styled.div`
-  background: #300d30;
+  background: #342180;
   height: 60px;
   display: flex;
   justify-content: flext-start;
@@ -30,24 +31,47 @@ const NavIcon = styled(Link)`
 `;
 
 const SidebarNav = styled.nav`
-  background: #3f0e40;
+  background: #3c15d6;
   width: 250px;
   height: 100vh;
   display: flex;
   justify-conter: center;
   position: fixed;
-  top: 0;
+  top: 60px;
   left: ${({ sidebar }) => (sidebar ? '0' : '-100%')};
   transition: 150ms;
-  z-index: 10;
+  z-index: 10px;
+  color: white;
 `;
 
 const SidebarWrap = styled.div`
   width: 100%;
 `;
 
+const Slacktitle = styled.div`
+  background: #3c15d6;
+  height: 15px;
+  padding-left: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  border-top: 0.01em solid rgba(211, 211, 211, 0.2);
+  border-bottom: 0.01em solid rgba(211, 211, 211, 0.2);
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  text-decoration: none;
+  color: lightgray;
+  font-size: 24px;
+
+  &:hover {
+    background: #342180;
+    color: white;
+  }
+`;
+
 const Sidebar = () => {
-  const [sidebar, setSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState(true);
 
   const showSidebar = () => setSidebar(!sidebar);
 
@@ -57,12 +81,11 @@ const Sidebar = () => {
         <NavIcon to="#">
           <FaIcons.FaBars onClick={showSidebar} />
         </NavIcon>
+        <SearchBar />
       </Nav>
       <SidebarNav sidebar={sidebar}>
         <SidebarWrap>
-          <NavIcon to="#">
-            <AiIcons.AiOutlineClose onClick={showSidebar} />
-          </NavIcon>
+          <Slacktitle>Parsity Students</Slacktitle>
           {SidebarData.map((item, index) => (
             <SubMenu item={item} key={index} />
           ))}
