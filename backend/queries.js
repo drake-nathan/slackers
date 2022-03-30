@@ -7,7 +7,11 @@ const client = new Client({
 });
 
 const pool = new Pool({
-  database: 'test',
+  user: 'me',
+  host: 'localhost',
+  database: 'api',
+  password: '',
+  port: 5432,
 });
 
 const getDMs = (request, response) => {
