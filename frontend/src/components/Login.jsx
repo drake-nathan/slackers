@@ -8,14 +8,14 @@ import BackgroundImage from '../images/blueSwoosh.png';
 import MainImage from '../images/main-image.png';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // const [isloggedIn, setIsLoggedIn] = useState(false);
 
   const userSchema = yup
     .object()
     .shape({
-      username: yup.string().required(),
+      email: yup.string().email().required(),
       password: yup.string().required(),
     })
     .required();
@@ -24,17 +24,17 @@ function Login() {
     resolver: yupResolver(userSchema),
   });
 
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = () => {
     const loginInfo = {
-      username,
+      email,
       password,
     };
 
@@ -54,7 +54,7 @@ function Login() {
     console.log(loginInfo);
 
     // Set inputs back to blank after form submission;
-    setUsername('');
+    setEmail('');
     setPassword('');
   };
 
@@ -65,11 +65,11 @@ function Login() {
         <Header>slackers</Header>
         <Form onSubmit={handleSubmit(handleFormSubmit)}>
           <Input
-            type="text"
-            {...register('username', { required: true })}
-            placeholder="username"
-            value={username}
-            onChange={(e) => handleUsernameChange(e)}
+            type="email"
+            {...register('email', { required: true })}
+            placeholder="email"
+            value={email}
+            onChange={(e) => handleEmailChange(e)}
           />
           <Input
             type="password"
