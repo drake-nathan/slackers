@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import styled from 'styled-components';
 import GlobalStyle from '../globalStyles';
 import BackgroundImage from '../images/blueSwoosh.png';
 import MainImage from '../images/main-image.png';
+import { loginUser, useAuthState, useAuthDispatch } from '../context';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -32,26 +34,24 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleFormSubmit = () => {
-    const loginInfo = {
+  const dispatch = useAuthDispatch();
+  const { loading, errorMessage } = useAuthState(); // read the values of loading and errorMessage from context
+
+  const navigate = useNavigate();
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
       email,
       password,
     };
-
-    // Need to figure out authorization flow here with useContext instead of Redux
-
-    // const navigate = useNavigate();
-
-    // // If logging in is successful
-    // const redirect = () => {
-    //   navigate('/user');
-    // };
-
-    //   dispatch(signin(loginInfo, () => {
-    // redirect()
-    //   }));
-
-    console.log(loginInfo);
+    try {
+      const response = await loginUser(dispatch, payload); // loginUser action makes the request and handles all the neccessary state changes
+      if (!response.user) return;
+      navigate('/user/:id'); // navigate to dashboard on success - for the moment using user id as this route- NEED TO VERIFY WITH BACKEND!
+    } catch (error) {
+      console.log(error);
+    }
 
     // Set inputs back to blank after form submission;
     setEmail('');
@@ -63,6 +63,7 @@ function Login() {
       <LeftSideWrapper>
         <GlobalStyle />
         <Header>slackers</Header>
+        {errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
         <Underline />
         <Text>where those who slack go to chat</Text>
         <Form onSubmit={handleSubmit(handleFormSubmit)}>
@@ -82,7 +83,7 @@ function Login() {
               handlePasswordChange(e);
             }}
           />
-          <LoginBtn as="button" type="submit">
+          <LoginBtn as="button" type="submit" disabled={loading}>
             Login
           </LoginBtn>
         </Form>
@@ -233,6 +234,12 @@ const LoginBtn = styled.button`
   &:hover {
     background-color: #b7a2d7;
   }
+`;
+
+const ErrorMsg = styled.p`
+  color: red;
+  text-align: center;
+  margin: 1rem;
 `;
 
 const ImageBox = styled.img`
