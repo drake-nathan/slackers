@@ -63,6 +63,8 @@ function Login() {
       <LeftSideWrapper>
         <GlobalStyle />
         <Header>slackers</Header>
+        <Underline />
+        <Text>where those who slack go to chat</Text>
         <Form onSubmit={handleSubmit(handleFormSubmit)}>
           <Input
             type="email"
@@ -111,9 +113,9 @@ const LeftSideWrapper = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  @media (max-width: 500px) {
+  align-items: center;
+  @media (max-width: 550px) {
     width: 100%;
     padding: 4rem 2rem;
   }
@@ -127,52 +129,69 @@ const RightSideWrapper = styled.div`
   }
 `;
 
-const ImageBox = styled.img`
-  padding: 5rem 4rem 5rem 0;
-  max-width: 650px;
-  box-sizing: border-box;
-  transition: 0.4s;
-  @media (max-width: 1250px) {
-    max-width: 550px;
-  }
-  @media (max-width: 1100px) {
-    max-width: 450px;
-  }
-  @media (max-width: 900px) {
-    max-width: 400px;
-  }
-  @media (max-width: 900px) {
-    max-width: 400px;
-  }
-  @media (max-width: 900px) {
-    max-width: 400px;
-  }
-  @media (max-width: 700px) {
-    max-width: 300px;
-  }
-  @media (max-width: 500px) {
-    display: none;
-  }
-}
-`;
-
 const Header = styled.header`
   padding-bottom: 1rem;
+  margin-top: -3rem;
   font-size: 6.6rem;
   font-weight: 600;
   text-align: left;
   transition: 0.4s;
   @media (max-width: 1100px) {
-    font-size: 5.4rem;
+    font-size: 4.5rem;
+    margin-top: 3rem;
   }
   @media (max-width: 900px) {
-    font-size: 4.4rem;
+    font-size: 4rem;
+    margin-top: 3rem;
   }
   @media (max-width: 700px) {
     font-size: 3.5rem;
   }
   @media (max-width: 600px) {
     font-size: 3rem;
+  }
+}
+@media (max-width: 500px) {
+  margin-top:  1rem;
+}
+`;
+
+const Underline = styled.hr`
+  background-color: rgba(60, 21, 214);
+  opacity: 50%;
+  border: none;
+  width: 60%;
+  margin-top: -3rem;
+  margin-bottom: 0.2rem;
+  height: 0.5rem;
+  box-sizing: border-box;
+  transition: 0.4s;
+  @media (max-width: 1100px) {
+    margin-top: -2.2rem;
+    width: 65%;
+  }
+  @media (max-width: 900px) {
+    width: 60%;
+    margin-top: -2.3rem;
+  }
+  @media (max-width: 750px) {
+    width: 70%;
+    margin-top: -2rem;
+  }
+  @media (max-width: 500px) {
+    width: 50%;
+    margin-top: -1.9rem;
+  }
+`;
+
+const Text = styled.p`
+  margin-bottom: 2rem;
+  font-size: 1.3rem;
+  font-style: italic;
+  text-align: center;
+  padding: 0 2rem;
+  @media (max-width: 1000px) {
+    font-size: 1rem;
   }
 `;
 
@@ -214,6 +233,35 @@ const LoginBtn = styled.button`
   &:hover {
     background-color: #b7a2d7;
   }
+`;
+
+const ImageBox = styled.img`
+  padding: 5rem 4rem 5rem 0;
+  max-width: 650px;
+  box-sizing: border-box;
+  transition: 0.4s;
+  @media (max-width: 1250px) {
+    max-width: 550px;
+  }
+  @media (max-width: 1100px) {
+    max-width: 450px;
+  }
+  @media (max-width: 900px) {
+    max-width: 400px;
+  }
+  @media (max-width: 900px) {
+    max-width: 400px;
+  }
+  @media (max-width: 900px) {
+    max-width: 400px;
+  }
+  @media (max-width: 700px) {
+    max-width: 300px;
+  }
+  @media (max-width: 500px) {
+    display: none;
+  }
+}
 `;
 
 export default Login;
