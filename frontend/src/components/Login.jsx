@@ -39,16 +39,15 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (data, e) => {
     e.preventDefault();
-    const payload = {
-      email,
-      password,
-    };
+
     try {
-      const response = await loginUser(dispatch, payload); // loginUser action makes the request and handles all the neccessary state changes
-      if (!response.user) return;
-      navigate('/user/:id'); // navigate to dashboard on success - for the moment using user id as this route- NEED TO VERIFY WITH BACKEND!
+      const response = await loginUser(dispatch, { email, password });
+      console.log(response); // loginUser action makes the request and handles all the neccessary state changes
+      if (!response) return;
+      // if user found - navigate to user dashboard (using this for now)
+      navigate('/user');
     } catch (error) {
       console.log(error);
     }
