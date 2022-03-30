@@ -3,10 +3,13 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIO = require('socket.io');
+// route level authentication middleware. Expecting a JWT in the header for in the requireAuth middleware.
+const { requireSignIn, requireAuth } = require('./services/authentication');
 
 const channelRouter = require('./routes/channel-router');
 const directMessageRouter = require('./routes/direct-message-router');
 const databaseRouter = require('./routes/db-router');
+const { signin, currentUser } = require('./routes/sign-in');
 
 const app = express();
 
@@ -16,8 +19,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // routes
 app.get('/test', (req, res) => res.send('Beers, Beets, Battlestar Gallactica'));
-app.use('/api/channels', channelRouter);
-app.use('/api/direct-messages', directMessageRouter);
+app.post('/api/sign-in', requireSignIn, signin);
+app.get('/api/current-user', requireAuth, currentUser);
+app.use('/api/channels', requireAuth, channelRouter);
+app.use('/api/direct-messages', requireAuth, directMessageRouter);
 app.use('/api/database-setup', databaseRouter);
 
 // Server Setup
