@@ -17,7 +17,9 @@ function Logout() {
   };
   return (
     <div>
-      <h1>{userDetails.user.name}</h1>
+      <h1>
+        {userDetails.user.firstName} {userDetails.user.lastName}
+      </h1>
       <button type="submit" onClick={handleLogout}>
         Logout
       </button>
