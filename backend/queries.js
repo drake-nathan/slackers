@@ -28,7 +28,7 @@ const getAllChannels = (req, res, next) => {
   const query = {
     text: `
     SELECT *
-    FROM channel;
+    FROM conversation;
   `,
   };
 
@@ -46,13 +46,13 @@ const getChannelUsers = (req, res, next) => {
   const query = {
     text: `
     SELECT
-      slacker_users.userid,
+      slacker_users.user_id,
       slacker_users.name,
-      user_channel.channelid
+      user_conversation.conversation_id
     FROM
       slacker_users
-    INNER JOIN user_channel ON user_channel.userid = slacker_users.userid
-	  WHERE user_channel.channelid = $1
+    INNER JOIN user_conversation ON user_conversation.user_id = slacker_users.user_id
+	  WHERE user_conversation.conversation_id = $1
     `,
     values: [channelId],
   };
@@ -65,22 +65,22 @@ const getChannelUsers = (req, res, next) => {
   });
 };
 
-const getChannelPosts = (req, res, next) => {
+const getConversationMessages = (req, res, next) => {
   const { channelId } = req.params;
 
   const query = {
     text: `
     SELECT
       message.text,
-      message.userid,
+      message.user_id,
 	  message.createddate,
       slacker_users.name,
-      channel.channelid
+      conversation.conversation_id
     FROM
       message
-	  INNER JOIN slacker_users ON slacker_users.userid = message.userid
-    INNER JOIN channel ON channel.channelid = message.channelid
-    WHERE message.channelid = $1
+	  INNER JOIN slacker_users ON slacker_users.user_id = message.user_id
+    INNER JOIN conversation ON conversation.conversation_id = message.conversation_id
+    WHERE message.conversation_id = $1
     `,
     values: [channelId],
   };
@@ -93,14 +93,14 @@ const getChannelPosts = (req, res, next) => {
   });
 };
 
-const createChannelMessage = (req, res, next) => {
+const createConversationMessage = (req, res, next) => {
   const { channelId } = req.params;
   const { text, userid, createddate } = req.body;
 
   const query = {
     text: `
-    INSERT INTO message (userid, channelid, dmid, text, createddate)
-      VALUES ($1, $2, null, $3, $4);
+    INSERT INTO message (user_id, conversation_id, text, createddate)
+      VALUES ($1, $2, $3, $4);
     `,
     values: [userid, channelId, text, createddate],
   };
@@ -113,64 +113,102 @@ const createChannelMessage = (req, res, next) => {
   });
 };
 
-const createChannelUser = (req, res, next) => {
+const getUserChannels = (req, res, next) => {
   const { channelId } = req.params;
-  const { userid } = req.body;
+  const { text, userid, createddate } = req.body;
 
   const query = {
     text: `
-    INSERT INTO user_channel (userid, channelid)
-      VALUES ($1, $2);
+
     `,
-    values: [userid, channelId],
+    values: [],
   };
 
   client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    res.send('BOOM');
+    res.send();
   });
 };
 
-const deleteChannelMessage = (req, res, next) => {
-  const { messageId } = req.params;
-
-  const query = {
-    text: `
-    DELETE FROM message
-    WHERE messageid = $1
-    `,
-    values: [messageId],
-  };
-
-  client.query(query, (error, results) => {
-    if (error) {
-      throw error;
-    }
-    res.send('sweet!!');
-  });
-};
-
-const deleteChannelUser = (req, res, next) => {
+const getUserDms = (req, res, next) => {
   const { channelId } = req.params;
-  const { userid } = req.body;
+  const { text, userid, createddate } = req.body;
 
   const query = {
     text: `
-    DELETE FROM user_channel
-    WHERE userid = $1 AND channelid = $2
+
     `,
-    values: [userid, channelId],
+    values: [],
   };
 
   client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    res.send('sweet!!');
+    res.send();
   });
 };
+
+// const createChannelUser = (req, res, next) => {
+//   const { channelId } = req.params;
+//   const { userid } = req.body;
+
+//   const query = {
+//     text: `
+//     INSERT INTO user_conversation (user_id, conversation_id)
+//       VALUES ($1, $2);
+//     `,
+//     values: [userid, channelId],
+//   };
+
+//   client.query(query, (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     res.send('BOOM');
+//   });
+// };
+
+// const deleteChannelMessage = (req, res, next) => {
+//   const { messageId } = req.params;
+
+//   const query = {
+//     text: `
+//     DELETE FROM message
+//     WHERE message_id = $1
+//     `,
+//     values: [messageId],
+//   };
+
+//   client.query(query, (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     res.send('sweet!!');
+//   });
+// };
+
+// const deleteChannelUser = (req, res, next) => {
+//   const { channelId } = req.params;
+//   const { userid } = req.body;
+
+//   const query = {
+//     text: `
+//     DELETE FROM user_channel
+//     WHERE user_id = $1 AND channel_id = $2
+//     `,
+//     values: [userid, channelId],
+//   };
+
+//   client.query(query, (error, results) => {
+//     if (error) {
+//       throw error;
+//     }
+//     res.send('sweet!!');
+//   });
+// };
 
 async function setupDevDatabase(request, response) {
   const passwords = ['awesome', 'cool', 'epic', 'fantabulous', 'mindblowing'];
@@ -206,27 +244,26 @@ async function setupDevDatabase(request, response) {
 
   const populateConversationTable = `
     INSERT INTO "conversation" (name, description, type, private, count, createddate)
-      VALUES ('slackers', 'channel for cohort 3 fulltime agile project', ch, false, null, '2022-03-29 10:23:54'), ('slackers-backend', 'channel for backend team', ch, false, null, '2022-03-29 10:23:54'),
-      ('slackers-frontend', 'channel for frontend team', ch, false, null, '2022-03-29 10:23:54'
+      VALUES ('slackers', 'channel for cohort 3 fulltime agile project', 'channel', false, null, '2022-03-29 10:23:54'), ('slackers-backend', 'channel for backend team', 'channel', false, null, '2022-03-29 10:23:54'),('test1', 'test channel 1', 'channel', false, null, '2022-03-29 10:23:54'), ('test2', 'test channel 2', 'channel', false, null, '2022-03-29 10:23:54'), ('test3', 'test channel 3', 'channel', false, null, '2022-03-29 10:23:54'), ('slackers-frontend', 'channel for frontend team', 'channel', false, null, '2022-03-29 10:23:54'
     );`;
 
   const createUserConversationJunction = `
     CREATE TABLE user_conversation (
         user_id integer REFERENCES "slacker_users"(user_id),
         conversation_id integer REFERENCES "conversation"(conversation_id),
-        CONSTRAINT user_channel_pkey PRIMARY KEY (user_id, conversation_id)
+        CONSTRAINT user_conversation_pkey PRIMARY KEY (user_id, conversation_id)
     );`;
 
   const populateUserConversationTable = `
-    INSERT INTO "user_conversation" (user_id, channel_id)
-      VALUES (1, 5), (2, 6), (3, 2), (2, 3), (4, 1), (2, 2), (2, 4), (3, 6);
+    INSERT INTO "user_conversation" (user_id, conversation_id)
+      VALUES (1, 5), (2, 2), (2, 3), (2, 4), (2, 6), (3, 2), (3, 6), (4, 1);
     `;
 
   const createMessageTable = `
     CREATE TABLE message (
         message_id int GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
         user_id integer REFERENCES "slacker_users"(user_id),
-        conversation_id integer REFERENCES "channel"(conversation_id),
+        conversation_id integer REFERENCES "conversation"(conversation_id),
         text varchar,
         createdDate timestamp
     );`;
@@ -238,12 +275,12 @@ async function setupDevDatabase(request, response) {
       (2, 3, 'channel 3 for the win', '2022-03-25 07:30:00'),
       (2, 2, 'how are you liking channel 2?', '2022-03-30 02:45:15'), 
       (3, 2, 'it is okay', '2022-03-30 02:47:15'),
-      (1, 4, 1, 'hey user 2', '2022-03-30 11:15:15'),
-      (2, 4, 1, 'hey user 1', '2022-03-30 11:20:15'),
-      (1, 5, 2, 'hi how are you doing', '2022-03-30 11:16:15'),
-      (3, 6, 3, 'user 1 is so annoying haha', '2022-03-30 11:16:55'),
-      (2, 6, 3, 'what are you talking about', '2022-03-30 11:18:15'),
-      (2, 6, 3, 'oh i see now', '2022-03-30 11:21:17');
+      (1, 4, 'hey user 2', '2022-03-30 11:15:15'),
+      (2, 4, 'hey user 1', '2022-03-30 11:20:15'),
+      (1, 5, 'hi how are you doing', '2022-03-30 11:16:15'),
+      (3, 6, 'user 1 is so annoying haha', '2022-03-30 11:16:55'),
+      (2, 6, 'what are you talking about', '2022-03-30 11:18:15'),
+      (2, 6, 'oh i see now', '2022-03-30 11:21:17');
     `;
 
   await client.query(createUserTable).catch((err) => {
@@ -303,10 +340,9 @@ module.exports = {
   client,
   setupDevDatabase,
   getAllChannels,
-  getChannelPosts,
+  getConversationMessages,
   getChannelUsers,
-  createChannelMessage,
-  deleteChannelMessage,
-  createChannelUser,
-  deleteChannelUser,
+  createConversationMessage,
+  getUserChannels,
+  getUserDms,
 };

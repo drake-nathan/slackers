@@ -6,15 +6,15 @@ router.route('/').get(db.getAllChannels);
 
 router
   .route('/:channelId/posts')
-  .get(db.getChannelPosts)
-  .post(db.createChannelMessage);
+  .get(db.getConversationMessages)
+  .post(db.createConversationMessage);
 
 router
   .route('/:channelId/users')
   .get(db.getChannelUsers)
-  .post(db.createChannelUser)
-  .delete(db.deleteChannelUser);
+  .post((req, res) => res.send('hey'))
+  .delete((req, res) => res.send('hey'));
 
-router.route('/posts/:messageId/').delete(db.deleteChannelMessage);
+router.route('/posts/:messageId/').delete((req, res) => res.send('hey'));
 
 module.exports = router;
