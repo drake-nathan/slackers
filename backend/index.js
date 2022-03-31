@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIO = require('socket.io');
 
-// connect to the DB!
+// Connect to the DB! (no need to end the connection)
 const { client } = require('./queries');
 
 client.connect((err) => {
