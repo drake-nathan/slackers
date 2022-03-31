@@ -1,6 +1,6 @@
-// NOTE - for now the root url is blank and I was using testing data - see below
+// NOTE - for now the root url is blank and I was using testing data - see below for functions
 
-const ROOT_URL = '';
+// const ROOT_URL = '';
 
 const users = [
   {
@@ -50,7 +50,9 @@ const users = [
   },
 ];
 
-// FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data form a URL
+// These function dispatch multiple state updates as a result of an Http request or side-effect. The loginUser function will handle asynchronous requests to the server to authenticate a user login details and a logout function used to log a user out of an authenticated session.
+
+// NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data form a URL
 export async function loginUser(dispatch, loginPayload) {
   // const requestOptions = {
   //   method: 'POST',
@@ -58,13 +60,12 @@ export async function loginUser(dispatch, loginPayload) {
   // body: JSON.stringify(loginPayload),
   // };
 
-  // Also NOTE that the response was CHANGED to accomodate the test data - when we get a url I will switch back and turn back on the response.json()
+  // Also NOTE that the response was CHANGED to accomodate the test data - I did a find of the test data BUT when we get a url I will switch back and turn back on the response.json()
   try {
     dispatch({ type: 'REQUEST_LOGIN' });
     const response = users.find((user) => user.email === loginPayload.email);
     // const response = await fetch(`${ROOT_URL}`, requestOptions);
-    const data = response;
-    console.log(response);
+    const data = await response;
     //  response.json();
 
     if (data) {

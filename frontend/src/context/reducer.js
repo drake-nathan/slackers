@@ -1,4 +1,4 @@
-// import React, { useReducer } from 'react';
+// Below we are either retrieving or storing user info and the jwt token for the logged in user;
 
 const user = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser')).user
@@ -7,6 +7,7 @@ const token = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser')).auth_token
   : '';
 
+// Initial state
 export const initialState = {
   userDetails: '' || user,
   token: '' || token,
