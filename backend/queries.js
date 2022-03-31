@@ -13,9 +13,9 @@ const strings = {};
 // ------------- QUERIES GO HERE---------------------
 
 strings.allUsers = () => `SELECT * FROM "slacker_users"`;
-strings.oneUser = (email, encryptedPassword) => ({
-  text: `SELECT * FROM "slacker_users" WHERE email = $1 AND password = $2`,
-  values: [email, encryptedPassword],
+strings.oneUser = (email) => ({
+  text: `SELECT * FROM "slacker_users" WHERE email = $1`,
+  values: [email],
 });
 strings.userById = (id) => ({
   text: `SELECT * FROM "slacker_users" WHERE userid = $1`,
@@ -45,7 +45,6 @@ const getChannelUsers = (req, res, next) => {
     if (error) {
       throw error;
     }
-    client.end();
     res.send(results.rows);
   });
 };
@@ -74,7 +73,6 @@ const getChannelPosts = (req, res, next) => {
     if (error) {
       throw error;
     }
-    client.end();
     res.send(results.rows);
   });
 };
@@ -95,7 +93,6 @@ const createChannelMessage = (req, res, next) => {
     if (error) {
       throw error;
     }
-    client.end();
     res.send('cool!');
   });
 };
@@ -116,7 +113,6 @@ const createChannelUser = (req, res, next) => {
     if (error) {
       throw error;
     }
-    client.end();
     res.send('BOOM');
   });
 };
@@ -136,7 +132,6 @@ const deleteChannelMessage = (req, res, next) => {
     if (error) {
       throw error;
     }
-    client.end();
     res.send('sweet!!');
   });
 };
@@ -157,7 +152,6 @@ const deleteChannelUser = (req, res, next) => {
     if (error) {
       throw error;
     }
-    client.end();
     res.send('sweet!!');
   });
 };
@@ -306,7 +300,6 @@ async function setupDevDatabase(request, response) {
   });
   console.log('+++++ message table was successfully populated');
 
-  client.end();
   response.send();
 }
 
