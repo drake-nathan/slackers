@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../queries');
+const db = require('../queries/queries');
 
 // all routes here are going to /api/direct-messages
 router.route('/').get();
