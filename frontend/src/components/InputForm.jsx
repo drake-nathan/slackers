@@ -1,7 +1,9 @@
-import { useState } from 'react';
+/* eslint-disable import/no-relative-packages */
+import { useState, useEffect, useRef } from 'react';
 // import io from 'socket.io-client';
 import styled from 'styled-components';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import { messages } from '../test-data';
 
 const moment = require('moment');
 
@@ -38,29 +40,17 @@ const ChatHeader = styled.h1`
   border: none; ;
 `;
 
-// eslint-disable-next-line react/prop-types
 const Chat = () => {
   const date = moment().format('MMMM Do YYYY, h:mm a');
-
+  const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
-  const [chat, setChat] = useState([
-    {
-      user: 'User1',
-      text: 'Hello',
-      time: date,
-    },
-    {
-      user: 'User2',
-      text: 'Good day',
-      time: date,
-    },
-  ]);
+  const [chat, setChat] = useState(messages);
 
   const chatWindow = () =>
     chat.map((m, i) => (
-      <ChatWindow key={i}>
+      <ChatWindow key={i} id={i}>
         <p>
-          {m.user} - {m.time}
+          {m.userName} - {date}
         </p>
         <p>
           <small>{m.text}</small>
@@ -68,12 +58,21 @@ const Chat = () => {
       </ChatWindow>
     ));
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chat]);
+
   const sendMsg = (newMsg) => {
     setChat((previousMsgs) => [...previousMsgs, newMsg]);
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
+
     if (!message) {
       alert('enter text');
     } else {
@@ -82,29 +81,35 @@ const Chat = () => {
         text: message,
         time: date,
       });
-      document.getElementById('message-form').reset();
+      const elem = document.getElementById('message-form');
+      elem.reset();
       setMessage('');
+      scrollToBottom();
     }
   };
+
   return (
     <div className="container">
       <div className="col-md-6">
-        {chatWindow()}
-        <form
-          className="form-inline"
-          id="message-form"
-          onSubmit={handleSendMessage}
-        >
-          <MessageInput
-            className="form-control"
-            type="text"
-            placeholder="Send a Message"
-            onChange={(event) => setMessage(event.target.value)}
-          />
-          <SendButton type="submit" className="btn btn-primary">
-            <FaRegPaperPlane />
-          </SendButton>
-        </form>
+        <div id="messages-div">{chatWindow()}</div>
+        <div ref={messagesEndRef} />
+        <div id="message-form-div">
+          <form
+            className="form-inline"
+            id="message-form"
+            onSubmit={handleSendMessage}
+          >
+            <MessageInput
+              className="form-control"
+              type="text"
+              placeholder="Send a Message"
+              onChange={(event) => setMessage(event.target.value)}
+            />
+            <SendButton type="submit" className="btn btn-primary">
+              <FaRegPaperPlane />
+            </SendButton>
+          </form>
+        </div>
       </div>
     </div>
   );
