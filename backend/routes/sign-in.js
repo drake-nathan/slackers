@@ -4,7 +4,7 @@ const keys = require('../config/keys');
 function tokenGenerator(user) {
   return jwt.encode(
     {
-      sub: user.userId,
+      sub: user.userid,
       iat: Math.round(Date.now() / 1000),
       exp: Math.round(Date.now() / 1000 + 5 * 60 * 60),
     },

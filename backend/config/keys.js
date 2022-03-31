@@ -1,7 +1,5 @@
-const keys = {
-  TOKEN_SECRET: 'batmanAndrobin',
-  // TODO put the connection string for PG db here
-  //
-};
-
-module.exports = keys;
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./prod');
+} else {
+  module.exports = require('./dev');
+}
