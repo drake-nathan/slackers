@@ -5,6 +5,14 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIO = require('socket.io');
+
+// connect to the DB!
+const { client } = require('./queries');
+
+await client.connect((err) => {
+  if (err) console.log(err);
+});
+
 // route level authentication middleware. Expecting a JWT in the header for in the requireAuth middleware.
 const { requireSignIn, requireAuth } = require('./services/authentication');
 

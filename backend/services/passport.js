@@ -15,9 +15,11 @@ const localLogin = new LocalStrategy(
   (email, password, done) => {
     // TODO search the db for this username and password, and call done with that user if found.
     // TODO make a decrypt passwords function to use with the database and encrypt the data.
-    client.connect();
-    client.query(strings.allUsers(), (err, results) => {
-      console.log(results);
+    client.connect((err) => {
+      if (err) throw err;
+      client.query(strings.oneUser(email, password), (err, results) => {
+        done(null, results.rows[0]);
+      });
     });
   }
 );
