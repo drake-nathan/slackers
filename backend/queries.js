@@ -7,12 +7,18 @@ const client = new Client(parser(process.env.DATABASE_URL));
 
 const pool = new Pool(parser(process.env.DATABASE_URL));
 
+const strings = {};
+
 // ------------- QUERIES GO HERE---------------------
 
-const allUsers = () => `SELECT * FROM "slacker_users"`;
-const oneUser = (email, encryptedPassword) => ({
+strings.allUsers = () => `SELECT * FROM "slacker_users"`;
+strings.oneUser = (email, encryptedPassword) => ({
   text: `SELECT * FROM "slacker_users" WHERE email = $1 AND password = $2`,
   values: [email, encryptedPassword],
+});
+strings.userById = (id) => ({
+  text: `SELECT * FROM "slacker_users" WHERE "userID" = $1`,
+  values: [id],
 });
 
 // ---------------------------------------------------
@@ -138,7 +144,5 @@ async function setupDevDatabase(request, response) {
   client.end();
   response.send();
 }
-
-const strings = { allUsers, oneUser };
 
 module.exports = { strings, getDMs, setupDevDatabase, pool, client };
