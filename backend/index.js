@@ -20,9 +20,9 @@ client.connect((err) => {
 const { requireSignIn, requireAuth } = require('./services/authentication');
 
 const channelRouter = require('./routes/channel-router');
-const currentUserRouter = require('./routes/current-user-router');
+const directMessageRouter = require('./routes/direct-message-router');
 const databaseRouter = require('./routes/db-router');
-const { signin } = require('./routes/sign-in');
+const { signin, currentUser } = require('./routes/sign-in');
 
 const app = express();
 
@@ -33,8 +33,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // routes
 app.get('/test', (req, res) => res.send('Beers, Beets, Battlestar Gallactica'));
 app.post('/api/sign-in', requireSignIn, signin);
-app.use('/api/me', requireAuth, currentUserRouter);
+app.get('/api/current-user', requireAuth, currentUser);
 app.use('/api/channels', requireAuth, channelRouter);
+app.use('/api/direct-messages', requireAuth, directMessageRouter);
 app.use('/api/database-setup', databaseRouter);
 
 // Server Setup
@@ -57,15 +58,12 @@ io.use((socket, next) => {
 
 // attach socket listeners here. You can also export the io object and use it in your routes.
 io.on('connection', (socket) => {
-  // socket id = unique identifier for user
   console.log(socket.id);
   socket.on('message_sent', ({ message, channelID }) => {
-    // add to database
     socket.to(channelID).emit('new_message', message);
     // any fetching, creating, or updating to the db can be done here.
   });
   socket.on('join_channel', (channelID) => {
-    // query db for messages
     console.log(`${socket.id} joined channel ${channelID}`);
     socket.join(channelID);
   });
