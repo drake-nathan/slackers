@@ -7,7 +7,6 @@ const token = localStorage.getItem('currentUser')
   ? JSON.parse(localStorage.getItem('currentUser')).auth_token
   : '';
 
-// Initial state
 export const initialState = {
   userDetails: '' || user,
   token: '' || token,
@@ -15,36 +14,33 @@ export const initialState = {
   errorMessage: null,
 };
 
-// eslint-disable-next-line no-shadow
-export const AuthReducer = (initialState, action) => {
-  switch (action.type) {
+export const AuthReducer = (state, { type, payload, error }) => {
+  switch (type) {
     case 'REQUEST_LOGIN':
       return {
-        ...initialState,
+        ...state,
         loading: true,
       };
     case 'LOGIN_SUCCESS':
       return {
-        ...initialState,
-        user: action.payload.user,
-        token: action.payload.auth_token,
+        ...state,
+        user: payload.user,
+        token: payload.auth_token,
         loading: false,
       };
     case 'LOGOUT':
       return {
-        ...initialState,
+        ...state,
         user: '',
         token: '',
       };
-
     case 'LOGIN_ERROR':
       return {
-        ...initialState,
+        ...state,
         loading: false,
-        errorMessage: action.error,
+        errorMessage: error,
       };
-
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      throw new Error(`Unhandled action type: ${type}`);
   }
 };
