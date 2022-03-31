@@ -104,33 +104,40 @@ const InputForm = () => (
 
 const Container = styled.div``;
 
-const Form = styled.form``;
+const Form = styled.form`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+`;
 
 const SendButton = styled.button`
   color: #3c15d6;
   font-size: 1em;
   margin: 0.1em;
   padding: 0.25em 1em;
-  border: 2px solid #3c15d6;
   border-radius: 8px;
+  position: relative;
+  background-color: white;
+  height: 50%;
+  align-self: center;
 `;
 
 const MessageInput = styled.input`
   width: 50%;
   height: 120px;
-  padding: 1rem;
+  padding: 0.25rem 2rem;
   margin: 0.5em 0em 0.5em 20em;
-  color: lightgrey;
+  color: #1e1926;
   background: white;
   font-size: 1.2rem;
   font-style: italic;
   border: 1px solid #3c15d6;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  position: absolute;
-  outline: none;
+  position: fixed;
   bottom: 5%;
-  left: 5%;
+  left: 10%;
+  outline: none;
 `;
 
 const ChatWindow = styled.div`
@@ -147,7 +154,7 @@ const ChatHeader = styled.h1`
   margin-top: 0;
   margin-bottom: 3rem;
   background: #ffffff;
-  color: #131926;
+  color: #1e1926;
   border-bottom: 1px solid #3c15d6;
 `;
 

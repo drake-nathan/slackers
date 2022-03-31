@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
+// import * as AiIcons from 'react-icons/ai';
 // import * as IoIcons from 'react-icons/io';
 // import * as RiIcons from 'react-icons/ri';
 // import * as BiIcons from 'react-icons/bi';
@@ -39,7 +39,6 @@ const Sidebar = () => {
 
 const Nav = styled.div`
   background: #362b48;
-  // background: #403159;
   height: 60px;
   display: flex;
   justify-content: flext-start;
@@ -57,14 +56,14 @@ const NavIcon = styled(Link)`
 `;
 
 const SidebarNav = styled.nav`
-  background: #403159;
+  background: linear-gradient(to bottom, #403159, #5b4773);
   width: 250px;
   height: 100vh;
   display: flex;
   justify-conter: center;
   position: fixed;
   top: 60px;
-  // left: ${({ sidebar }) => (sidebar ? '0' : '-100%')};
+  left: ${({ sidebar }) => (sidebar ? '0' : '-100%')};
   transition: 150ms;
   z-index: 10px;
   color: white;
