@@ -1,31 +1,167 @@
 // instructions to setting up test database below
 // https://parsity-fulltime-3.atlassian.net/jira/software/projects/PFTC3AP/boards/1?selectedIssue=PFTC3AP-9
-const { Pool, Client } = require('pg');
+const { Client } = require('pg');
 
-const client = new Client({
-  database: 'test',
-});
-
-const pool = new Pool({
+const config = {
   user: 'me',
   host: 'localhost',
-  database: 'test',
+  database: 'api',
+  password: '',
   port: 5432,
-});
+};
 
-const getDMs = (request, response) => {
-  const query = `
-    SELECT * FROM "dm";`;
+const getChannelUsers = (req, res, next) => {
+  const client = new Client(config);
+  client.connect();
+  const { channelId } = req.params;
 
-  pool.query(query, (error, results) => {
+  const query = {
+    text: `
+    SELECT
+      slacker_users.userid,
+      slacker_users.name,
+      user_channel.channelid
+    FROM
+      slacker_users
+    INNER JOIN user_channel ON user_channel.userid = slacker_users.userid
+	  WHERE user_channel.channelid = $1
+    `,
+    values: [channelId],
+  };
+
+  client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    response.send(results.rows);
+    client.end();
+    res.send(results.rows);
+  });
+};
+
+const getChannelPosts = (req, res, next) => {
+  const client = new Client(config);
+  client.connect();
+  const { channelId } = req.params;
+
+  const query = {
+    text: `
+    SELECT
+      message.text,
+      message.userid,
+	  message.createddate,
+      slacker_users.name,
+      channel.channelid
+    FROM
+      message
+	  INNER JOIN slacker_users ON slacker_users.userid = message.userid
+    INNER JOIN channel ON channel.channelid = message.channelid
+    WHERE message.channelid = $1
+    `,
+    values: [channelId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    client.end();
+    res.send(results.rows);
+  });
+};
+
+const createChannelMessage = (req, res, next) => {
+  const client = new Client(config);
+  client.connect();
+  const { channelId } = req.params;
+  const { text, userid, createddate } = req.body;
+
+  const query = {
+    text: `
+    INSERT INTO message (userid, channelid, dmid, text, createddate)
+      VALUES ($1, $2, null, $3, $4);
+    `,
+    values: [userid, channelId, text, createddate],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    client.end();
+    res.send('cool!');
+  });
+};
+
+const createChannelUser = (req, res, next) => {
+  const client = new Client(config);
+  client.connect();
+  const { channelId } = req.params;
+  const { userid } = req.body;
+
+  const query = {
+    text: `
+    INSERT INTO user_channel (userid, channelid)
+      VALUES ($1, $2);
+    `,
+    values: [userid, channelId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    client.end();
+    res.send('BOOM');
+  });
+};
+
+const deleteChannelMessage = (req, res, next) => {
+  const client = new Client(config);
+  client.connect();
+  const { messageId } = req.params;
+
+  const query = {
+    text: `
+    DELETE FROM message
+    WHERE messageid = $1
+    `,
+    values: [messageId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    client.end();
+    res.send('sweet!!');
+  });
+};
+
+const deleteChannelUser = (req, res, next) => {
+  const client = new Client(config);
+  client.connect();
+  const { channelId } = req.params;
+  const { userid } = req.body;
+
+  const query = {
+    text: `
+    DELETE FROM user_channel
+    WHERE userid = $1 AND channelid = $2
+    `,
+    values: [userid, channelId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    client.end();
+    res.send('sweet!!');
   });
 };
 
 async function setupDevDatabase(request, response) {
+  const client = new Client(config);
   client.connect();
 
   const createUserTable = `
@@ -168,6 +304,11 @@ async function setupDevDatabase(request, response) {
 }
 
 module.exports = {
-  getDMs,
   setupDevDatabase,
+  getChannelPosts,
+  getChannelUsers,
+  createChannelMessage,
+  deleteChannelMessage,
+  createChannelUser,
+  deleteChannelUser,
 };
