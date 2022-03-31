@@ -10,7 +10,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 
 // Connect to the DB! (no need to end the connection)
-const { client } = require('./queries');
+const { client } = require('./queries/queries');
 
 client.connect((err) => {
   if (err) console.log(err);

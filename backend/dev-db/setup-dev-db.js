@@ -125,4 +125,4 @@ async function setupDevDatabase(request, response) {
   response.send();
 }
 
-module.exports = setupDevDatabase;
+module.exports = { setupDevDatabase };
