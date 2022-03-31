@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GlobalStyle from '../globalStyles';
 import BackgroundImage from '../images/blueSwoosh.png';
 import MainImage from '../images/main-image.png';
@@ -47,16 +47,48 @@ function Login() {
     try {
       const response = await loginUser(dispatch, { email, password });
       console.log(response); // loginUser action makes the request and handles all the neccessary state changes
+
+      // Set inputs back to blank after form submission;
+      setEmail('');
+      setPassword('');
+
       if (!response) return;
       // if user found - navigate to user dashboard
       navigate('/user');
     } catch (error) {
       console.log(error);
     }
-    // Set inputs back to blank after form submission;
-    setEmail('');
-    setPassword('');
   };
+
+  // For error messages, so they don't persist
+  const [emailErr, setEmailErr] = useState(false);
+  const [passErr, setPassErr] = useState(false);
+  useEffect(() => {
+    // message is empty (meaning no errors). Adjust as needed
+    if (!errors.email) {
+      setEmailErr(false);
+      return;
+    }
+    // error exists. Display the message and hide after 5 secs
+    setEmailErr(true);
+    const timer = setTimeout(() => {
+      setEmailErr(false);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [errors]); // executes every time `message` changes. Adjust as needed
+
+  useEffect(() => {
+    if (!errors.password) {
+      setPassErr(false);
+      return;
+    }
+    setPassErr(true);
+    const timer = setTimeout(() => {
+      setPassErr(false);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [errors]); // executes every time `message` changes. Adjust as needed
 
   return (
     <Container>
@@ -73,7 +105,9 @@ function Login() {
             value={email}
             onChange={(e) => handleEmailChange(e)}
           />
-          {errors?.email?.message}
+          {emailErr ? (
+            <ErrorInput>Please enter a valid email</ErrorInput>
+          ) : null}
           <Input
             {...register('password', { required: true })}
             placeholder="password"
@@ -82,7 +116,7 @@ function Login() {
               handlePasswordChange(e);
             }}
           />
-          {errors?.password?.message}
+          {passErr ? <ErrorInput>Password is incorrect</ErrorInput> : null}
           <LoginBtn as="button" type="submit" disabled={loading}>
             Login
           </LoginBtn>
@@ -242,6 +276,10 @@ const ErrorMsg = styled.p`
   margin: 1rem;
 `;
 
+const ErrorInput = styled.p`
+  color: red;
+  text-align: center;
+`;
 const ImageBox = styled.img`
   padding: 5rem 4rem 5rem 0;
   max-width: 650px;
