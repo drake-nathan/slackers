@@ -134,7 +134,7 @@ const getUserChannels = (req, res, next) => {
 const getUserDms = (req, res, next) => {
   const { channelId } = req.params;
   const { text, userid, createddate } = req.body;
-
+  // TODO write a query that finds all the DMs associated with a user.
   const query = {
     text: `
 
@@ -146,6 +146,7 @@ const getUserDms = (req, res, next) => {
     if (error) {
       throw error;
     }
+    // TODO
     res.send();
   });
 };
