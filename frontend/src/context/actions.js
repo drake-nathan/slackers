@@ -1,6 +1,6 @@
 // NOTE - for now the root url is blank and I was using testing data - see below for functions
-
-// const ROOT_URL = '';
+// NOTE - mgrum: URL is hardcoded for now until I get the dev database working.
+const ROOT_URL = 'http://localhost:8000/api';
 
 const users = [
   {
@@ -53,33 +53,47 @@ const users = [
 // These function dispatch multiple state updates as a result of an Http request or side-effect. The loginUser function will handle asynchronous requests to the server to authenticate a user login details and a logout function used to log a user out of an authenticated session.
 
 // NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data from a URL
+// NOTE done. loginPayload is encoded and sent to the endpoint, and user and auth_token are returned as json.
 export async function loginUser(dispatch, loginPayload) {
-  // const requestOptions = {
-  //   method: 'POST',
-  // headers: { 'Content-Type': 'application/json' },
-  // body: JSON.stringify(loginPayload),
-  // };
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    },
+    body: new URLSearchParams(loginPayload),
+  };
 
   // Also NOTE that the response was CHANGED to accomodate the test data - I did a find of the test data BUT when we get a url I will switch back and turn back on the response.json()
+  // NOTE updated by mgrum: completed the above task.
   try {
     dispatch({ type: 'REQUEST_LOGIN' });
-    const response = users.find((user) => user.email === loginPayload.email);
-    // const response = await fetch(`${ROOT_URL}`, requestOptions);
-    const data = await response;
-    //  response.json();
+    const response = await fetch(`${ROOT_URL}/sign-in`, requestOptions);
 
-    if (data) {
+    if (response.ok) {
+      const data = await response.json();
       dispatch({ type: 'LOGIN_SUCCESS', payload: data });
       localStorage.setItem('currentUser', JSON.stringify(data));
       return data;
     }
+    if (response.status === 401) {
+      console.log('not found');
+      dispatch({
+        type: 'LOGIN_ERROR',
+        error: 'Invalid username and/or password.',
+      });
+      return;
+    }
+    dispatch({
+      type: 'LOGIN_ERROR',
+      error: `${response.status} error.`,
+    });
 
     // FOR THE MOMENT, without the URL, the data.errors doesn't work so just console.logging. Will turn it back on when the url is set
-    console.log('not found');
-    // dispatch({ type: 'LOGIN_ERROR', error: data.errors[0] });
-    return;
+    // mgrum update: connected to the backend. Should work now.
   } catch (error) {
-    dispatch({ type: 'LOGIN_ERROR', error });
+    dispatch({ type: 'LOGIN_ERROR', error: error.toString() });
+    console.log(error);
+    return null;
   }
 }
 
