@@ -24,6 +24,22 @@ strings.userById = (id) => ({
 
 // ---------------------------------------------------
 
+const getAllChannels = (req, res, next) => {
+  const query = {
+    text: `
+    SELECT *
+    FROM channel;
+  `,
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    res.send(results.rows);
+  });
+};
+
 const getChannelUsers = (req, res, next) => {
   const { channelId } = req.params;
 
@@ -308,6 +324,7 @@ module.exports = {
   pool,
   client,
   setupDevDatabase,
+  getAllChannels,
   getChannelPosts,
   getChannelUsers,
   createChannelMessage,
