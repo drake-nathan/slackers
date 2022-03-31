@@ -3,48 +3,28 @@ import { useState, useEffect, useRef } from 'react';
 // import io from 'socket.io-client';
 import styled from 'styled-components';
 import { FaRegPaperPlane } from 'react-icons/fa';
-import { messages } from '../test-data';
+import GlobalStyle from '../globalStyles';
 
 const moment = require('moment');
 
-const SendButton = styled.button`
-  color: green;
-  font-size: 1em;
-  margin: 0.1em;
-  padding: 0.25em 1em;
-  border: 2px solid green;
-  border-radius: 3px;
-`;
-
-const MessageInput = styled.input`
-  width: 600px;
-  padding: 0.5em;
-  margin: 0.5em 0em 0.5em 20em;
-  color: black;
-  background: white;
-  border: none;
-  border-radius: 3px;
-`;
-
-const ChatWindow = styled.div`
-  padding: 0.5em;
-  margin: 0em 0em 0em 16.75em;
-  background: #e8e6df;
-  border: none;
-`;
-
-const ChatHeader = styled.h1`
-  padding: 0.5em;
-  margin: 0em 0em 0em 8em;
-  background: #e8e6df;
-  border: none; ;
-`;
-
+// eslint-disable-next-line react/prop-types
 const Chat = () => {
   const date = moment().format('MMMM Do YYYY, h:mm a');
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
-  const [chat, setChat] = useState(messages);
+  const [chat, setChat] = useState([
+    {
+      user: 'User1',
+      text: 'Hello',
+      time: date,
+    },
+    {
+      user: 'User2',
+      text: 'Good day',
+      time: date,
+    },
+  ]);
+  const [error, setError] = useState(false);
 
   const chatWindow = () =>
     chat.map((m, i) => (
@@ -74,7 +54,8 @@ const Chat = () => {
     e.preventDefault();
 
     if (!message) {
-      alert('enter text');
+      // alert('enter text');
+      setError(true);
     } else {
       sendMsg({
         user: 'Username',
@@ -89,29 +70,28 @@ const Chat = () => {
   };
 
   return (
-    <div className="container">
+    <Container>
+      <GlobalStyle />
       <div className="col-md-6">
-        <div id="messages-div">{chatWindow()}</div>
-        <div ref={messagesEndRef} />
-        <div id="message-form-div">
-          <form
-            className="form-inline"
-            id="message-form"
-            onSubmit={handleSendMessage}
-          >
-            <MessageInput
-              className="form-control"
-              type="text"
-              placeholder="Send a Message"
-              onChange={(event) => setMessage(event.target.value)}
-            />
-            <SendButton type="submit" className="btn btn-primary">
-              <FaRegPaperPlane />
-            </SendButton>
-          </form>
-        </div>
+        {chatWindow()}
+        <Form
+          // className="form-inline"
+          id="message-form"
+          onSubmit={handleSendMessage}
+        >
+          <MessageInput
+            className="form-control"
+            type="text"
+            placeholder="Send a Message"
+            onChange={(event) => setMessage(event.target.value)}
+          />
+          {error && <p>Please enter message text</p>}
+          <SendButton type="submit" className="btn btn-primary">
+            <FaRegPaperPlane />
+          </SendButton>
+        </Form>
       </div>
-    </div>
+    </Container>
   );
 };
 
@@ -121,6 +101,62 @@ const InputForm = () => (
     <Chat />
   </>
 );
+
+const Container = styled.div``;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+`;
+
+const SendButton = styled.button`
+  color: #3c15d6;
+  font-size: 1em;
+  margin: 0.1em;
+  padding: 0.25em 1em;
+  border-radius: 8px;
+  position: relative;
+  background-color: white;
+  height: 50%;
+  align-self: center;
+`;
+
+const MessageInput = styled.input`
+  width: 50%;
+  height: 120px;
+  padding: 0.25rem 2rem;
+  margin: 0.5em 0em 0.5em 20em;
+  color: #1e1926;
+  background: white;
+  font-size: 1.2rem;
+  font-style: italic;
+  border: 1px solid #3c15d6;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  position: fixed;
+  bottom: 5%;
+  left: 10%;
+  outline: none;
+`;
+
+const ChatWindow = styled.div`
+  padding: 0.5em 2rem;
+  margin: 0em 0em 2rem 16.75em;
+  border-radius: 15px;
+  background: #fafafa;
+  border-bottom: 1px solid lightgrey;
+  width: 70%;
+`;
+
+const ChatHeader = styled.h1`
+  padding: 1rem 0 1rem 18rem;
+  margin-top: 0;
+  margin-bottom: 3rem;
+  background: #ffffff;
+  color: #1e1926;
+  border-bottom: 1px solid #3c15d6;
+`;
 
 export default InputForm;
 
