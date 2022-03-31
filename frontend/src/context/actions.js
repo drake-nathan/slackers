@@ -1,6 +1,9 @@
 // NOTE - for now the root url is blank and I was using testing data - see below for functions
-// NOTE - mgrum: URL is hardcoded for now until I get the dev database working.
-const ROOT_URL = 'http://localhost:8000/api';
+// NOTE - mgrum: URL is setup.
+let ROOT_URL = 'http://localhost:8000/';
+if (process.env.NODE_ENV === 'production') {
+  ROOT_URL = 'https://slackersz.herokuapp.com/';
+}
 
 const users = [
   {
@@ -67,7 +70,7 @@ export async function loginUser(dispatch, loginPayload) {
   // NOTE updated by mgrum: completed the above task.
   try {
     dispatch({ type: 'REQUEST_LOGIN' });
-    const response = await fetch(`${ROOT_URL}/sign-in`, requestOptions);
+    const response = await fetch(`${ROOT_URL}api/sign-in`, requestOptions);
 
     if (response.ok) {
       const data = await response.json();
