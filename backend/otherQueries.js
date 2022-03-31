@@ -10,24 +10,24 @@
 //   port: 5432,
 // });
 
-const getThreadUsers = (req, res, next) => {
+const getChannelUsers = (req, res, next) => {
   const { threadId } = req.params;
 
   const query = {
     text: `
     SELECT
-      users.user_id,
-      users.name,
-      thread_user.thread_id
+      slacker_users.userid,
+      slacker_users.name,
+      user_channel.channelid
     FROM
-      users
-    INNER JOIN thread_user ON thread_user.user_id = users.user_id
-    WHERE thread_user.thread_id = $1
+      slacker_users
+    INNER JOIN user_channel ON user_channel.userid = slacker_users.userid
+	  WHERE user_channel.channelid = $1
     `,
     values: [threadId],
   };
 
-  pool.query(query, (error, results) => {
+  client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -35,26 +35,27 @@ const getThreadUsers = (req, res, next) => {
   });
 };
 
-const getThreadPosts = (req, res, next) => {
-  const { threadId } = req.params;
+const getChannelPosts = (req, res, next) => {
+  const { channelid } = req.params;
 
   const query = {
     text: `
     SELECT
-      post.posttext,
-      post.user_id,
-      users.name,
-      thread.thread_id
+      message.text,
+      message.userid,
+	  message.createddate,
+      slacker_users.name,
+      channel.channelid
     FROM
-      post
-	  INNER JOIN users ON users.user_id = post.user_id
-    INNER JOIN thread ON thread.thread_id = post.thread_id
-    WHERE post.thread_id = $1
+      message
+	  INNER JOIN slacker_users ON slacker_users.userid = message.userid
+    INNER JOIN channel ON channel.channelid = message.channelid
+    WHERE message.channelid = $1
     `,
-    values: [threadId],
+    values: [channelid],
   };
 
-  pool.query(query, (error, results) => {
+  client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -62,40 +63,40 @@ const getThreadPosts = (req, res, next) => {
   });
 };
 
-const createThreadPost = (req, res, next) => {
-  const { threadId } = req.params;
-  const { posttext } = req.body;
-  const userId = 1;
+const createChannelMessage = (req, res, next) => {
+  const { channelId } = req.params;
+  const { text, userid, createddate } = req.body;
 
   const query = {
     text: `
-    INSERT INTO post (user_id, thread_id, posttext)
-      VALUES ($1, $2, $3);
+    INSERT INTO message (userid, channelid, dmid, text, createddate)
+      VALUES ($1, $2, null, $3, $4);
     `,
-    values: [userId, threadId, posttext],
+    values: [userid, channelId, text, createddate],
   };
 
-  pool.query(query, (error, results) => {
+  client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
+
     res.send('cool!');
   });
 };
 
-const createThreadUser = (req, res, next) => {
-  const { threadId } = req.params;
-  const { userId } = req.body;
+const createChannelUser = (req, res, next) => {
+  const { channelId } = req.params;
+  const { userid } = req.body;
 
   const query = {
     text: `
-    INSERT INTO thread_user (user_id, thread_id)
+    INSERT INTO user_channel (userid, channelid)
       VALUES ($1, $2);
     `,
-    values: [userId, threadId],
+    values: [userid, channelId],
   };
 
-  pool.query(query, (error, results) => {
+  client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -104,17 +105,17 @@ const createThreadUser = (req, res, next) => {
 };
 
 const deleteThreadPost = (req, res, next) => {
-  const { postId } = req.params;
+  const { messageId } = req.params;
 
   const query = {
     text: `
-    DELETE FROM post
-    WHERE post_id = $1
+    DELETE FROM message
+    WHERE messageid = $1
     `,
-    values: [postId],
+    values: [messageId],
   };
 
-  pool.query(query, (error, results) => {
+  client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -182,10 +183,10 @@ const buildDatabase = (req, res, next) => {
 };
 
 module.exports = {
-  getThreadPosts,
-  getThreadUsers,
+  getChannelPosts,
+  getChannelUsers,
   buildDatabase,
-  createThreadPost,
+  createChannelMessage,
   deleteThreadPost,
-  createThreadUser,
+  createChannelUser,
 };
