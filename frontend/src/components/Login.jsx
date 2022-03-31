@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import styled from 'styled-components';
+import React, { useState } from 'react';
 import GlobalStyle from '../globalStyles';
 import BackgroundImage from '../images/blueSwoosh.png';
 import MainImage from '../images/main-image.png';
+import { loginUser, useAuthState, useAuthDispatch } from '../context';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [isloggedIn, setIsLoggedIn] = useState(false);
 
   const userSchema = yup
     .object()
@@ -20,7 +21,11 @@ function Login() {
     })
     .required();
 
-  const { register, handleSubmit } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(userSchema),
   });
 
@@ -32,27 +37,22 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleFormSubmit = () => {
-    const loginInfo = {
-      email,
-      password,
-    };
+  const dispatch = useAuthDispatch(); // gets the dispatch method from the useDispatch custom hook in the context file
+  const { loading, errorMessage } = useAuthState(); // read the values of loading and errorMessage (state variables)
 
-    // Need to figure out authorization flow here with useContext instead of Redux
+  const navigate = useNavigate();
 
-    // const navigate = useNavigate();
-
-    // // If logging in is successful
-    // const redirect = () => {
-    //   navigate('/user');
-    // };
-
-    //   dispatch(signin(loginInfo, () => {
-    // redirect()
-    //   }));
-
-    console.log(loginInfo);
-
+  const handleFormSubmit = async (data, e) => {
+    e.preventDefault();
+    try {
+      const response = await loginUser(dispatch, { email, password });
+      console.log(response); // loginUser action makes the request and handles all the neccessary state changes
+      if (!response) return;
+      // if user found - navigate to user dashboard
+      navigate('/user');
+    } catch (error) {
+      console.log(error);
+    }
     // Set inputs back to blank after form submission;
     setEmail('');
     setPassword('');
@@ -63,18 +63,18 @@ function Login() {
       <LeftSideWrapper>
         <GlobalStyle />
         <Header>slackers</Header>
+        {errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
         <Underline />
         <Text>where those who slack go to chat</Text>
         <Form onSubmit={handleSubmit(handleFormSubmit)}>
           <Input
-            type="email"
             {...register('email', { required: true })}
             placeholder="email"
             value={email}
             onChange={(e) => handleEmailChange(e)}
           />
+          {errors?.email?.message}
           <Input
-            type="password"
             {...register('password', { required: true })}
             placeholder="password"
             value={password}
@@ -82,7 +82,8 @@ function Login() {
               handlePasswordChange(e);
             }}
           />
-          <LoginBtn as="button" type="submit">
+          {errors?.password?.message}
+          <LoginBtn as="button" type="submit" disabled={loading}>
             Login
           </LoginBtn>
         </Form>
@@ -233,6 +234,12 @@ const LoginBtn = styled.button`
   &:hover {
     background-color: #b7a2d7;
   }
+`;
+
+const ErrorMsg = styled.p`
+  color: red;
+  text-align: center;
+  margin: 1rem;
 `;
 
 const ImageBox = styled.img`
