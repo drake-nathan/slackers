@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const db = require('../queries/queries');
+const db = require('../dev-db/setup-dev-db');
 
 // all routes to /api/database-setup
 router.route('/').get(db.setupDevDatabase);
