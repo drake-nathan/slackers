@@ -1,16 +1,16 @@
-import React, { useReducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { AuthReducer, initialState } from './reducer';
 
 // This context object will contain the authentication token and user details.
-const AuthStateContext = React.createContext();
+const AuthStateContext = createContext();
 
 //  We will use this context object to pass the dispatch method created in the reducer file. This makes it easy to provide the dispatch method to components that need it.
-const AuthDispatchContext = React.createContext();
+const AuthDispatchContext = createContext();
 
-// These next functions create custom hooks that will help us read values from these context objects without having to call React.useContext in every component that needs it. It also does some error handling in case these contexts are used outside the context providers.
+// These next functions create custom hooks that will help us read values from these context objects without having to call useContext in every component that needs it. It also does some error handling in case these contexts are used outside the context providers.
 export function useAuthState() {
-  const context = React.useContext(AuthStateContext);
+  const context = useContext(AuthStateContext);
   if (context === undefined) {
     throw new Error('useAuthState must be used within an AuthProvider');
   }
@@ -19,7 +19,7 @@ export function useAuthState() {
 }
 
 export function useAuthDispatch() {
-  const context = React.useContext(AuthDispatchContext);
+  const context = useContext(AuthDispatchContext);
   if (context === undefined) {
     throw new Error('useAuthDispatch must be used within an AuthProvider');
   }

@@ -52,7 +52,7 @@ const users = [
 
 // These function dispatch multiple state updates as a result of an Http request or side-effect. The loginUser function will handle asynchronous requests to the server to authenticate a user login details and a logout function used to log a user out of an authenticated session.
 
-// NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data form a URL
+// NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data from a URL
 export async function loginUser(dispatch, loginPayload) {
   // const requestOptions = {
   //   method: 'POST',
