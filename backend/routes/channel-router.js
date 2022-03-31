@@ -2,7 +2,7 @@ const router = require('express').Router();
 const db = require('../queries');
 
 // all routes here are going to /api/channels
-router.route('/').get((req, res) => res.send('hey'));
+router.route('/').get(db.getAllChannels);
 
 router
   .route('/:channelId/posts')
