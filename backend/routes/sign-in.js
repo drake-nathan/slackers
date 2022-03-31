@@ -16,7 +16,8 @@ exports.signin = function (req, res, next) {
   // passport already authenticated this user.
   // We just need to give them a token
   res.send({
-    token: tokenGenerator(req.user),
+    user: { email: req.user.email, name: req.user.name },
+    auth_token: tokenGenerator(req.user),
   });
 };
 
