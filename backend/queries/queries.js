@@ -17,7 +17,7 @@ strings.oneUser = (email) => ({
   values: [email],
 });
 strings.userById = (id) => ({
-  text: `SELECT * FROM "slacker_users" WHERE userid = $1`,
+  text: `SELECT * FROM "slacker_users" WHERE user_id = $1`,
   values: [id],
 });
 
@@ -115,6 +115,7 @@ const createConversationMessage = (req, res, next) => {
 const getUserChannels = (req, res, next) => {
   const { channelId } = req.params;
   const { text, userid, createddate } = req.body;
+  const { user_id } = req.user;
 
   const query = {
     text: `
