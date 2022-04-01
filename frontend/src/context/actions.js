@@ -55,6 +55,46 @@ const users = [
 
 // These function dispatch multiple state updates as a result of an Http request or side-effect. The loginUser function will handle asynchronous requests to the server to authenticate a user login details and a logout function used to log a user out of an authenticated session.
 
+// NOTE this function modifies the messages state via setState, not a dispatch/reducer. It takes in current meassages and the setMesages function.
+export async function sendMessage(
+  currentMessages,
+  setMessages,
+  message,
+  channelID
+) {
+  const userInfo = localStorage.getItem('currentUser');
+  const messageData = {
+    text: message,
+    user_id: userInfo.user.user_id,
+    createddate: Date(),
+  };
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type:': 'application/json',
+      Authorization: `Bearer ${userInfo.auth_token}`,
+    },
+    body: JSON.stringify(messageData),
+  };
+
+  try {
+    const response = await fetch(
+      `${ROOT_URL}api/channels/${channelID}/posts`,
+      requestOptions
+    );
+    if (response.ok) {
+      const savedMessage = await response.json();
+      setMessages([...currentMessages, savedMessage]);
+      return savedMessage;
+    }
+    console.log(response.statusText);
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 // NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data from a URL
 // NOTE done. loginPayload is encoded and sent to the endpoint, and user and auth_token are returned as json.
 export async function loginUser(dispatch, loginPayload) {
