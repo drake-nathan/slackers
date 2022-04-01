@@ -94,21 +94,21 @@ const getConversationMessages = (req, res, next) => {
 
 const createConversationMessage = (req, res, next) => {
   const { channelId } = req.params;
-  const { text, userid, createddate } = req.body;
+  const { text, user_id, createddate } = req.body;
 
   const query = {
     text: `
     INSERT INTO message (user_id, conversation_id, text, createddate)
-      VALUES ($1, $2, $3, $4);
+      VALUES ($1, $2, $3, $4) RETURNING *;
     `,
-    values: [userid, channelId, text, createddate],
+    values: [user_id, channelId, text, createddate],
   };
 
   client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    res.send('cool!');
+    res.send(results.rows[0]);
   });
 };
 
