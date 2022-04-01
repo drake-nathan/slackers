@@ -11,9 +11,9 @@ const strings = {};
 
 // ------------- QUERIES GO HERE---------------------
 
-strings.allUsers = () => `SELECT * FROM "slacker_users"`;
+strings.allUsers = () => `SELECT * FROM slacker_users`;
 strings.oneUser = (email) => ({
-  text: `SELECT * FROM "slacker_users" WHERE email = $1`,
+  text: `SELECT * FROM slacker_users WHERE email = $1`,
   values: [email],
 });
 strings.userById = (id) => ({
@@ -94,21 +94,21 @@ const getConversationMessages = (req, res, next) => {
 
 const createConversationMessage = (req, res, next) => {
   const { channelId } = req.params;
-  const { text, userid, createddate } = req.body;
+  const { text, user_id, createddate } = req.body;
 
   const query = {
     text: `
     INSERT INTO message (user_id, conversation_id, text, createddate)
-      VALUES ($1, $2, $3, $4);
+      VALUES ($1, $2, $3, $4) RETURNING *;
     `,
-    values: [userid, channelId, text, createddate],
+    values: [user_id, channelId, text, createddate],
   };
 
   client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    res.send('cool!');
+    res.send(results.rows[0]);
   });
 };
 
@@ -141,21 +141,26 @@ const getUserChannels = (req, res, next) => {
 };
 
 const getUserDms = (req, res, next) => {
-  const { channelId } = req.params;
-  const { text, userid, createddate } = req.body;
-
   const query = {
     text: `
-
+    SELECT 
+      conversation.conversation_id, 
+      conversation.name, 
+      conversation.description, 
+      conversation.createddate, 
+      conversation.private, 
+      conversation.type 
+    FROM conversation NATURAL JOIN user_conversation 
+    WHERE type = 'dm' AND user_id = $1;
     `,
-    values: [],
+    values: [req.user.user_id],
   };
 
   client.query(query, (error, results) => {
     if (error) {
-      throw error;
+      res.send(400, 'Request could not be processed.');
     }
-    res.send();
+    res.send(results.rows);
   });
 };
 

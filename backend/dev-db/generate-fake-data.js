@@ -13,7 +13,8 @@ const generateUsers = (numToMake) => {
     users.push({
       email: falso.randEmail(),
       name: falso.randUserName(),
-      password: getHashedPassword(),
+      password: falso.randPassword(),
+      hash: getHashedPassword(this.password),
     });
   }
   return users;
@@ -25,6 +26,7 @@ const generateChannels = (numToMake) => {
     channels.push({
       name: falso.randProductName(),
       description: falso.randProductDescription(),
+      // type: Math.random() > 5 / 10 ? 'channel' : 'dm',
       type: 'channel',
       private: false,
       count: null,
