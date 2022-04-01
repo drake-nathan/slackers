@@ -120,3 +120,28 @@ export const getMessages = async (setMessages, channelId) => {
     console.log(error);
   }
 };
+
+export const getChannels = async (setMessages, channelId) => {
+  const token = localStorage.getItem('token');
+
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const request = axios
+      .get(`http://localhost:8000/api/channels/`, headerConfig)
+      .catch((error) => {
+        throw error;
+      });
+
+    const data = await request;
+
+    if (data) {
+      setChannels(data);
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -15,6 +15,7 @@ const Chat = () => {
   const date = moment().format('MMMM Do YYYY, h:mm a');
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
+  const { messages, setMessages } = useContext(ChannelMessageContext);
   const [chat, setChat] = useState([
     {
       user: 'User1',
@@ -29,18 +30,16 @@ const Chat = () => {
   ]);
   const [error, setError] = useState(false);
 
-  const { messages, setMessages } = useContext(ChannelMessageContext);
-
   const handleClick = async () => {
     await getMessages(setMessages, 2);
     console.log(messages);
   };
 
   const chatWindow = () =>
-    chat.map((m, i) => (
+    messages.map((m, i) => (
       <ChatWindow key={i} id={i}>
         <p>
-          {m.userName} - {date}
+          {m.name} - {date}
         </p>
         <p>
           <small>{m.text}</small>

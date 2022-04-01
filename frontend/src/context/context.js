@@ -35,9 +35,10 @@ export const AuthProvider = ({ children }) => {
   // note that useReducer starts with this as a means of keeping/managing state using useReducer. Note that it references a specific reducer and returns an array with the current state and the dispatch method for triggering state updates/changes,
   const [user, dispatch] = useReducer(AuthReducer, initialState);
   const [messages, setMessages] = useState([]);
+  const [channels, setChannels] = useState([]);
 
   return (
-    <ChannelMessageContext.Provider value={{ messages, setMessages }}>
+    <ChannelMessageContext.Provider value={{ messages, setMessages, channels, setChannels }}>
       <AuthStateContext.Provider value={user}>
         <AuthDispatchContext.Provider value={dispatch}>
           {children}
