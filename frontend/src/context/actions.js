@@ -96,8 +96,8 @@ export async function logout(dispatch) {
   localStorage.removeItem('token');
 }
 
-export async function getConversationMessages(setMessage, channelId) {
-  const token = localStorage.get('token');
+export const getMessages = async (setMessages, channelId) => {
+  const token = localStorage.getItem('token');
 
   const headerConfig = {
     headers: { Authorization: `Bearer ${token}` },
@@ -105,18 +105,18 @@ export async function getConversationMessages(setMessage, channelId) {
 
   try {
     const request = axios
-      .get(`http://localhost:8000/api/channels/2/posts`, headerConfig)
+      .get(`http://localhost:8000/api/channels/${channelId}/posts`, headerConfig)
       .catch((error) => {
         throw error;
       });
 
-    const data = await request.json();
+    const data = await request;
 
     if (data) {
-      console.log(data);
+      setMessages(data.data);
       return;
     }
   } catch (error) {
     console.log(error);
   }
-}
+};

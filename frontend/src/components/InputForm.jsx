@@ -6,6 +6,7 @@ import { FaRegPaperPlane } from 'react-icons/fa';
 import axios from 'axios';
 import GlobalStyle from '../globalStyles';
 import { ChannelMessageContext } from '../context/context';
+import { getMessages } from '../context/actions';
 
 const moment = require('moment');
 
@@ -30,33 +31,8 @@ const Chat = () => {
 
   const { messages, setMessages } = useContext(ChannelMessageContext);
 
-  const getMessages = async (channelId) => {
-    const token = localStorage.getItem('token');
-
-    const headerConfig = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
-    try {
-      const request = axios
-        .get(`http://localhost:8000/api/channels/${channelId}/posts`, headerConfig)
-        .catch((error) => {
-          throw error;
-        });
-
-      const data = await request;
-
-      if (data) {
-        setMessages(data.data);
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleClick = async () => {
-    await getMessages();
+    await getMessages(setMessages, 2);
     console.log(messages);
   };
 
