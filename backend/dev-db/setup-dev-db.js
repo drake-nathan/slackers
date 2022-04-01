@@ -162,4 +162,4 @@ async function setupDevDatabase(request, response) {
   response.send(populateConversationsTable);
 }
 
-module.exports = { setupDevDatabase };
+module.exports = setupDevDatabase;
