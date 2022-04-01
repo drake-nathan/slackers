@@ -159,7 +159,7 @@ async function setupDevDatabase(request, response) {
   });
   console.log('+++++ message table was successfully populated');
 
-  response.send(populateConversationsTable);
+  response.send('you are so populated');
 }
 
 module.exports = setupDevDatabase;
