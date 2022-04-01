@@ -112,6 +112,7 @@ function Login() {
             {...register('password', { required: true })}
             placeholder="password"
             value={password}
+            type="password"
             onChange={(e) => {
               handlePasswordChange(e);
             }}
