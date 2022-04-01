@@ -123,7 +123,7 @@ export const getMessages = async (setMessages, channelId) => {
   }
 };
 
-export const getChannels = async (setMessages, channelId) => {
+export const getChannels = async (setChannels) => {
   const token = localStorage.getItem('token');
 
   const headerConfig = {
@@ -140,7 +140,8 @@ export const getChannels = async (setMessages, channelId) => {
     const data = await request;
 
     if (data) {
-      setChannels(data);
+      setChannels(data.data);
+      console.log(data.data);
       return;
     }
   } catch (error) {
