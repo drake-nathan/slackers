@@ -99,9 +99,9 @@ const Chat = () => {
             onChange={(event) => setMessage(event.target.value)}
           />
           {error && <p>Please enter message text</p>}
-          <SendButton type="submit" className="btn btn-primary">
+          {/* <SendButton type="submit" className="btn btn-primary">
             <FaRegPaperPlane />
-          </SendButton>
+          </SendButton> */}
         </Form>
       </div>
     </Container>
@@ -164,7 +164,7 @@ const MessageInput = styled.input`
   border-radius: 12px;
   position: fixed;
   bottom: 5%;
-  left: 10%;
+  left: 6%;
   outline: none;
 `;
 
