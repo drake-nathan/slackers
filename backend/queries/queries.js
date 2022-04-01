@@ -94,6 +94,7 @@ const getConversationMessages = (req, res, next) => {
 
 const createConversationMessage = (req, res, next) => {
   const { channelId } = req.params;
+  // eslint-disable-next-line camelcase
   const { text, user_id, createddate } = req.body;
 
   const query = {
@@ -101,6 +102,7 @@ const createConversationMessage = (req, res, next) => {
     INSERT INTO message (user_id, conversation_id, text, createddate)
       VALUES ($1, $2, $3, $4) RETURNING *;
     `,
+    // eslint-disable-next-line camelcase
     values: [user_id, channelId, text, createddate],
   };
 
