@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from '../globalStyles';
 import { ChannelMessageContext } from '../context/context';
-import { getChannels, getMessages } from '../context/actions';
+import { getChannels, getMessages, sendMessage } from '../context/actions';
 
 const moment = require('moment');
 
@@ -13,7 +13,9 @@ const Chat = () => {
   const date = moment().format('MMMM Do YYYY, h:mm a');
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
-  const { messages, setMessages, setChannels } = useContext(ChannelMessageContext);
+  const { messages, setMessages, setChannels } = useContext(
+    ChannelMessageContext
+  );
   const [chat, setChat] = useState([
     {
       user: 'User1',
@@ -64,11 +66,12 @@ const Chat = () => {
       // alert('enter text');
       setError(true);
     } else {
-      sendMsg({
-        user: 'Username',
-        text: message,
-        time: date,
-      });
+      // sendMsg({
+      //   user: 'Username',
+      //   text: message,
+      //   time: date,
+      // });
+      const savedMessage = sendMessage(messages, setMessages, message, 1);
       const elem = document.getElementById('message-form');
       elem.reset();
       setMessage('');
