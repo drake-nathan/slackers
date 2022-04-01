@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 import { useAuthDispatch, logout, useAuthState } from '../context';
 
 function Menu() {
-
   const dispatch = useAuthDispatch();
   const userDetails = useAuthState();
 
@@ -18,11 +17,11 @@ function Menu() {
   return (
     <Container>
       <Button onClick={handleLogout}>Logout</Button>
-      </Container>
-  )
+    </Container>
+  );
 }
 
-const Container = styled.div `
+const Container = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -33,12 +32,12 @@ const Container = styled.div `
   width: 150px;
   height: 150px;
   border-radius: 10px;
-  background-color: #1E1926;
+  background-color: #1e1926;
   color: white;
   box-sizing: border-box;
-`
+`;
 
-const Button = styled.button `
+const Button = styled.button`
   background-color: #1e1926;
   margin-top: 4rem;
   margin-bottom: 0;
@@ -51,7 +50,7 @@ const Button = styled.button `
   letter-spacing: 0.5px;
   width: 90%;
   padding: 0.6rem 3.5rem;
-  border: 1px solid #B7A2D7;
+  border: 1px solid #b7a2d7;
   border-radius: 10px;
   text-transform: uppercase;
   box-sizing: border-box;
@@ -59,7 +58,6 @@ const Button = styled.button `
   &:hover {
     background-color: #b7a2d7;
   }
-`
-
+`;
 
 export default Menu;
