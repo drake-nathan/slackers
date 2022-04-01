@@ -11,6 +11,7 @@ import * as FaIcons from 'react-icons/fa';
 import { SidebarData } from './SidebarData';
 import SubMenu from './SubMenu';
 import SearchBar from './SearchBar';
+import Logout from './Logout';
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(true);
@@ -24,6 +25,7 @@ const Sidebar = () => {
           <FaIcons.FaBars onClick={showSidebar} />
         </NavIcon>
         <SearchBar />
+        <Logout/>
       </Nav>
       <SidebarNav sidebar={sidebar}>
         <SidebarWrap>
