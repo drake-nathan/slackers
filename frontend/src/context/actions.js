@@ -49,7 +49,6 @@ export async function sendMessage(
   }
 }
 
-// NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data from a URL
 // NOTE done. loginPayload is encoded and sent to the endpoint, and user and auth_token are returned as json.
 export async function loginUser(dispatch, loginPayload) {
   const requestOptions = {
