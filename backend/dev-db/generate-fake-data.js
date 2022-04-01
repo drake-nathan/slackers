@@ -34,19 +34,19 @@ const generateChannels = (numToMake) => {
   return channels;
 };
 
-// const messages = [];
-// for (let i = 0; i < 500; i += 1) {
-//   messages.push({
-//     _id: randNumber(),
-//     userId: '', // get random userId
-//     channelId: '', // get random channelId
-//     text: randPhrase(),
-//     date: '', // generate sequential dates
-//   });
-// }
+const generateMessages = (numToMake) => {
+  const messages = [];
+  for (let i = 0; i < numToMake; i += 1) {
+    messages.push({
+      text: falso.randPhrase(),
+    });
+  }
+  return messages;
+};
 
 module.exports = {
   getHashedPassword,
   generateUsers,
   generateChannels,
+  generateMessages,
 };
