@@ -1,9 +1,11 @@
 /* eslint-disable import/no-relative-packages */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 // import io from 'socket.io-client';
 import styled from 'styled-components';
 import { FaRegPaperPlane } from 'react-icons/fa';
+import axios from 'axios';
 import GlobalStyle from '../globalStyles';
+import { ChannelMessageContext } from '../context/context';
 
 const moment = require('moment');
 
@@ -25,6 +27,38 @@ const Chat = () => {
     },
   ]);
   const [error, setError] = useState(false);
+
+  const { messages, setMessages } = useContext(ChannelMessageContext);
+
+  const getMessages = async (channelId) => {
+    const token = localStorage.getItem('token');
+
+    const headerConfig = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+      const request = axios
+        .get(`http://localhost:8000/api/channels/${channelId}/posts`, headerConfig)
+        .catch((error) => {
+          throw error;
+        });
+
+      const data = await request;
+
+      if (data) {
+        setMessages(data.data);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleClick = async () => {
+    await getMessages();
+    console.log(messages);
+  };
 
   const chatWindow = () =>
     chat.map((m, i) => (
@@ -73,6 +107,9 @@ const Chat = () => {
     <Container>
       <GlobalStyle />
       <div className="col-md-6">
+        <TestButton type="button" onClick={handleClick}>
+          HELLLLLOOOO
+        </TestButton>
         {chatWindow()}
         <Form
           // className="form-inline"
@@ -111,6 +148,21 @@ const Form = styled.form`
 `;
 
 const SendButton = styled.button`
+  color: #3c15d6;
+  font-size: 1em;
+  margin: 0.1em;
+  padding: 0.25em 1em;
+  border-radius: 8px;
+  position: relative;
+  background-color: white;
+  height: 50%;
+  align-self: center;
+`;
+
+const TestButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
   color: #3c15d6;
   font-size: 1em;
   margin: 0.1em;

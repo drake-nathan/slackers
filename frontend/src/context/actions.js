@@ -1,5 +1,8 @@
 // NOTE - for now the root url is blank and I was using testing data - see below for functions
 // NOTE - mgrum: URL is setup.
+
+const axios = require('axios');
+
 let ROOT_URL = 'http://localhost:8000/';
 if (process.env.NODE_ENV === 'production') {
   ROOT_URL = 'https://slackersz.herokuapp.com/';
@@ -104,4 +107,29 @@ export async function logout(dispatch) {
   dispatch({ type: 'LOGOUT' });
   localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
+}
+
+export async function getConversationMessages(setMessage, channelId) {
+  const token = localStorage.get('token');
+
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const request = axios
+      .get(`http://localhost:8000/api/channels/2/posts`, headerConfig)
+      .catch((error) => {
+        throw error;
+      });
+
+    const data = await request.json();
+
+    if (data) {
+      console.log(data);
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
