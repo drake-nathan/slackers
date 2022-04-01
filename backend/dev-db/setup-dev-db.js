@@ -128,12 +128,15 @@ async function setupDevDatabase(request, response) {
   // });
   // console.log('+++++ message table was successfully populated');
 
-  const id = await client.query(`SELECT user_id
+  const id = await client.query(
+    `SELECT user_id
   FROM slacker_users
   ORDER BY RANDOM()
-  LIMIT 1;`);
+  LIMIT 1;`,
+    (err, res) => response.send(res.rows[0])
+  );
 
-  response.send(id.rows[0]);
+  // response.send(id.rows[0]);
 }
 
 module.exports = { setupDevDatabase };
