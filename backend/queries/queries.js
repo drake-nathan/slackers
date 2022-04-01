@@ -11,13 +11,13 @@ const strings = {};
 
 // ------------- QUERIES GO HERE---------------------
 
-strings.allUsers = () => `SELECT * FROM "slacker_users"`;
+strings.allUsers = () => `SELECT * FROM slacker_users`;
 strings.oneUser = (email) => ({
-  text: `SELECT * FROM "slacker_users" WHERE email = $1`,
+  text: `SELECT * FROM slacker_users WHERE email = $1`,
   values: [email],
 });
 strings.userById = (id) => ({
-  text: `SELECT * FROM "slacker_users" WHERE userid = $1`,
+  text: `SELECT * FROM slacker_users WHERE user_id = $1`,
   values: [id],
 });
 
