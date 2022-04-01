@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as HiIcons from 'react-icons/hi';
 import * as AiIcons from 'react-icons/ai';
 
+
 const SearchBar = () => {
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
