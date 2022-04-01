@@ -1,4 +1,7 @@
 // NOTE - mgrum: URL is setup.
+
+const axios = require('axios');
+
 let ROOT_URL = 'http://localhost:8000/';
 
 if (process.env.NODE_ENV === 'production') {
@@ -92,3 +95,28 @@ export async function logout(dispatch) {
   localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
 }
+
+export const getMessages = async (setMessages, channelId) => {
+  const token = localStorage.getItem('token');
+
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const request = axios
+      .get(`http://localhost:8000/api/channels/${channelId}/posts`, headerConfig)
+      .catch((error) => {
+        throw error;
+      });
+
+    const data = await request;
+
+    if (data) {
+      setMessages(data.data);
+      return;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
