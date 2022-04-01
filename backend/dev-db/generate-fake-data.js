@@ -25,7 +25,7 @@ const generateChannels = (numToMake) => {
     channels.push({
       name: falso.randProductName(),
       description: falso.randProductDescription(),
-      type: 'channel',
+      type: Math.random() > 5 / 10 ? 'channel' : 'dm',
       private: false,
       count: null,
       createDate: `2022-03-31 10:${i + 15}:54`,
