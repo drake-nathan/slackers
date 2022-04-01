@@ -118,7 +118,7 @@ const getUserChannels = (req, res, next) => {
 
   const query = {
     text: `
-
+      
     `,
     values: [],
   };
@@ -132,22 +132,20 @@ const getUserChannels = (req, res, next) => {
 };
 
 const getUserDms = (req, res, next) => {
-  const { channelId } = req.params;
-  const { text, userid, createddate } = req.body;
-  // TODO write a query that finds all the DMs associated with a user.
   const query = {
     text: `
-
+    SELECT conversation_id, name, description, createddate, private, type 
+    FROM conversation NATURAL JOIN user_conversation 
+    WHERE type = 'dm' AND user_id = $1;
     `,
-    values: [],
+    values: [req.user.user_id],
   };
 
   client.query(query, (error, results) => {
     if (error) {
-      throw error;
+      res.send(400, 'Request could not be processed.');
     }
-    // TODO
-    res.send();
+    res.send(results.rows);
   });
 };
 

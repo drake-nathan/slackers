@@ -35,7 +35,7 @@ async function setupDevDatabase(request, response) {
 
   const populateConversationTable = `
     INSERT INTO "conversation" (name, description, type, private, count, createddate)
-      VALUES ('slackers', 'channel for cohort 3 fulltime agile project', 'channel', false, null, '2022-03-29 10:23:54'), ('slackers-backend', 'channel for backend team', 'channel', false, null, '2022-03-29 10:23:54'),('test1', 'test channel 1', 'channel', false, null, '2022-03-29 10:23:54'), ('test2', 'test channel 2', 'channel', false, null, '2022-03-29 10:23:54'), ('test3', 'test channel 3', 'channel', false, null, '2022-03-29 10:23:54'), ('slackers-frontend', 'channel for frontend team', 'channel', false, null, '2022-03-29 10:23:54'
+      VALUES ('slackers', 'channel for cohort 3 fulltime agile project', 'channel', false, null, '2022-03-29 10:23:54'), ('slackers-backend', 'channel for backend team', 'channel', false, null, '2022-03-29 10:23:54'),('test1', 'test channel 1', 'channel', false, null, '2022-03-29 10:23:54'), ('test2', 'test channel 2', 'channel', false, null, '2022-03-29 10:23:54'), ('test3', 'test channel 3', 'channel', false, null, '2022-03-29 10:23:54'), ('slackers-frontend', 'channel for frontend team', 'channel', false, null, '2022-03-29 10:23:54'), ('test-dm1', null, 'dm', true, null, '2022-03-31 05:45:32'), ('test-dm2', null, 'dm', true, null, '2022-03-31 05:45:32'), ('test-dm3', null, 'dm', true, null, '2022-03-31 05:45:32'
     );`;
 
   const createUserConversationJunction = `
@@ -47,7 +47,7 @@ async function setupDevDatabase(request, response) {
 
   const populateUserConversationTable = `
     INSERT INTO "user_conversation" (user_id, conversation_id)
-      VALUES (1, 5), (2, 2), (2, 3), (2, 4), (2, 6), (3, 2), (3, 6), (4, 1);
+      VALUES (1, 5), (2, 2), (2, 3), (2, 4), (2, 6), (3, 2), (3, 6), (4, 1), (1, 7), (2, 7), (2, 8), (3, 8), (4, 8), (1, 9);
     `;
 
   const createMessageTable = `
