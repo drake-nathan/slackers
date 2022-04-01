@@ -8,14 +8,17 @@ function Menu() {
   const userDetails = useAuthState();
 
   const navigate = useNavigate();
+  const username = JSON.parse(localStorage.getItem('currentUser')).user.name;
 
   const handleLogout = () => {
+    console.log(username);
+
     logout(dispatch);
     navigate('/');
   };
-
   return (
     <Container>
+      <Name>Hello {username}</Name>
       <Button onClick={handleLogout}>Logout</Button>
     </Container>
   );
@@ -38,9 +41,8 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: #1e1926;
   margin-top: 4rem;
-  margin-bottom: 0;
+  margin-bottom: 1rem;
   color: white;
   font-weight: 600;
   font-size: 0.8rem;
@@ -50,14 +52,24 @@ const Button = styled.button`
   letter-spacing: 0.5px;
   width: 90%;
   padding: 0.6rem 3.5rem;
-  border: 1px solid #b7a2d7;
   border-radius: 10px;
+  background-color: #362B48;
+  border: none;
+  outline: none;
+  box-shadow: none;
   text-transform: uppercase;
   box-sizing: border-box;
   cursor: pointer;
+  transform: 0.4s
   &:hover {
     background-color: #b7a2d7;
   }
+`;
+
+const Name = styled.h1`
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
 `;
 
 export default Menu;
