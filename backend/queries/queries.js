@@ -113,25 +113,43 @@ const createConversationMessage = (req, res, next) => {
 };
 
 const getUserChannels = (req, res, next) => {
+  // eslint-disable-next-line camelcase
+  const { user_id } = req.user;
+
   const query = {
     text: `
-      
+    SELECT
+      user_conversation.conversation_id,
+      conversation.name
+    FROM user_conversation
+    INNER JOIN slacker_users
+    ON slacker_users.user_id = user_conversation.user_id
+    INNER JOIN conversation
+    ON conversation.conversation_id = user_conversation.conversation_id
+    WHERE user_conversation.user_id = $1 AND conversation.type = $2
     `,
-    values: [],
+    // eslint-disable-next-line camelcase
+    values: [user_id, 'channel'],
   };
 
   client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    res.send();
+    res.send(results.rows);
   });
 };
 
 const getUserDms = (req, res, next) => {
   const query = {
     text: `
-    SELECT conversation_id, name, description, createddate, private, type 
+    SELECT 
+      conversation.conversation_id, 
+      conversation.name, 
+      conversation.description, 
+      conversation.createddate, 
+      conversation.private, 
+      conversation.type 
     FROM conversation NATURAL JOIN user_conversation 
     WHERE type = 'dm' AND user_id = $1;
     `,
