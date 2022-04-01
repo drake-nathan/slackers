@@ -105,7 +105,10 @@ export const getMessages = async (setMessages, channelId) => {
 
   try {
     const request = axios
-      .get(`http://localhost:8000/api/channels/${channelId}/posts`, headerConfig)
+      .get(
+        `http://localhost:8000/api/channels/${channelId}/posts`,
+        headerConfig
+      )
       .catch((error) => {
         throw error;
       });

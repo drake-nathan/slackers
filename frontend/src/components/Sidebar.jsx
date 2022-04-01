@@ -25,7 +25,7 @@ const Sidebar = () => {
           <FaIcons.FaBars onClick={showSidebar} />
         </NavIcon>
         <SearchBar />
-        <Logout/>
+        <Logout />
       </Nav>
       <SidebarNav sidebar={sidebar}>
         <SidebarWrap>
