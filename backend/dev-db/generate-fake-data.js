@@ -1,40 +1,52 @@
-const {
-  randUserName,
-  randEmail,
-  randPassword,
-  randPhrase,
-  randNumber,
-  randBird,
-} = require('@ngneat/falso');
+const falso = require('@ngneat/falso');
+const bcrypt = require('bcrypt');
 
-const channels = [];
-for (let i = 0; i < 10; i += 1) {
-  channels.push({
-    _id: randNumber(),
-    // i used bird because I needed a word and it sometimes spits out 'bushtit'...i'm a child
-    name: randBird(),
-  });
-}
+const getHashedPassword = (pw) => {
+  const password = pw || falso.randPassword();
+  const hashed = bcrypt.hashSync(password, 10);
+  return hashed;
+};
 
-const users = [];
-for (let i = 0; i < 25; i += 1) {
-  channels.push({
-    _id: randNumber(),
-    email: randEmail(),
-    username: randUserName(),
-    password: randPassword(),
-  });
-}
+const generateUsers = (numToMake) => {
+  const users = [];
+  for (let i = 0; i < numToMake; i += 1) {
+    users.push({
+      email: falso.randEmail(),
+      name: falso.randUserName(),
+      password: getHashedPassword(),
+    });
+  }
+  return users;
+};
 
-const messages = [];
-for (let i = 0; i < 500; i += 1) {
-  channels.push({
-    _id: randNumber(),
-    userId: '', // get random userId
-    channelId: '', // get random channelId
-    text: randPhrase(),
-    date: '', // generate sequential dates
-  });
-}
+const generateChannels = (numToMake) => {
+  const channels = [];
+  for (let i = 0; i < numToMake; i += 1) {
+    channels.push({
+      name: falso.randProductName(),
+      description: falso.randProductDescription(),
+      type: 'channel',
+      private: false,
+      count: null,
+      createDate: `2022-03-31 10:${i + 15}:54`,
+    });
+  }
+  return channels;
+};
 
-// write this out to a js file
+const generateMessages = (numToMake) => {
+  const messages = [];
+  for (let i = 0; i < numToMake; i += 1) {
+    messages.push({
+      text: falso.randPhrase(),
+    });
+  }
+  return messages;
+};
+
+module.exports = {
+  getHashedPassword,
+  generateUsers,
+  generateChannels,
+  generateMessages,
+};
