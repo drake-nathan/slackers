@@ -30,11 +30,12 @@ const SubMenu = ({ item }) => {
           </div>
         </SidebarLink>
         {subnav &&
-          item.subNav.map((item, index) => (
-            <DropdownLink to={item.path} key={index}>
-              {item.icon}
-              <SidebarLabel>{item.title}</SidebarLabel>
-            </DropdownLink>
+          channels.map((item, index) => (
+            <SidebarLabel>{item.name}</SidebarLabel>
+            // <DropdownLink to={item.path} key={index}>
+            //   {item.icon}
+            //   <SidebarLabel>{item.title}</SidebarLabel>
+            // </DropdownLink>
           ))}
       </>
     );

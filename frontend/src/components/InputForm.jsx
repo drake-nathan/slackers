@@ -2,11 +2,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 // import io from 'socket.io-client';
 import styled from 'styled-components';
-import { FaRegPaperPlane } from 'react-icons/fa';
-import axios from 'axios';
 import GlobalStyle from '../globalStyles';
 import { ChannelMessageContext } from '../context/context';
-import { getMessages } from '../context/actions';
+import { getChannels, getMessages } from '../context/actions';
 
 const moment = require('moment');
 
@@ -15,7 +13,7 @@ const Chat = () => {
   const date = moment().format('MMMM Do YYYY, h:mm a');
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
-  const { messages, setMessages } = useContext(ChannelMessageContext);
+  const { messages, setMessages, setChannels } = useContext(ChannelMessageContext);
   const [chat, setChat] = useState([
     {
       user: 'User1',
@@ -32,7 +30,7 @@ const Chat = () => {
 
   const handleClick = async () => {
     await getMessages(setMessages, 2);
-    console.log(messages);
+    await getChannels(setChannels);
   };
 
   const chatWindow = () =>
