@@ -1,14 +1,49 @@
-import React from 'react';
-import Sidebar from './Sidebar';
-import InputForm from './InputForm';
+import styled from 'styled-components';
+import { Switch, Route } from 'react-router-dom';
+
+import Header from './user-components/Header';
+import Sidebar from './user-components/Sidebar';
+import Chat from './user-components/Chat';
+
+const user = {
+  name: 'Han Solo',
+  image: 'https://i.ibb.co/gMSQPXp/green-avatar.jpg',
+};
+
+// const signOut = () => {
+//   auth.signOut().then(() => {
+//     localStorage.removeItem('user');
+//     setUser(null);
+//   });
+// };
 
 function UserPage() {
   return (
-    <>
-      <Sidebar />
-      <InputForm />
-    </>
+    <Container>
+      <Header user={user} />
+      <Main>
+        <Sidebar />
+        <Switch>
+          <Route path="/user/:channelId">
+            <Chat user={user} />
+          </Route>
+        </Switch>
+      </Main>
+    </Container>
   );
 }
 
 export default UserPage;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 38px minmax(0, 1fr);
+`;
+
+const Main = styled.div`
+  background: white;
+  display: grid;
+  grid-template-columns: 260px auto;
+`;

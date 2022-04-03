@@ -2,9 +2,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 // import io from 'socket.io-client';
 import styled from 'styled-components';
-import GlobalStyle from '../globalStyles';
-import { ChannelMessageContext } from '../context/context';
-import { getChannels, getMessages, sendMessage } from '../context/actions';
+import GlobalStyle from '../../globalStyles';
+import { ChannelMessageContext } from '../../context/context';
+import { getChannels, getMessages, sendMessage } from '../../context/actions';
 
 const moment = require('moment');
 

@@ -1,20 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { useAuthDispatch, logout, useAuthState } from '../context';
 
 function Menu() {
   const dispatch = useAuthDispatch();
   const userDetails = useAuthState();
 
-  const navigate = useNavigate();
+  const history = useHistory();
   const username = JSON.parse(localStorage.getItem('currentUser')).user.name;
 
   const handleLogout = () => {
     console.log(username);
 
     logout(dispatch);
-    navigate('/');
+    history.push('/');
   };
   return (
     <Container>
