@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
 import {
   createContext,
   useContext,
@@ -44,7 +45,9 @@ export const AuthProvider = ({ children }) => {
   const [channels, setChannels] = useState([]);
 
   return (
-    <ChannelMessageContext.Provider value={{ messages, setMessages, channels, setChannels }}>
+    <ChannelMessageContext.Provider
+      value={{ messages, setMessages, channels, setChannels }}
+    >
       <AuthStateContext.Provider value={user}>
         <AuthDispatchContext.Provider value={dispatch}>
           {children}
