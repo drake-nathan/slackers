@@ -11,32 +11,32 @@ const Header = ({ user, signOut }) => {
     setMenu(!menu);
   };
   return (
-  <Container>
-    <Main>
-      <AccessTimeIcon />
-      <SearchContainer>
-        <Search>
-          <input type="text" placeholder="Search..." />
-        </Search>
-      </SearchContainer>
-      <HelpOutlineIcon />
-    </Main>
-    <UserContainer>
-      <Name>{user.name ? user.name : 'Han Solo'}</Name>
-      <UserImage onClick={handleLogout}>
-        <img
-          src={
-            user.photo
-              ? user.photo
-              : 'https://i.ibb.co/gMSQPXp/green-avatar.jpg'
-          }
-          alt="avatar"
-        />
-         {menu && <Menu />}
-      </UserImage>
-    </UserContainer>
-  </Container>
-)
+    <Container>
+      <Main>
+        <AccessTimeIcon />
+        <SearchContainer>
+          <Search>
+            <input type="text" placeholder="Search..." />
+          </Search>
+        </SearchContainer>
+        <HelpOutlineIcon />
+      </Main>
+      <UserContainer>
+        <Name>{user.name ? user.name : 'Han Solo'}</Name>
+        <UserImage onClick={handleLogout}>
+          <img
+            src={
+              user.photo
+                ? user.photo
+                : 'https://i.ibb.co/gMSQPXp/green-avatar.jpg'
+            }
+            alt="avatar"
+          />
+          {menu && <Menu />}
+        </UserImage>
+      </UserContainer>
+    </Container>
+  );
 };
 
 export default Header;
