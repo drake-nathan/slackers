@@ -69,7 +69,7 @@ function Login() {
       setEmailErr(false);
       return;
     }
-    // error exists. Display the message and hide after 5 secs
+    // error exists. Display the message and hide after 4 secs
     setEmailErr(true);
     const timer = setTimeout(() => {
       setEmailErr(false);
@@ -133,35 +133,38 @@ function Login() {
 
 const Container = styled.div`
   display: flex;
+  justify-content: center;
+  align-itmes: center;
   background: url(${BackgroundImage});
   background-repeat: no-repeat;
   background-size: 100% 100%;
   width: 100vw;
   height: 100vh;
-  @media (max-width: 500px) {
-    display: block;
-  }
+
 `;
 
 const LeftSideWrapper = styled.div`
-  width: 50%;
+  width: 45%;
   min-width: auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  @media (max-width: 550px) {
+  @media (max-width: 1000px) {
     width: 100%;
-    padding: 4rem 2rem;
+    padding-top: 2rem;
+  }
+  @media (max-width: 1000px) {
+    width: 100%;
   }
 `;
 
 const RightSideWrapper = styled.div`
-  width: 50%;
+  width: 55%;
   box-sizing: border-box;
-  @media (max-width: 400px) {
-    display: none;
+  @media (max-width: 1000px) {
+    width: 0%;
   }
 `;
 
@@ -172,62 +175,71 @@ const Header = styled.header`
   font-weight: 600;
   text-align: left;
   transition: 0.4s;
-  @media (max-width: 1100px) {
-    font-size: 4.5rem;
-    margin-top: 3rem;
+  @media (max-width: 1200px) {
+    font-size: 5.5rem;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
+    font-size: 4.8rem;
+    margin-top: -4rem;
+  }
+  @media (max-width: 500px) {
     font-size: 4rem;
-    margin-top: 3rem;
+    margin-top: -4rem;
+
   }
-  @media (max-width: 700px) {
-    font-size: 3.5rem;
-  }
-  @media (max-width: 600px) {
-    font-size: 3rem;
-  }
-}
-@media (max-width: 500px) {
-  margin-top:  1rem;
-}
 `;
 
 const Underline = styled.hr`
   background-color: rgba(60, 21, 214);
   opacity: 50%;
   border: none;
-  width: 50%;
+  width: 65%;
   margin-top: -3rem;
-  margin-bottom: 0.2rem;
+  margin-bottom: 1.5rem;
   height: 0.5rem;
   box-sizing: border-box;
   transition: 0.4s;
-  @media (max-width: 1100px) {
-    margin-top: -2.2rem;
-    width: 65%;
+  @media (max-width: 1250px) {
+    margin-top: -2.5rem;
+    width: 75%;
+  }
+  @media (max-width: 1000px) {
+    width: 40%;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
   }
   @media (max-width: 900px) {
-    width: 60%;
-    margin-top: -2.3rem;
-  }
-  @media (max-width: 750px) {
-    width: 70%;
     margin-top: -2rem;
+    margin-bottom: 1rem;
   }
-  @media (max-width: 500px) {
+  @media (max-width: 800px) {
+    margin-top: -2rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 700px) {
     width: 50%;
-    margin-top: -1.9rem;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 700px) {
+    width: 65%;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
   }
 `;
 
 const Text = styled.p`
-  margin-bottom: 2rem;
   font-size: 1.3rem;
   font-style: italic;
   text-align: center;
-  padding: 0 2rem;
+  margin: 0 auto;
+  margin-bottom: 2rem;
+  @media (max-width: 1200px) {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
   @media (max-width: 1000px) {
     font-size: 1rem;
+    margin: 1rem 0;
   }
 `;
 
@@ -283,31 +295,17 @@ const ErrorInput = styled.p`
 `;
 const ImageBox = styled.img`
   padding: 5rem 4rem 5rem 0;
-  max-width: 650px;
+  height: calc(100% - 100px);
   box-sizing: border-box;
+  padding-right: 5rem;
+  max-width: 90%;
   transition: 0.4s;
-  @media (max-width: 1250px) {
-    max-width: 550px;
+  @media (max-width: 1300px) {
+    height: calc(95% - 100px);
   }
-  @media (max-width: 1100px) {
-    max-width: 450px;
-  }
-  @media (max-width: 900px) {
-    max-width: 400px;
-  }
-  @media (max-width: 900px) {
-    max-width: 400px;
-  }
-  @media (max-width: 900px) {
-    max-width: 400px;
-  }
-  @media (max-width: 700px) {
-    max-width: 300px;
-  }
-  @media (max-width: 500px) {
+  @media (max-width: 1000px) {
     display: none;
   }
-}
 `;
 
 export default Login;
