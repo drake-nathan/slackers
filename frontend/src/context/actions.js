@@ -64,6 +64,7 @@ export async function loginUser(dispatch, loginPayload) {
       const data = await response.json();
       dispatch({ type: 'LOGIN_SUCCESS', payload: data });
       localStorage.setItem('currentUser', JSON.stringify(data));
+      localStorage.setItem('token', data.auth_token);
       return data;
     }
     if (response.status === 401) {
