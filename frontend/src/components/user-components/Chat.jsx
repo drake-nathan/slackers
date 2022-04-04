@@ -62,9 +62,16 @@ function Chat({ user }) {
   useEffect(() => {
     // getChannel();
     if (socket) {
-      socket.close();
+      debugger;
+      socket.close(() => {
+        debugger;
+        setSocket(io(`${process.env.REACT_APP_ROOT_SERVER_URL}/${channelId}`));
+      });
+    } else {
+      debugger;
+      setSocket(io(`${process.env.REACT_APP_ROOT_SERVER_URL}/${channelId}`));
     }
-    setSocket(io(`${process.env.REACT_APP_ROOT_SERVER_URL}/${channelId}`));
+
     getMessages();
   }, [channelId]);
 
