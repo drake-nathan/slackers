@@ -35,29 +35,7 @@ function Chat({ user }) {
     }
   };
 
-  const getChannel = async () => {
-    try {
-      const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels`,
-        headerConfig
-      );
-
-      const { data } = await request;
-
-      if (data) {
-        const newChannel = data.filter(
-          (ch) => ch.conversation_id === channelId
-        );
-
-        setChannel(newChannel);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    // getChannel();
     getMessages();
   }, [channelId]);
 

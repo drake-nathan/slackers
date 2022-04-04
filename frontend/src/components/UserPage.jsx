@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 
@@ -11,22 +12,20 @@ const user = {
   image: 'https://i.ibb.co/gMSQPXp/green-avatar.jpg',
 };
 
-// const signOut = () => {
-//   auth.signOut().then(() => {
-//     localStorage.removeItem('user');
-//     setUser(null);
-//   });
-// };
-
 function UserPage() {
+  const [channels, setChannels] = useState([]);
+  const [selectedChannel, setSelectedChannel] = useState(null);
   return (
     <Container>
       <Header user={user} />
       <Main>
-        <Sidebar />
+        <Sidebar
+          setChannels={setChannels}
+          setSelectedChsnnel={setSelectedChannel}
+        />
         <Switch>
           <Route path="/user/:channelId">
-            <Chat user={user} />
+            <Chat user={user} channel={selectedChannel} />
           </Route>
           <Route path="/people">
             <AllUsers />
