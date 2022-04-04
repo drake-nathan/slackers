@@ -8,7 +8,7 @@ async function setupDevDatabase(request, response) {
   const hashes = passwords.map((p) => bcrypt.hashSync(p, 10));
 
   const numOfUsers = 25;
-  const numOfChannels = 10;
+  const numOfChannels = 30;
   const numOfMessages = 25 * numOfChannels;
 
   const users = fakerFuncs.generateUsers(numOfUsers);
@@ -22,16 +22,17 @@ async function setupDevDatabase(request, response) {
         email varchar,
         name varchar,
         password varchar,
-        password_temp varchar
+        password_temp varchar,
+        image_url varchar
     );`;
 
   const populateUserTable = {
     text: `
-    INSERT INTO "slacker_users" (name, email, password, password_temp)
+    INSERT INTO "slacker_users" (name, email, password, password_temp, image_url)
       VALUES ${users.map(
-        (user) =>
-          `('${user.name}', '${user.email}', '${user.hash}', '${user.password}')`
-      )},('Dio', 'dio@example.com', $1, 'awesome');`,
+        (user, i) =>
+          `('${user.name}', '${user.email}', '${user.hash}', '${user.password}', 'https://joeschmoe.io/api/v1/${i}')`
+      )},('Dio', 'dio@example.com', $1, 'awesome', 'https://joeschmoe.io/api/v1/claudio');`,
     values: hashes,
   };
 
@@ -65,7 +66,7 @@ async function setupDevDatabase(request, response) {
     for (let user = 1; user <= numOfUsers + 1; user += 1) {
       for (
         let channel = 1;
-        channel <= 5;
+        channel <= numOfChannels;
         channel += getRandNum(numOfChannels / 3)
       ) {
         junctions.push({ user, channel });
@@ -130,24 +131,26 @@ async function setupDevDatabase(request, response) {
 
   await client.query(createConversationsTable).catch((err) => {
     console.log(err);
-    console.log('channel table could not be created :(');
+    console.log('conversation table could not be created :(');
   });
-  console.log('+++++ channel table exists or was successfully created');
+  console.log('+++++ conversation table exists or was successfully created');
 
   await client.query(populateConversationsTable).catch((err) => {});
-  console.log('+++++ channel table was successfully populated');
+  console.log('+++++ conversation table was successfully populated');
 
   await client.query(createUserConversationsJunction).catch((err) => {
     console.log(err);
-    console.log('user_channel table could not be created :(');
+    console.log('user_conversation table could not be created :(');
   });
-  console.log('+++++ user_channel table exists or was successfully created');
+  console.log(
+    '+++++ user_conversation table exists or was successfully created'
+  );
 
   await client.query(populateUserConversationsTable).catch((err) => {
     console.log(err);
-    console.log('----- user_channel table could not be populated :(');
+    console.log('----- user_conversation table could not be populated :(');
   });
-  console.log('+++++ user_channel table was successfully populated');
+  console.log('+++++ user_conversation table was successfully populated');
 
   await client.query(createMessageTable).catch((err) => {
     console.log(err);

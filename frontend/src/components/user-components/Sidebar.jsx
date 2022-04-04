@@ -69,6 +69,13 @@ const Sidebar = () => {
             </Channel>
           ))}
         </ChannelsList>
+        <hr />
+        <NewChannelContainer>
+          <h3>
+            <strong>People</strong>
+          </h3>
+        </NewChannelContainer>
+        <hr />
         <NewChannelContainer>
           <h3>
             <strong>Direct Messages</strong>
