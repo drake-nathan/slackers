@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import image from '../images/man_img.jpeg';
-import Menu from './Menu';
-import { useAuthDispatch, logout, useAuthState } from '../context';
+import image from '../../images/man_img.jpeg';
+import Menu from '../user-components/Menu';
 
-// Also note have to see how to get the name - for now, just {user.name}
+
 function Logout() {
   const [menu, setMenu] = useState(false);
 

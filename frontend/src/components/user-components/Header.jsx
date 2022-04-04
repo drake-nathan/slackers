@@ -1,10 +1,16 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Menu from './Menu';
 
-const Header = ({ user, signOut }) => (
+const Header = ({ user, signOut }) => {
+  const [menu, setMenu] = useState(false);
+  const handleLogout = () => {
+    setMenu(!menu);
+  };
+  return (
   <Container>
     <Main>
       <AccessTimeIcon />
@@ -17,7 +23,7 @@ const Header = ({ user, signOut }) => (
     </Main>
     <UserContainer>
       <Name>{user.name ? user.name : 'Han Solo'}</Name>
-      <UserImage onClick={signOut}>
+      <UserImage onClick={handleLogout}>
         <img
           src={
             user.photo
@@ -26,10 +32,12 @@ const Header = ({ user, signOut }) => (
           }
           alt="avatar"
         />
+         {menu && <Menu />}
       </UserImage>
     </UserContainer>
   </Container>
-);
+)
+};
 
 export default Header;
 
@@ -41,6 +49,7 @@ const Container = styled.div`
   justify-content: center;
   position: relative;
   box-shadow: inset 0 0 0 1px rgba(250, 250, 250, 0.4);
+  padding: 10px;
 `;
 
 const Main = styled.div`
