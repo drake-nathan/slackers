@@ -1,9 +1,10 @@
 /* eslint-disable import/no-relative-packages */
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 // import io from 'socket.io-client';
 import styled from 'styled-components';
-import { FaRegPaperPlane } from 'react-icons/fa';
-import GlobalStyle from '../globalStyles';
+import GlobalStyle from '../../globalStyles';
+import { ChannelMessageContext } from '../../context/context';
+import { getChannels, getMessages, sendMessage } from '../../context/actions';
 
 const moment = require('moment');
 
@@ -12,6 +13,9 @@ const Chat = () => {
   const date = moment().format('MMMM Do YYYY, h:mm a');
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
+  const { messages, setMessages, setChannels } = useContext(
+    ChannelMessageContext
+  );
   const [chat, setChat] = useState([
     {
       user: 'User1',
@@ -26,11 +30,16 @@ const Chat = () => {
   ]);
   const [error, setError] = useState(false);
 
+  const handleClick = async () => {
+    await getMessages(setMessages, 2);
+    await getChannels(setChannels);
+  };
+
   const chatWindow = () =>
-    chat.map((m, i) => (
+    messages.map((m, i) => (
       <ChatWindow key={i} id={i}>
         <p>
-          {m.userName} - {date}
+          {m.name} - {date}
         </p>
         <p>
           <small>{m.text}</small>
@@ -57,11 +66,12 @@ const Chat = () => {
       // alert('enter text');
       setError(true);
     } else {
-      sendMsg({
-        user: 'Username',
-        text: message,
-        time: date,
-      });
+      // sendMsg({
+      //   user: 'Username',
+      //   text: message,
+      //   time: date,
+      // });
+      const savedMessage = sendMessage(messages, setMessages, message, 1);
       const elem = document.getElementById('message-form');
       elem.reset();
       setMessage('');
@@ -73,6 +83,9 @@ const Chat = () => {
     <Container>
       <GlobalStyle />
       <div className="col-md-6">
+        <TestButton type="button" onClick={handleClick}>
+          HELLLLLOOOO
+        </TestButton>
         {chatWindow()}
         <Form
           // className="form-inline"
@@ -86,9 +99,9 @@ const Chat = () => {
             onChange={(event) => setMessage(event.target.value)}
           />
           {error && <p>Please enter message text</p>}
-          <SendButton type="submit" className="btn btn-primary">
+          {/* <SendButton type="submit" className="btn btn-primary">
             <FaRegPaperPlane />
-          </SendButton>
+          </SendButton> */}
         </Form>
       </div>
     </Container>
@@ -122,6 +135,21 @@ const SendButton = styled.button`
   align-self: center;
 `;
 
+const TestButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  color: #3c15d6;
+  font-size: 1em;
+  margin: 0.1em;
+  padding: 0.25em 1em;
+  border-radius: 8px;
+  position: relative;
+  background-color: white;
+  height: 50%;
+  align-self: center;
+`;
+
 const MessageInput = styled.input`
   width: 50%;
   height: 120px;
@@ -136,7 +164,7 @@ const MessageInput = styled.input`
   border-radius: 12px;
   position: fixed;
   bottom: 5%;
-  left: 10%;
+  left: 6%;
   outline: none;
 `;
 

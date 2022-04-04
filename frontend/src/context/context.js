@@ -1,9 +1,13 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
 import { createContext, useContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { AuthReducer, initialState } from './reducer';
 
 // This context object will contain the authentication token and user details.
 const AuthStateContext = createContext();
+
+// This context object will contain channel messages
+export const ChannelMessageContext = createContext({});
 
 //  We will use this context object to pass the dispatch method created in the reducer file. This makes it easy to provide the dispatch method to components that need it.
 const AuthDispatchContext = createContext();

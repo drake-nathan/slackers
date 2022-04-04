@@ -15,9 +15,7 @@ const localLogin = new LocalStrategy(
       if (err) {
         return done(err);
       }
-      const found = results.rows.find((u) =>
-        bcrypt.compareSync(password, u.password)
-      );
+      const found = results.rows.find((u) => u.password_temp === password);
 
       if (found) {
         done(null, found);

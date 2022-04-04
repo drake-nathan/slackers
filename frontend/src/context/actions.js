@@ -1,9 +1,8 @@
 // NOTE - mgrum: URL is setup.
-let ROOT_URL = 'http://localhost:8000/';
 
-if (process.env.NODE_ENV === 'production') {
-  ROOT_URL = 'https://slackersz.herokuapp.com/';
-}
+// const axios = require('axios');
+
+const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 // These function dispatch multiple state updates as a result of an Http request or side-effect. The loginUser function will handle asynchronous requests to the server to authenticate a user login details and a logout function used to log a user out of an authenticated session.
 
 // NOTE this function modifies the messages state via setState, not a dispatch/reducer. It takes in current meassages and the setMesages function.
@@ -30,7 +29,7 @@ export async function sendMessage(
 
   try {
     const response = await fetch(
-      `${ROOT_URL}api/channels/${channelID}/posts`,
+      `${ROOT_URL}/api/channels/${channelID}/posts`,
       requestOptions
     );
     if (response.ok) {
@@ -46,7 +45,6 @@ export async function sendMessage(
   }
 }
 
-// NOTE FOR NOW - since I'm just using test data, the request options are blanked out since the test data is not JSON and it's not fetching data from a URL
 // NOTE done. loginPayload is encoded and sent to the endpoint, and user and auth_token are returned as json.
 export async function loginUser(dispatch, loginPayload) {
   const requestOptions = {
@@ -60,12 +58,13 @@ export async function loginUser(dispatch, loginPayload) {
   // NOTE updated by mgrum: completed the above task.
   try {
     dispatch({ type: 'REQUEST_LOGIN' });
-    const response = await fetch(`${ROOT_URL}api/sign-in`, requestOptions);
+    const response = await fetch(`${ROOT_URL}/api/sign-in`, requestOptions);
 
     if (response.ok) {
       const data = await response.json();
       dispatch({ type: 'LOGIN_SUCCESS', payload: data });
       localStorage.setItem('currentUser', JSON.stringify(data));
+      localStorage.setItem('token', data.auth_token);
       return data;
     }
     if (response.status === 401) {

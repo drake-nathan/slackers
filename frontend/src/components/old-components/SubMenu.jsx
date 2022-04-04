@@ -1,12 +1,15 @@
 /* eslint-disable no-shadow */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { ChannelMessageContext } from '../context/context';
+import { getChannels } from '../context/actions';
 
 const SubMenu = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
+  const { channels, setChannels } = useContext(ChannelMessageContext);
 
   const showSubnav = () => setSubnav(!subnav);
 
@@ -27,11 +30,12 @@ const SubMenu = ({ item }) => {
           </div>
         </SidebarLink>
         {subnav &&
-          item.subNav.map((item, index) => (
-            <DropdownLink to={item.path} key={index}>
-              {item.icon}
-              <SidebarLabel>{item.title}</SidebarLabel>
-            </DropdownLink>
+          channels.map((item, index) => (
+            <SidebarLabel>{item.name}</SidebarLabel>
+            // <DropdownLink to={item.path} key={index}>
+            //   {item.icon}
+            //   <SidebarLabel>{item.title}</SidebarLabel>
+            // </DropdownLink>
           ))}
       </>
     );

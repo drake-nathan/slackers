@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import styled from 'styled-components';
@@ -40,7 +40,7 @@ function Login() {
   const dispatch = useAuthDispatch(); // gets the dispatch method from the useDispatch custom hook in the context file
   const { loading, errorMessage } = useAuthState(); // read the values of loading and errorMessage (state variables)
 
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const handleFormSubmit = async (data, e) => {
     e.preventDefault();
@@ -54,7 +54,7 @@ function Login() {
 
       if (!response) return;
       // if user found - navigate to user dashboard
-      navigate('/user');
+      history.push('/user');
     } catch (error) {
       console.log(error);
     }
@@ -112,6 +112,7 @@ function Login() {
             {...register('password', { required: true })}
             placeholder="password"
             value={password}
+            type="password"
             onChange={(e) => {
               handlePasswordChange(e);
             }}
