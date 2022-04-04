@@ -1,14 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useAuthDispatch, logout, useAuthState } from '../../context';
+import { useAuthDispatch, logout } from '../../context';
 
 function Menu() {
   const dispatch = useAuthDispatch();
-  const userDetails = useAuthState();
+  // const userDetails = useAuthState();
 
   const history = useHistory();
-  const username = JSON.parse(localStorage.getItem('currentUser')).user.name;
+  const username =
+    JSON.parse(localStorage.getItem('currentUser')).user.name || '';
 
   const handleLogout = () => {
     console.log(username);
@@ -17,7 +18,7 @@ function Menu() {
   };
   return (
     <Container>
-      <Name>Hello {username || ''}</Name>
+      <Name>Hello {username}</Name>
       <Button onClick={handleLogout}>Logout</Button>
     </Container>
   );
@@ -52,14 +53,14 @@ const Button = styled.button`
   width: 90%;
   padding: 0.6rem 3.5rem;
   border-radius: 10px;
-  background-color: #362B48;
+  background-color: #362b48;
   border: none;
   outline: none;
   box-shadow: none;
   text-transform: uppercase;
   box-sizing: border-box;
   cursor: pointer;
-  transform: 0.4s
+  transform: 0.4s ease-out;
   &:hover {
     background-color: #b7a2d7;
   }

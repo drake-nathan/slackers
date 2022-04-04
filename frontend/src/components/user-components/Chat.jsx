@@ -7,6 +7,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
+import ProfilePics from './ProfilePics';
 
 function Chat({ user }) {
   const { channelId } = useParams();
@@ -68,10 +69,11 @@ function Chat({ user }) {
           <ChannelName># Channel Name</ChannelName>
           <ChannelInfo>info</ChannelInfo>
         </Channel>
-        <ChannelDetails>
+        <ProfilePics />
+        {/* <ChannelDetails>
           <div>Details</div>
           <InfoOutlinedIcon style={{ marginLeft: '10px' }} />
-        </ChannelDetails>
+        </ChannelDetails> */}
       </Header>
       <MessageContainer>
         {messages.length > 0 &&

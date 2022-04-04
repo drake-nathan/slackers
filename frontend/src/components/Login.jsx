@@ -220,7 +220,7 @@ const Underline = styled.hr`
     margin-bottom: 1rem;
   }
   @media (max-width: 700px) {
-    width: 65%;
+    width: 55%;
     margin-top: -2rem;
     margin-bottom: 1rem;
   }
