@@ -4,7 +4,6 @@ const { ExtractJwt } = require('passport-jwt');
 
 const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local');
-const bcrypt = require('bcrypt');
 const keys = require('../config/keys');
 const { client, strings } = require('../queries/queries');
 
