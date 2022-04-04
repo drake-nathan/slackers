@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import io from 'socket.io-client';
 import { useParams } from 'react-router-dom';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
@@ -12,6 +13,7 @@ function Chat({ user }) {
   const { channelId } = useParams();
   const [channel, setChannel] = useState();
   const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
 
   const token = localStorage.getItem('token');
   const headerConfig = {
@@ -58,6 +60,10 @@ function Chat({ user }) {
 
   useEffect(() => {
     // getChannel();
+    if (socket) {
+      socket.close();
+    }
+    setSocket(io(`${process.env.REACT_APP_ROOT_SERVER_URL}/${channelId}`));
     getMessages();
   }, [channelId]);
 
@@ -84,7 +90,11 @@ function Chat({ user }) {
             />
           ))}
       </MessageContainer>
-      <ChatInput />
+      <ChatInput
+        socket={socket}
+        messages={messages}
+        setMessages={setMessages}
+      />
     </Container>
   );
 }

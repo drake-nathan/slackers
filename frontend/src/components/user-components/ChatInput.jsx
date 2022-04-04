@@ -4,13 +4,21 @@ import styled from 'styled-components';
 import SendIcon from '@material-ui/icons/Send';
 import { sendMessage } from '../../context/actions';
 
-const ChatInput = () => {
+const ChatInput = ({ socket }) => {
   const [input, setInput] = useState('');
 
   const submitMessage = (e) => {
     e.preventDefault();
 
-    sendMessage(input);
+    try {
+      socket.send(input, (res) => {
+        console.log(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    // replacing with socket
+    // sendMessage(input);
     setInput('');
   };
 
