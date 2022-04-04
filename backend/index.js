@@ -50,29 +50,33 @@ const io = new socketIO.Server(server, {
 });
 
 // you can insert middleware that gets to use the socket when a client connects or an event is received from the client.
-io.use((socket, next) => {
-  console.log('middleware');
-  next();
-});
 
 // attach socket listeners here. You can also export the io object and use it in your routes.
-io.on('connection', (socket) => {
-  // socket id = unique identifier for user
-  console.log(socket.id);
-  socket.on('message_sent', ({ message, channelID }) => {
-    // add to database
-    socket.to(channelID).emit('new_message', message);
-    // any fetching, creating, or updating to the db can be done here.
-  });
-  socket.on('join_channel', (channelID) => {
-    // query db for messages
-    console.log(`${socket.id} joined channel ${channelID}`);
-    socket.join(channelID);
-  });
-  socket.on('disconnect', () => {
-    console.log('User disconnected ', socket.id);
+io.on('new_namespace', (namespace) => {
+  namespace.on('connection', (socket) => {
+    socket.on('message_sent', (message) => {
+      console.log(message);
+    });
   });
 });
+
+// io.on('connection', (socket) => {
+//   // socket id = unique identifier for user
+//   console.log(socket.id);
+//   socket.on('message_sent', ({ message, channelID }) => {
+//     // add to database
+//     socket.to(channelID).emit('new_message', message);
+//     // any fetching, creating, or updating to the db can be done here.
+//   });
+//   socket.on('join_channel', (channelID) => {
+//     // query db for messages
+//     console.log(`${socket.id} joined channel ${channelID}`);
+//     socket.join(channelID);
+//   });
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected ', socket.id);
+//   });
+// });
 
 server.listen(port);
 console.log('Server listening on:', port);
