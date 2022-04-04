@@ -140,7 +140,6 @@ const Container = styled.div`
   background-size: 100% 100%;
   width: 100vw;
   height: 100vh;
-
 `;
 
 const LeftSideWrapper = styled.div`
@@ -185,7 +184,6 @@ const Header = styled.header`
   @media (max-width: 500px) {
     font-size: 4rem;
     margin-top: -4rem;
-
   }
 `;
 

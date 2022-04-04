@@ -11,13 +11,13 @@ function Menu() {
   const username = JSON.parse(localStorage.getItem('currentUser')).user.name;
 
   const handleLogout = () => {
-    console.log( username );
+    console.log(username);
     logout(dispatch);
     history.push('/');
   };
   return (
     <Container>
-      <Name>Hello {username ||''}</Name>
+      <Name>Hello {username || ''}</Name>
       <Button onClick={handleLogout}>Logout</Button>
     </Container>
   );
