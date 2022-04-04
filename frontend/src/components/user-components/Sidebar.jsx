@@ -1,23 +1,46 @@
-import { useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import axios from 'axios';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import AddIcon from '@material-ui/icons/Add';
-// import db from '../firebase';
-
-import { ChannelMessageContext } from '../../context/context';
-// import { sidebarItems } from '../../data/SidebarData';
-import { channelItems } from '../../data/ChannelData';
 
 const Sidebar = () => {
-  // const [channels, setChannels] = useContext(ChannelMessageContext);
+  const [channels, setChannels] = useState([]);
   const history = useHistory();
+
+  const getChannels = async () => {
+    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('currentUser').user.auth_token;
+
+    const headerConfig = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+      const request = axios.get(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/channels/`,
+        headerConfig
+      );
+
+      const data = await request;
+
+      if (data) {
+        setChannels(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const goToChannel = (id) => {
     if (id) {
       history.push(`/user/${id}`);
     }
   };
+
+  useEffect(() => {
+    getChannels();
+  }, []);
 
   return (
     <Container>
@@ -29,14 +52,6 @@ const Sidebar = () => {
           <AddCircleOutlineIcon />
         </NewMessage>
       </WorkSpaceContainer>
-      {/* <MainChannels>
-        {sidebarItems.map((item, index) => (
-          <MainChannelItem tabIndex={1} key={index}>
-            {item.icon}
-            {item.text}
-          </MainChannelItem>
-        ))}
-      </MainChannels> */}
       <ChannelsContainer>
         <NewChannelContainer>
           <h3>
@@ -44,13 +59,13 @@ const Sidebar = () => {
           </h3>
         </NewChannelContainer>
         <ChannelsList>
-          {channelItems.map((item, index) => (
+          {channels.map((channel, i) => (
             <Channel
-              onClick={() => goToChannel(item.id)}
+              onClick={() => goToChannel(channel.conversation_id)}
               tabIndex={1}
-              key={index}
+              key={i}
             >
-              # {item.name}
+              # {channel.name}
             </Channel>
           ))}
         </ChannelsList>
@@ -59,17 +74,6 @@ const Sidebar = () => {
             <strong>Direct Messages</strong>
           </h3>
         </NewChannelContainer>
-        <ChannelsList>
-          {channelItems.map((item, index) => (
-            <Channel
-              onClick={() => goToChannel(item.id)}
-              tabIndex={1}
-              key={index}
-            >
-              # {item.name}
-            </Channel>
-          ))}
-        </ChannelsList>
       </ChannelsContainer>
     </Container>
   );

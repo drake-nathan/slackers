@@ -1,12 +1,8 @@
 // NOTE - mgrum: URL is setup.
 
-const axios = require('axios');
+// const axios = require('axios');
 
-let ROOT_URL = 'http://localhost:8000/';
-
-if (process.env.NODE_ENV === 'production') {
-  ROOT_URL = 'https://slackersz.herokuapp.com/';
-}
+const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 // These function dispatch multiple state updates as a result of an Http request or side-effect. The loginUser function will handle asynchronous requests to the server to authenticate a user login details and a logout function used to log a user out of an authenticated session.
 
 // NOTE this function modifies the messages state via setState, not a dispatch/reducer. It takes in current meassages and the setMesages function.
@@ -33,7 +29,7 @@ export async function sendMessage(
 
   try {
     const response = await fetch(
-      `${ROOT_URL}api/channels/${channelID}/posts`,
+      `${ROOT_URL}/api/channels/${channelID}/posts`,
       requestOptions
     );
     if (response.ok) {
@@ -62,7 +58,7 @@ export async function loginUser(dispatch, loginPayload) {
   // NOTE updated by mgrum: completed the above task.
   try {
     dispatch({ type: 'REQUEST_LOGIN' });
-    const response = await fetch(`${ROOT_URL}api/sign-in`, requestOptions);
+    const response = await fetch(`${ROOT_URL}/api/sign-in`, requestOptions);
 
     if (response.ok) {
       const data = await response.json();
@@ -94,53 +90,3 @@ export async function logout(dispatch) {
   localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
 }
-
-export const getMessages = async (setMessages, channelId) => {
-  const token = localStorage.getItem('token');
-
-  const headerConfig = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  try {
-    const request = axios.get(
-      `http://localhost:8000/api/channels/${channelId}/posts`,
-      headerConfig
-    );
-
-    const data = await request;
-
-    if (data) {
-      setMessages(data.data);
-      return;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const getChannels = async (setChannels) => {
-  const token = localStorage.getItem('token');
-
-  const headerConfig = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  try {
-    const request = axios
-      .get(`http://localhost:8000/api/channels/`, headerConfig)
-      .catch((error) => {
-        throw error;
-      });
-
-    const data = await request;
-
-    if (data) {
-      setChannels(data.data);
-      console.log(data.data);
-      return;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};

@@ -13,16 +13,15 @@ function Chat({ user }) {
   const [channel, setChannel] = useState();
   const [messages, setMessages] = useState([]);
 
+  const token = localStorage.getItem('token');
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
   const getMessages = async () => {
-    const token = localStorage.getItem('token');
-
-    const headerConfig = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
     try {
       const request = axios.get(
-        `http://localhost:8000/api/channels/${channelId}/posts`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${channelId}/posts`,
         headerConfig
       );
 
@@ -30,6 +29,27 @@ function Chat({ user }) {
 
       if (data) {
         setMessages(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getChannel = async () => {
+    try {
+      const request = axios.get(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels`,
+        headerConfig
+      );
+
+      const { data } = await request;
+
+      if (data) {
+        const newChannel = data.filter(
+          (ch) => ch.conversation_id === channelId
+        );
+
+        setChannel(newChannel);
       }
     } catch (error) {
       console.log(error);
@@ -45,9 +65,7 @@ function Chat({ user }) {
     <Container>
       <Header>
         <Channel>
-          <ChannelName>
-            #{channel && JSON.stringify(channel.name).slice(1, -1)}
-          </ChannelName>
+          <ChannelName># Channel Name</ChannelName>
           <ChannelInfo>info</ChannelInfo>
         </Channel>
         <ChannelDetails>
