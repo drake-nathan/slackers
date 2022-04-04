@@ -26,13 +26,22 @@ const generateChannels = (numToMake) => {
     channels.push({
       name: falso.randProductName(),
       description: falso.randProductDescription(),
-      type: Math.random() > 6.6 / 10 ? 'channel' : 'dm',
+      type: 'channel',
       private: false,
-      count: null,
-      createDate: `2022-03-31 10:${i + 15}:54`,
     });
   }
   return channels;
+};
+
+const generateDMs = (numToMake) => {
+  const DMs = [];
+  for (let i = 0; i < numToMake; i += 1) {
+    DMs.push({
+      type: 'dm',
+      private: false,
+    });
+  }
+  return DMs;
 };
 
 const generateMessages = (numToMake) => {
@@ -49,5 +58,6 @@ module.exports = {
   getHashedPassword,
   generateUsers,
   generateChannels,
+  generateDMs,
   generateMessages,
 };
