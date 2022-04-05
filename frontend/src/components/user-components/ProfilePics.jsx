@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-// import Modal from './ProfileModal';
+
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
