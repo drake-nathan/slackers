@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import './normalize.css';
 import './App.css';
 import Login from './components/Login';
 import UserPage from './components/UserPage';

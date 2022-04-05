@@ -3,9 +3,11 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { Modal } from './AddChannelModal';
 
 const Sidebar = () => {
   const [channels, setChannels] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const history = useHistory();
 
   const getChannels = async () => {
@@ -40,7 +42,11 @@ const Sidebar = () => {
 
   useEffect(() => {
     getChannels();
-  }, []);
+  });
+
+  const handleAddClick = () => {
+    setShowModal(true);
+  };
 
   return (
     <Container>
@@ -49,10 +55,17 @@ const Sidebar = () => {
           <h3>Parsity Students</h3>
         </Name>
         <NewMessage>
-          <AddCircleOutlineIcon />
+          <AddCircleOutlineIcon onClick={handleAddClick} />
         </NewMessage>
       </WorkSpaceContainer>
       <ChannelsContainer>
+        {showModal ? (
+          <Modal
+            setShowModal={setShowModal}
+            setChannels={setChannels}
+            currentChannels={channels}
+          />
+        ) : null}
         <NewChannelContainer>
           <h3>
             <strong>Channels</strong>

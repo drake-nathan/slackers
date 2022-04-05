@@ -4,6 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Header from './user-components/Header';
 import Sidebar from './user-components/Sidebar';
 import Chat from './user-components/Chat';
+import AllUsers from './user-components/AllUsers';
 
 const user = {
   name: 'Han Solo',
@@ -26,6 +27,9 @@ function UserPage() {
         <Switch>
           <Route path="/user/:channelId">
             <Chat user={user} />
+          </Route>
+          <Route path="/people">
+            <AllUsers />
           </Route>
         </Switch>
       </Main>
