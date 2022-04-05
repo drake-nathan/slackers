@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useAuthDispatch, logout, useAuthState } from '../context';
+import { useAuthDispatch, logout, useAuthState } from '../../context';
 
 function Menu() {
   const dispatch = useAuthDispatch();

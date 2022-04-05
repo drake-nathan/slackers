@@ -50,33 +50,45 @@ const io = new socketIO.Server(server, {
 });
 
 // you can insert middleware that gets to use the socket when a client connects or an event is received from the client.
-
-// attach socket listeners here. You can also export the io object and use it in your routes.
-io.on('new_namespace', (namespace) => {
-  namespace.on('connection', (socket) => {
-    socket.on('message_sent', (message) => {
-      console.log(message);
-    });
-  });
+io.use((socket, next) => {
+  // authentication can go here
+  next();
 });
 
-// io.on('connection', (socket) => {
-//   // socket id = unique identifier for user
-//   console.log(socket.id);
-//   socket.on('message_sent', ({ message, channelID }) => {
-//     // add to database
-//     socket.to(channelID).emit('new_message', message);
-//     // any fetching, creating, or updating to the db can be done here.
-//   });
-//   socket.on('join_channel', (channelID) => {
-//     // query db for messages
-//     console.log(`${socket.id} joined channel ${channelID}`);
-//     socket.join(channelID);
-//   });
-//   socket.on('disconnect', () => {
-//     console.log('User disconnected ', socket.id);
-//   });
-// });
+const SQLDate = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+// attach socket listeners here.
+io.on('connection', (socket) => {
+  console.log(`User ${socket.id} connected`);
+  socket.on('message', (userId, message, channelId) => {
+    const query = {
+      text: `
+      INSERT INTO message (user_id, conversation_id, text, createddate)
+        VALUES ($1, $2, $3, $4) RETURNING *;
+      `,
+      // eslint-disable-next-line camelcase
+      values: [userId, channelId, message, SQLDate()],
+    };
+
+    client.query(query, (err, result) => {
+      if (err) {
+        socket.emit('db_error', err.toString());
+      } else {
+        console.log(channelId);
+        io.to(channelId).emit('new_message', result.rows[0]);
+      }
+    });
+  });
+  socket.on('join_channel', (channelId) => {
+    if (!socket.rooms.has(channelId)) {
+      socket.join(channelId);
+      console.log(`${socket.id} joined room ${channelId}`);
+    }
+  });
+  socket.on('disconnect', () => {
+    console.log('User disconnected ', socket.id);
+  });
+});
 
 server.listen(port);
 console.log('Server listening on:', port);
