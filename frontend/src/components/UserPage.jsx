@@ -56,7 +56,11 @@ function UserPage() {
         />
         <Switch>
           <Route path="/user/:channelId">
-            <Chat channel={selectedChannel} />
+            <Chat
+              channel={selectedChannel}
+              channels={channels}
+              setSelectedChannel={setSelectedChannel}
+            />
           </Route>
           <Route path="/people">
             <AllUsers />

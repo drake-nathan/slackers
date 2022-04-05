@@ -36,7 +36,8 @@ const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
           <Modal
             setShowModal={setShowModal}
             setChannels={setChannels}
-            currentChannels={channels}
+            channels={channels}
+            setSelectedChannel={setSelectedChannel}
           />
         ) : null}
         <NewChannelContainer>
