@@ -1,16 +1,27 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import SendIcon from '@material-ui/icons/Send';
 import { sendMessage } from '../../context/actions';
 
-const ChatInput = () => {
+const ChatInput = ({ socket }) => {
   const [input, setInput] = useState('');
+  const { channelId } = useParams();
 
   const submitMessage = (e) => {
     e.preventDefault();
 
-    sendMessage(input);
+    try {
+      socket.send(
+        JSON.parse(localStorage.getItem('currentUser')).user.user_id,
+        input,
+        channelId
+      );
+      console.log(channelId);
+    } catch (error) {
+      console.log(error);
+    }
     setInput('');
   };
 

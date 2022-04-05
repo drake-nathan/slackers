@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
@@ -13,6 +14,8 @@ function Chat({ user }) {
   const { channelId } = useParams();
   const [channel, setChannel] = useState();
   const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
+  const [socketTrigger, setSocketTrigger] = useState({});
 
   const token = localStorage.getItem('token');
   const headerConfig = {
@@ -57,10 +60,60 @@ function Chat({ user }) {
     }
   };
 
+  const checkState = async (state) => {};
+
   useEffect(() => {
     // getChannel();
-    getMessages();
-  }, [channelId]);
+    if (
+      !messages.length ||
+      messages[0].conversation_id !== parseInt(channelId)
+    ) {
+      getMessages();
+    }
+
+    if (socket) {
+      socket.emit('join_channel', channelId);
+    } else {
+      const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+      connection.once('connect', () => {
+        connection.on('new_message', (data) => {
+          if (data.conversation_id === parseInt(channelId)) {
+            setMessages([...messages, data]);
+          }
+        });
+        connection.emit('join_channel', channelId);
+        setSocket(connection);
+      });
+    }
+  }, [channelId, messages]);
+
+  // useEffect(() => {
+  //   if (
+  //     messages.length &&
+  //     messages[0].conversation_id !== parseInt(channelId)
+  //   ) {
+  //     setSocketTrigger({ ready: true });
+  //   }
+  // }, [messages]);
+
+  // useEffect(() => {
+  //   if (socketTrigger.ready) {
+  //     if (socket) {
+  //       socket.emit('join_channel', channelId);
+  //     } else {
+  //       const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+  //       connection.once('connect', () => {
+  //         connection.on('new_message', (data) => {
+  //           if (data.conversation_id === parseInt(channelId)) {
+  //             setMessages([...messages, data]);
+  //           }
+  //         });
+  //         connection.emit('join_channel', channelId);
+  //         setSocket(connection);
+  //       });
+  //     }
+  //   }
+  // }, [socketTrigger]);
 
   return (
     <Container>
@@ -86,7 +139,11 @@ function Chat({ user }) {
             />
           ))}
       </MessageContainer>
-      <ChatInput />
+      <ChatInput
+        socket={socket}
+        messages={messages}
+        setMessages={setMessages}
+      />
     </Container>
   );
 }
