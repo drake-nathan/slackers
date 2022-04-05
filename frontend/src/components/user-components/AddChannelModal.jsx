@@ -101,7 +101,7 @@ export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
               </div>
               <br />
               <button type="submit" className="btn btn-primary">
-                Add Contact
+                Add Channel
               </button>
             </form>
           </div>

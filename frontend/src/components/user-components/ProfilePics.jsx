@@ -1,14 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Img from '../../images/man_img.jpeg';
-{/* <img
-src={
-  user.photo
-    ? user.photo
-    : 'https://i.ibb.co/gMSQPXp/green-avatar.jpg'
-}
-alt="avatar"
-/> */}
 
 function ProfilePics() {
   return (

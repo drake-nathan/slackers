@@ -54,9 +54,6 @@ const Sidebar = () => {
         <Name>
           <h3>Parsity Students</h3>
         </Name>
-        <NewMessage>
-          <AddCircleOutlineIcon onClick={handleAddClick} />
-        </NewMessage>
       </WorkSpaceContainer>
       <ChannelsContainer>
         {showModal ? (
@@ -70,6 +67,9 @@ const Sidebar = () => {
           <h3>
             <strong>Channels</strong>
           </h3>
+          <NewMessage>
+            <AddCircleOutlineIcon onClick={handleAddClick} />
+          </NewMessage>
         </NewChannelContainer>
         <ChannelsList>
           {channels.map((channel, i) => (
@@ -118,8 +118,8 @@ const WorkSpaceContainer = styled.div`
 const Name = styled.div``;
 
 const NewMessage = styled.div`
-  width: 36px;
-  height: 36px;
+  width: 25px;
+  height: 25px;
   background: white;
   color: #0f2f81;
   fill: #0f2f81;
