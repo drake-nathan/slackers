@@ -93,35 +93,5 @@ export async function logout(dispatch) {
 }
 
 
-export async function getProfilePics(dispatch) {
-  dispatch({ type: 'IMG_REQUEST' });
 
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type:': 'application/json',
-      Authorization: `Bearer ${userInfo.auth_token}`,
-    },
-  };
-
-  try {
-    const response = await fetch(
-      `${ROOT_URL}/api/channels/${channelID}/users`,
-      requestOptions
-    );
-
-    if (response.ok) {
-      const userPics = await response.image_url.json();
-      console.log(userPics);
-      setUserPics([...currentPics]);
-      return userPics;
-    }
-
-    console.log(response.statusText);
-    return response.status;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-}
  

@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-// import Img from '../../images/man_img.jpeg';
-// import { imgReducer } from '../../context/imgReducer';
 import { useParams } from 'react-router-dom';
-import { getProfilePics } from '../../context/actions';
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
 function ProfilePics() {
   const { channelId } = useParams();
   const [pics, setPics] = useState([]);
-
-  // const [pics, setPics] = useState(["https://joeschmoe.io/api/v1/0", 'https://joeschmoe.io/api/v1/1', 'https://joeschmoe.io/api/v1/13']);
 
   const token = localStorage.getItem('token');
   const headerConfig = {
