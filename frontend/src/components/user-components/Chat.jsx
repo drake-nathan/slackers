@@ -10,9 +10,8 @@ import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 
-function Chat({ user }) {
+function Chat({ channel }) {
   const { channelId } = useParams();
-  const [channel, setChannel] = useState();
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
@@ -39,31 +38,9 @@ function Chat({ user }) {
     }
   };
 
-  const getChannel = async () => {
-    try {
-      const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels`,
-        headerConfig
-      );
-
-      const { data } = await request;
-
-      if (data) {
-        const newChannel = data.filter(
-          (ch) => ch.conversation_id === channelId
-        );
-
-        setChannel(newChannel);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const checkState = async (state) => {};
 
   useEffect(() => {
-    // getChannel();
     if (
       !messages.length ||
       messages[0].conversation_id !== parseInt(channelId)
@@ -119,7 +96,7 @@ function Chat({ user }) {
     <Container>
       <Header>
         <Channel>
-          <ChannelName># Channel Name</ChannelName>
+          <ChannelName># {channel.name || ''}</ChannelName>
           <ChannelInfo>info</ChannelInfo>
         </Channel>
         <ProfilePics />
@@ -134,7 +111,7 @@ function Chat({ user }) {
             <ChatMessage
               key={index}
               text={data.text}
-              name={data.user_id}
+              name={data.name}
               timestamp={data.createddate}
             />
           ))}

@@ -4,7 +4,7 @@ import ReactDom from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
+export const Modal = ({ setShowModal }) => {
   // close the modal when clicking outside the modal.
   const history = useHistory();
   const [name, setName] = useState('');
@@ -52,12 +52,11 @@ export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
       const addUserResponse = await addCurrentUserToNewChannelRequest;
 
       if (createChannelResponse && addUserResponse) {
-        console.log(createChannelResponse.data);
-        console.log(addUserResponse.data);
+        // console.log(createChannelResponse.data);
+        // console.log(addUserResponse.data);
         setShowModal(false);
         history.push('/user');
         history.push(`user/${conversationId}`);
-        // setChannels([response.data[0], ...currentChannels]);
       }
     } catch (error) {
       console.log(error);
