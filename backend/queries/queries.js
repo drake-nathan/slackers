@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // instructions to setting up test database below
 // https://parsity-fulltime-3.atlassian.net/jira/software/projects/PFTC3AP/boards/1?selectedIssue=PFTC3AP-9
 const { Pool, Client } = require('pg');
@@ -61,15 +62,64 @@ const addNewChannel = (req, res, next) => {
 };
 
 const createChannelUser = (req, res, next) => {
-  const { channelId } = req.params;
+  const { conversationId } = req.params;
   const { userId } = req.body;
-
   const query = {
     text: `
     INSERT INTO user_conversation (user_id, conversation_id)
       VALUES ($1, $2) RETURNING *;
     `,
-    values: [userId, parseInt(channelId)],
+    values: [userId, parseInt(conversationId)],
+  };
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    res.send(results.rows);
+  });
+};
+
+const getAllUsers = (req, res, next) => {
+  const query = {
+    text: `
+    SELECT
+      slacker_users.user_id,
+      slacker_users.name
+    FROM
+      slacker_users
+    `,
+  };
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    res.send(results.rows);
+  });
+};
+
+const getNonConvoUsers = (req, res, next) => {
+  const { conversationId } = req.params;
+
+  const query = {
+    text: `
+      With table_1 as (
+        SELECT DISTINCT
+                slacker_users.user_id
+              FROM
+                slacker_users
+              INNER JOIN user_conversation ON user_conversation.user_id = slacker_users.user_id
+            WHERE conversation_id = $1
+      )
+        
+      SELECT DISTINCT
+        slacker_users.user_id,
+        slacker_users.name
+      FROM
+        slacker_users
+      Left join table_1 on table_1.user_id = slacker_users.user_id
+      Where table_1.user_id IS NULL
+      `,
+    values: [conversationId],
   };
 
   client.query(query, (error, results) => {
@@ -81,7 +131,7 @@ const createChannelUser = (req, res, next) => {
 };
 
 const getChannelUsers = (req, res, next) => {
-  const { channelId } = req.params;
+  const { conversationId } = req.params;
 
   const query = {
     text: `
@@ -95,7 +145,7 @@ const getChannelUsers = (req, res, next) => {
     INNER JOIN user_conversation ON user_conversation.user_id = slacker_users.user_id
 	  WHERE user_conversation.conversation_id = $1
     `,
-    values: [channelId],
+    values: [conversationId],
   };
 
   client.query(query, (error, results) => {
@@ -107,14 +157,14 @@ const getChannelUsers = (req, res, next) => {
 };
 
 const getConversationMessages = (req, res, next) => {
-  const { channelId } = req.params;
+  const { conversationId } = req.params;
 
   const query = {
     text: `
     SELECT
       message.text,
+	    message.createddate,
       message.user_id,
-	  message.createddate,
       slacker_users.name,
       conversation.conversation_id
     FROM
@@ -123,7 +173,7 @@ const getConversationMessages = (req, res, next) => {
     INNER JOIN conversation ON conversation.conversation_id = message.conversation_id
     WHERE message.conversation_id = $1
     `,
-    values: [channelId],
+    values: [conversationId],
   };
 
   client.query(query, (error, results) => {
@@ -135,24 +185,24 @@ const getConversationMessages = (req, res, next) => {
 };
 
 const createConversationMessage = (req, res, next) => {
-  const { channelId } = req.params;
-  // eslint-disable-next-line camelcase
-  const { text, user_id, createddate } = req.body;
+  const { conversationId } = req.params;
+  const { text, createddate } = req.body;
+  const { user_id } = req.user;
 
   const query = {
     text: `
     INSERT INTO message (user_id, conversation_id, text, createddate)
       VALUES ($1, $2, $3, $4) RETURNING *;
     `,
-    // eslint-disable-next-line camelcase
-    values: [user_id, channelId, text, createddate],
+    values: [user_id, conversationId, text, createddate],
   };
 
   client.query(query, (error, results) => {
     if (error) {
       throw error;
     }
-    res.send(results.rows[0]);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.send();
   });
 };
 
@@ -260,4 +310,6 @@ module.exports = {
   getUserDms,
   addNewChannel,
   createChannelUser,
+  getAllUsers,
+  getNonConvoUsers,
 };

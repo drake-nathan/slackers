@@ -1,5 +1,7 @@
 // NOTE - mgrum: URL is setup.
 
+import axios from 'axios';
+
 // const axios = require('axios');
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
@@ -90,4 +92,59 @@ export async function logout(dispatch) {
   dispatch({ type: 'LOGOUT' });
   localStorage.removeItem('currentUser');
   localStorage.removeItem('token');
+}
+
+export async function addChannelUser(conversationId, userId) {
+  const token = localStorage.getItem('token');
+  debugger;
+  const body = {
+    userId,
+  };
+
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const response = await axios.post(
+      `${ROOT_URL}/api/conversations/${conversationId}/users`,
+      body,
+      headerConfig
+    );
+    if (response.status === 200) {
+      debugger;
+      const addedUser = await response.data;
+      return addedUser;
+    }
+    console.log(response.statusText);
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getNonConvoUsers(conversationId) {
+  const token = localStorage.getItem('token');
+
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const response = await axios.get(
+      `${ROOT_URL}/api/conversations/${conversationId}/non-users`,
+      headerConfig
+    );
+    if (response.status === 200) {
+      const users = await response.data;
+      console.log(users);
+      return users;
+    }
+    console.log(response.statusText);
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
