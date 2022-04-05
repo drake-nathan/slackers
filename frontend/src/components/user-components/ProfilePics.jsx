@@ -1,45 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import Img from '../../images/man_img.jpeg';
+// import Img from '../../images/man_img.jpeg';
+// import { imgReducer } from '../../context/imgReducer';
+import { useParams } from 'react-router-dom';
+import { getProfilePics } from '../../context/actions';
+
+const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
 function ProfilePics() {
-  const [pics, setPics] = useState([
-    'https://joeschmoe.io/api/v1/0',
-    'https://joeschmoe.io/api/v1/1',
-    'https://joeschmoe.io/api/v1/13',
-  ]);
+  const { channelId } = useParams();
+  const [pics, setPics] = useState([]);
 
-  // const getProfilePics = async () => {
-  //   const token = localStorage.getItem('token');
+  // const [pics, setPics] = useState(["https://joeschmoe.io/api/v1/0", 'https://joeschmoe.io/api/v1/1', 'https://joeschmoe.io/api/v1/13']);
 
-  //   const headerConfig = {
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   };
+  const token = localStorage.getItem('token');
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
-  //   //need to get the channel id, then the user_ids in that channel and then the image_url of each user
+  useEffect(() => {
+    axios
+      .get(`${ROOT_URL}/api/channels/${channelId}/users`, headerConfig)
+      .then((response) => {
+        console.log('response', response.data);
+        setPics(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [channelId]);
 
-  //   try {
-  //     const request = axios.get(
-  //       `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/channels/`,
-  //       headerConfig
-  //     );
-
-  //     const data = await request;
-
-  //     if (data) {
-  //       setPics(data.data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getProfilePics();
-  // });
-
-  const images = pics.map((pic, i) => <Imgs src={pic} key={i} alt="user" />);
+  const images = pics.map((user, i) => (
+    <Imgs src={user.image_url} key={i} alt="user" />
+  ));
 
   const number = pics.length;
 

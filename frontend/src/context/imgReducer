@@ -1,0 +1,20 @@
+//MOVED THIS TO PROFILE PIC COMPONENT FOR THE MOMENT
+
+export const imgReducer = (state, { type, payload, error }) => {
+  switch (type) {
+    case 'IMG_REQUEST':
+      return {
+        ...state,
+        images: payload,
+        loading: true,
+      };
+    case 'IMG_REQUEST_ERROR':
+      return {
+        ...state,
+        loading: false,
+        errorMessage: error,
+      };
+    default:
+      throw new Error(`Unhandled action type: ${type}`);
+  }
+};
