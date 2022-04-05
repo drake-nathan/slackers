@@ -1,38 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { Modal } from './AddChannelModal';
 
-const Sidebar = () => {
-  const [channels, setChannels] = useState([]);
+const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
-
-  const getChannels = async () => {
-    const token = localStorage.getItem('token');
-    // const token = localStorage.getItem('currentUser').user.auth_token;
-
-    const headerConfig = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
-    try {
-      const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/channels/`,
-        headerConfig
-      );
-
-      const data = await request;
-
-      if (data) {
-        setChannels(data.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const goToChannel = (id) => {
     if (id) {
@@ -40,12 +15,13 @@ const Sidebar = () => {
     }
   };
 
-  useEffect(() => {
-    getChannels();
-  }, [channels]);
-
   const handleAddClick = () => {
     setShowModal(true);
+  };
+
+  const handleChannelClick = (channel) => {
+    setSelectedChannel(channel);
+    goToChannel(channel.conversation_id);
   };
 
   return (
@@ -74,7 +50,7 @@ const Sidebar = () => {
         <ChannelsList>
           {channels.map((channel, i) => (
             <Channel
-              onClick={() => goToChannel(channel.conversation_id)}
+              onClick={() => handleChannelClick(channel)}
               tabIndex={1}
               key={i}
             >
@@ -97,6 +73,12 @@ const Sidebar = () => {
       </ChannelsContainer>
     </Container>
   );
+};
+
+Sidebar.propTypes = {
+  channels: PropTypes.array.isRequired,
+  setChannels: PropTypes.func.isRequired,
+  setSelectedChannel: PropTypes.func.isRequired,
 };
 
 export default Sidebar;
