@@ -5,7 +5,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Menu from './Menu';
 
-const Header = ({ user, signOut }) => {
+const Header = () => {
   const [menu, setMenu] = useState(false);
   const handleLogout = () => {
     setMenu(!menu);
@@ -29,16 +29,7 @@ const Header = ({ user, signOut }) => {
       <UserContainer>
         <Name>{userName}</Name>
         <UserImage>
-          <Image src={userImage} onClick={handleLogout}>
-            {/* <img
-            src={
-              user.photo
-                ? user.photo
-                : 'https://i.ibb.co/gMSQPXp/green-avatar.jpg'
-            }
-            alt="avatar"
-          /> */}
-          </Image>
+          <Image src={userImage} onClick={handleLogout} />
           {menu && <Menu />}
         </UserImage>
       </UserContainer>
