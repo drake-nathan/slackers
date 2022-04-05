@@ -61,14 +61,15 @@ const addNewChannel = (req, res, next) => {
 };
 
 const createChannelUser = (req, res, next) => {
-  const { userId, channelId } = req.body;
+  const { channelId } = req.params;
+  const { userId } = req.body;
 
   const query = {
     text: `
     INSERT INTO user_conversation (user_id, conversation_id)
       VALUES ($1, $2) RETURNING *;
     `,
-    values: [userId, channelId],
+    values: [userId, parseInt(channelId)],
   };
 
   client.query(query, (error, results) => {

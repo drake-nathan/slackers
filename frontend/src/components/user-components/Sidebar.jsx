@@ -42,7 +42,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     getChannels();
-  });
+  }, [channels]);
 
   const handleAddClick = () => {
     setShowModal(true);
