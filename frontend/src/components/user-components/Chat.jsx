@@ -10,8 +10,9 @@ import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 
-function Chat({ channel }) {
+function Chat({ channel, channels, setSelectedChannel }) {
   const { channelId } = useParams();
+  const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
@@ -41,11 +42,19 @@ function Chat({ channel }) {
   const checkState = async (state) => {};
 
   useEffect(() => {
+    setLoading(false);
+  }, [channel]);
+
+  useEffect(() => {
     if (
       !messages.length ||
       messages[0].conversation_id !== parseInt(channelId)
     ) {
       getMessages();
+      setSelectedChannel(
+        channels.filter((ch) => ch.conversation_id === channelId)
+      );
+      console.log(channel);
     }
 
     if (socket) {
@@ -92,13 +101,22 @@ function Chat({ channel }) {
   //   }
   // }, [socketTrigger]);
 
+  const loadChannelInfo = () => {
+    if (loading) {
+      return <h3 className="text-center">Loading...</h3>;
+    }
+    return (
+      <>
+        <ChannelName># {channel.name || ''}</ChannelName>
+        <ChannelInfo>{channel.description}</ChannelInfo>
+      </>
+    );
+  };
+
   return (
     <Container>
       <Header>
-        <Channel>
-          <ChannelName># {channel.name || ''}</ChannelName>
-          <ChannelInfo>info</ChannelInfo>
-        </Channel>
+        <Channel>{loadChannelInfo()}</Channel>
         <ProfilePics />
         {/* <ChannelDetails>
           <div>Details</div>
@@ -180,6 +198,6 @@ const ChannelName = styled.div`
 const ChannelInfo = styled.div`
   font-weight: 500;
   color: #606060;
-  font-size 18px;
+  font-size 13px;
   margin-top: 4px;
 `;

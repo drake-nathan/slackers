@@ -46,7 +46,7 @@ const addNewChannel = (req, res, next) => {
   const query = {
     text: `
     INSERT INTO conversation (name, description, type, private, createddate)
-      VALUES ($1, $2, $3, $4, Now()) RETURNING conversation_id, name;
+      VALUES ($1, $2, $3, $4, Now()) RETURNING conversation_id, name, description;
     `,
     // eslint-disable-next-line camelcase
     values: [name, description, 'channel', true],
@@ -163,7 +163,8 @@ const getUserChannels = (req, res, next) => {
     text: `
     SELECT
       user_conversation.conversation_id,
-      conversation.name
+      conversation.name,
+      conversation.description
     FROM user_conversation
     INNER JOIN slacker_users
     ON slacker_users.user_id = user_conversation.user_id
