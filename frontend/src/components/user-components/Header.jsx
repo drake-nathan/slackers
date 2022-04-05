@@ -1,35 +1,41 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import Menu from './Menu';
 
-const Header = ({ user, signOut }) => (
-  <Container>
-    <Main>
-      <AccessTimeIcon />
-      <SearchContainer>
-        <Search>
-          <input type="text" placeholder="Search..." />
-        </Search>
-      </SearchContainer>
-      <HelpOutlineIcon />
-    </Main>
-    <UserContainer>
-      <Name>{user.name ? user.name : 'Han Solo'}</Name>
-      <UserImage onClick={signOut}>
-        <img
-          src={
-            user.photo
-              ? user.photo
-              : 'https://i.ibb.co/gMSQPXp/green-avatar.jpg'
-          }
-          alt="avatar"
-        />
-      </UserImage>
-    </UserContainer>
-  </Container>
-);
+const Header = () => {
+  const [menu, setMenu] = useState(false);
+  const handleLogout = () => {
+    setMenu(!menu);
+  };
+
+  const userImage = JSON.parse(localStorage.getItem('currentUser')).user.url;
+  const userName =
+    JSON.parse(localStorage.getItem('currentUser')).user.name || '';
+
+  return (
+    <Container>
+      <Main>
+        <AccessTimeIcon />
+        <SearchContainer>
+          <Search>
+            <input type="text" placeholder="Search..." />
+          </Search>
+        </SearchContainer>
+        <HelpOutlineIcon />
+      </Main>
+      <UserContainer>
+        <Name>{userName}</Name>
+        <UserImage>
+          <Image src={userImage} onClick={handleLogout} />
+          {menu && <Menu />}
+        </UserImage>
+      </UserContainer>
+    </Container>
+  );
+};
 
 export default Header;
 
@@ -41,6 +47,7 @@ const Container = styled.div`
   justify-content: center;
   position: relative;
   box-shadow: inset 0 0 0 1px rgba(250, 250, 250, 0.4);
+  padding: 10px;
 `;
 
 const Main = styled.div`
@@ -90,8 +97,9 @@ const UserImage = styled.div`
   border: 2px solid #b7a2d7;
   border-radius: 3px;
   cursor: pointer;
-
   img {
     width: 100%;
   }
 `;
+
+const Image = styled.img``;

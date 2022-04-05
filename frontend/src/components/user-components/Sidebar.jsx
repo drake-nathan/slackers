@@ -1,36 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { Modal } from './AddChannelModal';
 
-const Sidebar = () => {
-  const [channels, setChannels] = useState([]);
+const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
+  const [showModal, setShowModal] = useState(false);
   const history = useHistory();
-
-  const getChannels = async () => {
-    const token = localStorage.getItem('token');
-    // const token = localStorage.getItem('currentUser').user.auth_token;
-
-    const headerConfig = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-
-    try {
-      const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/channels/`,
-        headerConfig
-      );
-
-      const data = await request;
-
-      if (data) {
-        setChannels(data.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const goToChannel = (id) => {
     if (id) {
@@ -38,9 +15,14 @@ const Sidebar = () => {
     }
   };
 
-  useEffect(() => {
-    getChannels();
-  }, []);
+  const handleAddClick = () => {
+    setShowModal(true);
+  };
+
+  const handleChannelClick = (channel) => {
+    setSelectedChannel(channel);
+    goToChannel(channel.conversation_id);
+  };
 
   return (
     <Container>
@@ -48,20 +30,28 @@ const Sidebar = () => {
         <Name>
           <h3>Parsity Students</h3>
         </Name>
-        <NewMessage>
-          <AddCircleOutlineIcon />
-        </NewMessage>
       </WorkSpaceContainer>
       <ChannelsContainer>
+        {showModal ? (
+          <Modal
+            setShowModal={setShowModal}
+            setChannels={setChannels}
+            channels={channels}
+            setSelectedChannel={setSelectedChannel}
+          />
+        ) : null}
         <NewChannelContainer>
           <h3>
             <strong>Channels</strong>
           </h3>
+          <NewMessage>
+            <AddCircleOutlineIcon onClick={handleAddClick} />
+          </NewMessage>
         </NewChannelContainer>
         <ChannelsList>
           {channels.map((channel, i) => (
             <Channel
-              onClick={() => goToChannel(channel.conversation_id)}
+              onClick={() => handleChannelClick(channel)}
               tabIndex={1}
               key={i}
             >
@@ -86,6 +76,12 @@ const Sidebar = () => {
   );
 };
 
+Sidebar.propTypes = {
+  channels: PropTypes.array.isRequired,
+  setChannels: PropTypes.func.isRequired,
+  setSelectedChannel: PropTypes.func.isRequired,
+};
+
 export default Sidebar;
 
 const Container = styled.div`
@@ -105,8 +101,8 @@ const WorkSpaceContainer = styled.div`
 const Name = styled.div``;
 
 const NewMessage = styled.div`
-  width: 36px;
-  height: 36px;
+  width: 25px;
+  height: 25px;
   background: white;
   color: #0f2f81;
   fill: #0f2f81;

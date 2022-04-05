@@ -8,13 +8,26 @@ async function setupDevDatabase(request, response) {
   const hashes = passwords.map((p) => bcrypt.hashSync(p, 10));
 
   const numOfUsers = 25;
-  const numOfChannels = 10;
+  const numOfChannels = 20;
+  const numOfDMs = numOfUsers * 3;
   const numOfMessages = 25 * numOfChannels;
 
   const users = fakerFuncs.generateUsers(numOfUsers);
   const channels = fakerFuncs.generateChannels(numOfChannels);
+  const DMs = fakerFuncs.generateDMs(numOfDMs);
 
   const getRandNum = (max) => falso.randNumber({ min: 1, max });
+
+  const renderDateNum = (num) => {
+    if (num > 9) return num;
+    return `0${num}`;
+  };
+
+  const incrementDate = (i, numOf) => {
+    const day = Math.floor(i * (30 / numOf)) || 1;
+    const minute = Math.floor(i * (60 / numOf)) || 1;
+    return `2022-03-${renderDateNum(day)} 10:${renderDateNum(minute)}:54`;
+  };
 
   const createUserTable = `
     CREATE TABLE "slacker_users" (
@@ -22,16 +35,17 @@ async function setupDevDatabase(request, response) {
         email varchar,
         name varchar,
         password varchar,
-        password_temp varchar
+        password_temp varchar,
+        image_url varchar
     );`;
 
   const populateUserTable = {
     text: `
-    INSERT INTO "slacker_users" (name, email, password, password_temp)
+    INSERT INTO "slacker_users" (name, email, password, password_temp, image_url)
       VALUES ${users.map(
-        (user) =>
-          `('${user.name}', '${user.email}', '${user.hash}', '${user.password}')`
-      )},('Dio', 'dio@example.com', $1, 'awesome');`,
+        (user, i) =>
+          `('${user.name}', '${user.email}', '${user.hash}', '${user.password}', 'https://joeschmoe.io/api/v1/${i}')`
+      )},('Dio', 'dio@example.com', $1, 'awesome', 'https://joeschmoe.io/api/v1/claudio');`,
     values: hashes,
   };
 
@@ -46,11 +60,20 @@ async function setupDevDatabase(request, response) {
         createddate timestamp
     );`;
 
-  const populateConversationsTable = `
+  const populateChannels = `
     INSERT INTO "conversation" (name, description, type, private, createddate)
       VALUES  ${channels.map(
-        (channel) =>
-          `('${channel.name}', '${channel.description}', '${channel.type}', '${channel.private}', '${channel.createDate}')`
+        (channel, i) =>
+          `('${channel.name}', '${channel.description}', '${channel.type}', '${
+            channel.private
+          }', '${incrementDate(i, numOfChannels)}')`
+      )};`;
+
+  const populateDMs = `
+    INSERT INTO "conversation" (type, private, createddate)
+      VALUES  ${DMs.map(
+        (DM, i) =>
+          `('${DM.type}', '${DM.private}', '${incrementDate(i, numOfDMs)}')`
       )};`;
 
   const createUserConversationsJunction = `
@@ -60,12 +83,13 @@ async function setupDevDatabase(request, response) {
         CONSTRAINT user_conversation_pkey PRIMARY KEY (user_id, conversation_id)
     );`;
 
-  const createJunctions = () => {
+  const createChannelJunctions = () => {
     const junctions = [];
+    // adds users to random channels
     for (let user = 1; user <= numOfUsers + 1; user += 1) {
       for (
         let channel = 1;
-        channel <= 5;
+        channel <= numOfChannels;
         channel += getRandNum(numOfChannels / 3)
       ) {
         junctions.push({ user, channel });
@@ -74,12 +98,34 @@ async function setupDevDatabase(request, response) {
     return junctions;
   };
 
-  const populateUserConversationsTable = `
+  const populateUserChannels = `
     INSERT INTO "user_conversation" (user_id, conversation_id)
-      VALUES ${createJunctions().map(
+      VALUES ${createChannelJunctions().map(
         (junc) => `('${junc.user}', '${junc.channel}')`
       )};
     `;
+
+  const createDMJunctions = () => {
+    const junctions = [];
+    // adds users to random DMs
+    for (let DM = numOfChannels + 1; DM <= numOfDMs + numOfChannels; DM += 1) {
+      const user1 = getRandNum(numOfUsers);
+      let user2 = getRandNum(numOfUsers);
+      while (user2 === user1) {
+        user2 = getRandNum(numOfUsers);
+      }
+      junctions.push({ user: user1, DM });
+      junctions.push({ user: user2, DM });
+    }
+    return junctions;
+  };
+
+  const populateUserDMs = `
+      INSERT INTO "user_conversation" (user_id, conversation_id)
+        VALUES ${createDMJunctions().map(
+          (junc) => `('${junc.user}', '${junc.DM}')`
+        )};
+      `;
 
   const createMessageTable = `
     CREATE TABLE message (
@@ -90,23 +136,12 @@ async function setupDevDatabase(request, response) {
         createdDate timestamp
     );`;
 
-  const renderDateNum = (num) => {
-    if (num > 9) return num;
-    return `0${num}`;
-  };
-
-  const incrementDate = (i) => {
-    const day = Math.floor(i * (30 / numOfMessages)) || 1;
-    const minute = Math.floor(i * (60 / numOfMessages)) || 1;
-    return `2022-03-${renderDateNum(day)} 10:${renderDateNum(minute)}:54`;
-  };
-
   const messages = fakerFuncs.generateMessages(numOfMessages);
   const distributeMessages = (message, i) => {
     const userId = getRandNum(numOfUsers + 1);
     const conversationId = getRandNum(numOfChannels);
     const { text } = message;
-    const date = incrementDate(i);
+    const date = incrementDate(i, numOfMessages);
 
     return `('${userId}', '${conversationId}', '${text}', '${date}')`;
   };
@@ -130,24 +165,37 @@ async function setupDevDatabase(request, response) {
 
   await client.query(createConversationsTable).catch((err) => {
     console.log(err);
-    console.log('channel table could not be created :(');
+    console.log('conversation table could not be created :(');
   });
-  console.log('+++++ channel table exists or was successfully created');
+  console.log('+++++ conversation table exists or was successfully created');
 
-  await client.query(populateConversationsTable).catch((err) => {});
-  console.log('+++++ channel table was successfully populated');
+  await client.query(populateChannels).catch((err) => {});
+  console.log(
+    '+++++ conversation table was successfully populated with channels'
+  );
+
+  await client.query(populateDMs).catch((err) => {});
+  console.log('+++++ conversation table was successfully populated with DMs');
 
   await client.query(createUserConversationsJunction).catch((err) => {
     console.log(err);
-    console.log('user_channel table could not be created :(');
+    console.log('user_conversation table could not be created :(');
   });
-  console.log('+++++ user_channel table exists or was successfully created');
+  console.log(
+    '+++++ user_conversation table exists or was successfully created'
+  );
 
-  await client.query(populateUserConversationsTable).catch((err) => {
+  await client.query(populateUserChannels).catch((err) => {
     console.log(err);
-    console.log('----- user_channel table could not be populated :(');
+    console.log('----- user channels table could not be populated :(');
   });
-  console.log('+++++ user_channel table was successfully populated');
+  console.log('+++++ user channels table was successfully populated');
+
+  await client.query(populateUserDMs).catch((err) => {
+    console.log(err);
+    console.log('----- user DMs table could not be populated :(');
+  });
+  console.log('+++++ user DMs table was successfully populated');
 
   await client.query(createMessageTable).catch((err) => {
     console.log(err);

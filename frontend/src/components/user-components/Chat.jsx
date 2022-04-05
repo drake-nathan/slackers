@@ -8,10 +8,11 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
+import ProfilePics from './ProfilePics';
 
-function Chat({ user }) {
+function Chat({ channel, channels, setSelectedChannel }) {
   const { channelId } = useParams();
-  const [channel, setChannel] = useState();
+  const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
@@ -38,93 +39,98 @@ function Chat({ user }) {
     }
   };
 
-  const getChannel = async () => {
-    try {
-      const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels`,
-        headerConfig
-      );
-
-      const { data } = await request;
-
-      if (data) {
-        const newChannel = data.filter(
-          (ch) => ch.conversation_id === channelId
-        );
-
-        setChannel(newChannel);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const checkState = async (state) => {};
 
   useEffect(() => {
-    // getChannel();
-    if (
-      !messages.length ||
-      messages[0].conversation_id !== parseInt(channelId)
-    ) {
-      getMessages();
-    }
+    setLoading(false);
+  }, [channel]);
 
-    if (socket) {
-      socket.emit('join_channel', channelId);
-    } else {
-      const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-      connection.once('connect', () => {
-        connection.on('new_message', (data) => {
-          if (data.conversation_id === parseInt(channelId)) {
-            setMessages([...messages, data]);
-          }
-        });
-        connection.emit('join_channel', channelId);
-        setSocket(connection);
-      });
-    }
-  }, [channelId, messages]);
+  useEffect(() => {
+    setSelectedChannel(
+      channels.filter((ch) => ch.conversation_id === channelId)
+    );
+  }, []);
 
   // useEffect(() => {
   //   if (
-  //     messages.length &&
+  //     !messages.length ||
   //     messages[0].conversation_id !== parseInt(channelId)
   //   ) {
-  //     setSocketTrigger({ ready: true });
+  //     getMessages();
+  //     setSelectedChannel(
+  //       channels.filter((ch) => ch.conversation_id === channelId)
+  //     );
   //   }
-  // }, [messages]);
 
-  // useEffect(() => {
-  //   if (socketTrigger.ready) {
-  //     if (socket) {
-  //       socket.emit('join_channel', channelId);
-  //     } else {
-  //       const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-  //       connection.once('connect', () => {
-  //         connection.on('new_message', (data) => {
-  //           if (data.conversation_id === parseInt(channelId)) {
-  //             setMessages([...messages, data]);
-  //           }
-  //         });
-  //         connection.emit('join_channel', channelId);
-  //         setSocket(connection);
+  //   if (socket) {
+  //     socket.emit('join_channel', channelId);
+  //   } else {
+  //     const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+  //     connection.once('connect', () => {
+  //       connection.on('new_message', (data) => {
+  //         if (data.conversation_id === parseInt(channelId)) {
+  //           setMessages([...messages, data]);
+  //         }
   //       });
-  //     }
+  //       connection.emit('join_channel', channelId);
+  //       setSocket(connection);
+  //     });
   //   }
-  // }, [socketTrigger]);
+  // }, [channelId, messages]);
+
+  useEffect(() => {
+    getMessages();
+  }, [channelId]);
+
+  useEffect(() => {
+    if (
+      messages.length &&
+      messages[0].conversation_id === parseInt(channelId)
+    ) {
+      setSocketTrigger({ ready: true });
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (socketTrigger.ready) {
+      if (socket) {
+        socket.emit('join_channel', channelId);
+      } else {
+        const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+        connection.once('connect', () => {
+          connection.on('new_message', (data) => {
+            if (data.conversation_id === parseInt(channelId)) {
+              setMessages([...messages, data]);
+            }
+          });
+          connection.emit('join_channel', channelId);
+          setSocket(connection);
+        });
+      }
+    }
+  }, [socketTrigger]);
+
+  const loadChannelInfo = () => {
+    if (loading) {
+      return <h3 className="text-center">Loading...</h3>;
+    }
+    return (
+      <>
+        <ChannelName># {channel.name || ''}</ChannelName>
+        <ChannelInfo>{channel.description}</ChannelInfo>
+      </>
+    );
+  };
 
   return (
     <Container>
       <Header>
-        <Channel>
-          <ChannelName># Channel Name</ChannelName>
-          <ChannelInfo>info</ChannelInfo>
-        </Channel>
-        <ChannelDetails>
+        <Channel>{loadChannelInfo()}</Channel>
+        <ProfilePics />
+        {/* <ChannelDetails>
           <div>Details</div>
           <InfoOutlinedIcon style={{ marginLeft: '10px' }} />
-        </ChannelDetails>
+        </ChannelDetails> */}
       </Header>
       <MessageContainer>
         {messages.length > 0 &&
@@ -132,7 +138,7 @@ function Chat({ user }) {
             <ChatMessage
               key={index}
               text={data.text}
-              name={data.user_id}
+              name={data.name}
               timestamp={data.createddate}
             />
           ))}
@@ -201,6 +207,6 @@ const ChannelName = styled.div`
 const ChannelInfo = styled.div`
   font-weight: 500;
   color: #606060;
-  font-size 18px;
+  font-size 13px;
   margin-top: 4px;
 `;

@@ -20,6 +20,7 @@ exports.signin = function (req, res, next) {
       user_id: req.user.user_id,
       email: req.user.email,
       name: req.user.name,
+      url: req.user.image_url,
     },
     auth_token: tokenGenerator(req.user),
   });
