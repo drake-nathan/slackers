@@ -46,60 +46,69 @@ function Chat({ channel, channels, setSelectedChannel }) {
   }, [channel]);
 
   useEffect(() => {
-    if (
-      !messages.length ||
-      messages[0].conversation_id !== parseInt(channelId)
-    ) {
-      getMessages();
-      setSelectedChannel(
-        channels.filter((ch) => ch.conversation_id === channelId)
-      );
-      console.log(channel);
-    }
-
-    if (socket) {
-      socket.emit('join_channel', channelId);
-    } else {
-      const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-      connection.once('connect', () => {
-        connection.on('new_message', (data) => {
-          if (data.conversation_id === parseInt(channelId)) {
-            setMessages([...messages, data]);
-          }
-        });
-        connection.emit('join_channel', channelId);
-        setSocket(connection);
-      });
-    }
-  }, [channelId, messages]);
+    setSelectedChannel(
+      channels.filter((ch) => ch.conversation_id === channelId)
+    );
+  }, []);
 
   // useEffect(() => {
   //   if (
-  //     messages.length &&
+  //     !messages.length ||
   //     messages[0].conversation_id !== parseInt(channelId)
   //   ) {
-  //     setSocketTrigger({ ready: true });
+  //     getMessages();
+  //     setSelectedChannel(
+  //       channels.filter((ch) => ch.conversation_id === channelId)
+  //     );
   //   }
-  // }, [messages]);
 
-  // useEffect(() => {
-  //   if (socketTrigger.ready) {
-  //     if (socket) {
-  //       socket.emit('join_channel', channelId);
-  //     } else {
-  //       const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-  //       connection.once('connect', () => {
-  //         connection.on('new_message', (data) => {
-  //           if (data.conversation_id === parseInt(channelId)) {
-  //             setMessages([...messages, data]);
-  //           }
-  //         });
-  //         connection.emit('join_channel', channelId);
-  //         setSocket(connection);
+  //   if (socket) {
+  //     socket.emit('join_channel', channelId);
+  //   } else {
+  //     const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+  //     connection.once('connect', () => {
+  //       connection.on('new_message', (data) => {
+  //         if (data.conversation_id === parseInt(channelId)) {
+  //           setMessages([...messages, data]);
+  //         }
   //       });
-  //     }
+  //       connection.emit('join_channel', channelId);
+  //       setSocket(connection);
+  //     });
   //   }
-  // }, [socketTrigger]);
+  // }, [channelId, messages]);
+
+  useEffect(() => {
+    getMessages();
+  }, [channelId]);
+
+  useEffect(() => {
+    if (
+      messages.length &&
+      messages[0].conversation_id === parseInt(channelId)
+    ) {
+      setSocketTrigger({ ready: true });
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (socketTrigger.ready) {
+      if (socket) {
+        socket.emit('join_channel', channelId);
+      } else {
+        const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+        connection.once('connect', () => {
+          connection.on('new_message', (data) => {
+            if (data.conversation_id === parseInt(channelId)) {
+              setMessages([...messages, data]);
+            }
+          });
+          connection.emit('join_channel', channelId);
+          setSocket(connection);
+        });
+      }
+    }
+  }, [socketTrigger]);
 
   const loadChannelInfo = () => {
     if (loading) {
