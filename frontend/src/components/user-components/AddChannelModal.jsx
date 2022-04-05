@@ -4,7 +4,7 @@ import ReactDom from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
+export const Modal = ({ setShowModal }) => {
   // close the modal when clicking outside the modal.
   const history = useHistory();
   const [name, setName] = useState('');
@@ -39,20 +39,24 @@ export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
       const createChannelResponse = await createChannelRequest;
 
       const responseData = {
-        channelId: createChannelResponse.data[0].conversation_id,
         userId: userInfoObj.user.user_id,
       };
+
+      const conversationId = createChannelResponse.data[0].conversation_id;
+
       const addCurrentUserToNewChannelRequest = axios.post(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${userInfoObj.user.user_id}/users`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${conversationId}/users`,
         responseData,
         headerConfig
       );
       const addUserResponse = await addCurrentUserToNewChannelRequest;
 
       if (createChannelResponse && addUserResponse) {
-        console.log(createChannelResponse.data);
-        console.log(addUserResponse.data);
-        // setChannels([response.data[0], ...currentChannels]);
+        // console.log(createChannelResponse.data);
+        // console.log(addUserResponse.data);
+        setShowModal(false);
+        history.push('/user');
+        history.push(`user/${conversationId}`);
       }
     } catch (error) {
       console.log(error);
@@ -64,9 +68,6 @@ export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
     // send post request to channels
     e.preventDefault();
     postNewChannel();
-    setShowModal(false);
-    history.push('/user');
-    history.push('user/47');
   };
   // render the modal JSX in the portal div.
   return ReactDom.createPortal(
@@ -99,7 +100,7 @@ export const Modal = ({ setShowModal, setChannels, currentChannels }) => {
               </div>
               <br />
               <button type="submit" className="btn btn-primary">
-                Add Contact
+                Add Channel
               </button>
             </form>
           </div>
