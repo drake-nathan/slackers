@@ -1,17 +1,53 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import Img from '../../images/man_img.jpeg';
 
 function ProfilePics() {
+  const [pics, setPics] = useState([
+    'https://joeschmoe.io/api/v1/0',
+    'https://joeschmoe.io/api/v1/1',
+    'https://joeschmoe.io/api/v1/13',
+  ]);
+
+  // const getProfilePics = async () => {
+  //   const token = localStorage.getItem('token');
+
+  //   const headerConfig = {
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   };
+
+  //   //need to get the channel id, then the user_ids in that channel and then the image_url of each user
+
+  //   try {
+  //     const request = axios.get(
+  //       `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/channels/`,
+  //       headerConfig
+  //     );
+
+  //     const data = await request;
+
+  //     if (data) {
+  //       setPics(data.data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getProfilePics();
+  // });
+
+  const images = pics.map((pic, i) => <Imgs src={pic} key={i} alt="user" />);
+
+  const number = pics.length;
+
   return (
     <Container>
       <InnerContainer>
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Number>5</Number>
+        {images}
+        <Number>{number}</Number>
       </InnerContainer>
     </Container>
   );
