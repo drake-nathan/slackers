@@ -39,6 +39,46 @@ const getAllChannels = (req, res, next) => {
   });
 };
 
+const addNewChannel = (req, res, next) => {
+  // body should have info
+  const { name, description } = req.body;
+
+  const query = {
+    text: `
+    INSERT INTO conversation (name, description, type, private, createddate)
+      VALUES ($1, $2, $3, $4, Now()) RETURNING conversation_id, name;
+    `,
+    // eslint-disable-next-line camelcase
+    values: [name, description, 'channel', true],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    res.send(results.rows);
+  });
+};
+
+const createChannelUser = (req, res, next) => {
+  const { userId, channelId } = req.body;
+
+  const query = {
+    text: `
+    INSERT INTO user_conversation (user_id, conversation_id)
+      VALUES ($1, $2) RETURNING *;
+    `,
+    values: [userId, channelId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    res.send(results.rows);
+  });
+};
+
 const getChannelUsers = (req, res, next) => {
   const { channelId } = req.params;
 
@@ -166,26 +206,6 @@ const getUserDms = (req, res, next) => {
   });
 };
 
-// const createChannelUser = (req, res, next) => {
-//   const { channelId } = req.params;
-//   const { userid } = req.body;
-
-//   const query = {
-//     text: `
-//     INSERT INTO user_conversation (user_id, conversation_id)
-//       VALUES ($1, $2);
-//     `,
-//     values: [userid, channelId],
-//   };
-
-//   client.query(query, (error, results) => {
-//     if (error) {
-//       throw error;
-//     }
-//     res.send('BOOM');
-//   });
-// };
-
 // const deleteChannelMessage = (req, res, next) => {
 //   const { messageId } = req.params;
 
@@ -235,4 +255,6 @@ module.exports = {
   createConversationMessage,
   getUserChannels,
   getUserDms,
+  addNewChannel,
+  createChannelUser,
 };
