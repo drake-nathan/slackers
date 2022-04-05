@@ -10,6 +10,11 @@ const Header = ({ user, signOut }) => {
   const handleLogout = () => {
     setMenu(!menu);
   };
+
+  const userImage = JSON.parse(localStorage.getItem('currentUser')).user.url;
+  const userName =
+    JSON.parse(localStorage.getItem('currentUser')).user.name || '';
+
   return (
     <Container>
       <Main>
@@ -22,16 +27,18 @@ const Header = ({ user, signOut }) => {
         <HelpOutlineIcon />
       </Main>
       <UserContainer>
-        <Name>{user.name ? user.name : 'Han Solo'}</Name>
-        <UserImage onClick={handleLogout}>
-          <img
+        <Name>{userName}</Name>
+        <UserImage>
+          <Image src={userImage} onClick={handleLogout}>
+            {/* <img
             src={
               user.photo
                 ? user.photo
                 : 'https://i.ibb.co/gMSQPXp/green-avatar.jpg'
             }
             alt="avatar"
-          />
+          /> */}
+          </Image>
           {menu && <Menu />}
         </UserImage>
       </UserContainer>
@@ -99,8 +106,9 @@ const UserImage = styled.div`
   border: 2px solid #b7a2d7;
   border-radius: 3px;
   cursor: pointer;
-
   img {
     width: 100%;
   }
 `;
+
+const Image = styled.img``;
