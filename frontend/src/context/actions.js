@@ -94,9 +94,8 @@ export async function logout(dispatch) {
   localStorage.removeItem('token');
 }
 
-export async function addChannelUser(conversationId, userId) {
+export async function addChannelUser(channelId, userId) {
   const token = localStorage.getItem('token');
-  debugger;
   const body = {
     userId,
   };
@@ -107,13 +106,13 @@ export async function addChannelUser(conversationId, userId) {
 
   try {
     const response = await axios.post(
-      `${ROOT_URL}/api/conversations/${conversationId}/users`,
+      `${ROOT_URL}/api/conversations/${channelId}/users`,
       body,
       headerConfig
     );
     if (response.status === 200) {
-      debugger;
       const addedUser = await response.data;
+      console.log(addedUser);
       return addedUser;
     }
     console.log(response.statusText);
