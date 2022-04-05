@@ -9,9 +9,8 @@ import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 
-function Chat({ user }) {
+function Chat({ user, channel }) {
   const { channelId } = useParams();
-  const [channel, setChannel] = useState();
   const [messages, setMessages] = useState([]);
 
   const token = localStorage.getItem('token');

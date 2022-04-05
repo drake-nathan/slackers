@@ -13,15 +13,16 @@ const user = {
 };
 
 function UserPage() {
-  const [channels, setChannels] = useState([]);
+  const [channels, sendChannelsUp] = useState([]);
   const [selectedChannel, setSelectedChannel] = useState(null);
+  console.log(channels);
   return (
     <Container>
       <Header user={user} />
       <Main>
         <Sidebar
-          setChannels={setChannels}
-          setSelectedChsnnel={setSelectedChannel}
+          sendChannelsUp={sendChannelsUp}
+          setSelectedChannel={setSelectedChannel}
         />
         <Switch>
           <Route path="/user/:channelId">

@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { Modal } from './AddChannelModal';
 
-const Sidebar = () => {
+const Sidebar = ({ sendChannelsUp }) => {
   const [channels, setChannels] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
@@ -97,6 +98,10 @@ const Sidebar = () => {
       </ChannelsContainer>
     </Container>
   );
+};
+
+Sidebar.propTypes = {
+  sendChannelsUp: PropTypes.func.isRequired,
 };
 
 export default Sidebar;
