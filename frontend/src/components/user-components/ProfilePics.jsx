@@ -26,11 +26,8 @@ function ProfilePics() {
       const { data } = await request;
 
       if (data) {
-        console.log('response', data);
         setPics(data);
         setShowPics(data.slice(0, 5));
-        console.log('pics', pics);
-        console.log('show pics', showPics);
       }
     } catch (error) {
       console.log(error);
@@ -50,7 +47,6 @@ function ProfilePics() {
   }, [channelId]);
 
   const handleClick = () => {
-    console.log('clicked');
     setModal(!modal);
   };
 
