@@ -5,32 +5,30 @@ import BookmarkBorderIcon from '@material-ui/icons/BookmarkBorder';
 import PeopleIcon from '@material-ui/icons/People';
 import AppsIcon from '@material-ui/icons/Apps';
 
-
-
 export const sidebarItems = [
   {
     icon: <MessageIcon />,
-    text: "Thread",
+    text: 'Thread',
   },
   {
     icon: <InboxIcon />,
-    text: "All DMs",
+    text: 'All DMs',
   },
   {
     icon: <DraftsIcon />,
-    text: "Mentions & Reactions",
+    text: 'Mentions & Reactions',
   },
   {
     icon: <BookmarkBorderIcon />,
-    text: "Save Items",
+    text: 'Save Items',
   },
   {
     icon: <PeopleIcon />,
-    text: "Peoples & Groups",
+    text: 'Peoples & Groups',
     path: '/people',
   },
   {
     icon: <AppsIcon />,
-    text: "More",
+    text: 'More',
   },
-]
+];

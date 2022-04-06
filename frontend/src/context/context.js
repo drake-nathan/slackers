@@ -3,7 +3,6 @@ import { createContext, useContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { AuthReducer, initialState } from './reducer';
 
-
 // This context object will contain channel messages
 export const ChannelMessageContext = createContext({});
 

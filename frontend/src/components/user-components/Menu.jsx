@@ -5,8 +5,8 @@ import { useAuthDispatch, logout } from '../../context';
 
 function Menu() {
   const dispatch = useAuthDispatch();
-
   const history = useHistory();
+
   const username =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';
 
