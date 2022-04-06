@@ -39,7 +39,7 @@ export const Modal = ({
     // update end point for adding channel
     try {
       const createChannelRequest = axios.post(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations`,
         data,
         headerConfig
       );
@@ -52,7 +52,7 @@ export const Modal = ({
       const conversationId = createChannelResponse.data[0].conversation_id;
 
       const addCurrentUserToNewChannelRequest = axios.post(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${conversationId}/users`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/users`,
         responseData,
         headerConfig
       );
@@ -61,7 +61,6 @@ export const Modal = ({
       if (createChannelResponse && addUserResponse) {
         // console.log(createChannelResponse.data);
         // console.log(addUserResponse.data);
-        // debugger;
         setChannels([...channels, createChannelResponse.data[0]]);
         setSelectedChannel(createChannelResponse.data[0]);
         setShowModal(false);

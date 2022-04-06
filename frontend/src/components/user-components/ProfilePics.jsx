@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
 function ProfilePics() {
-  const { channelId } = useParams();
+  const { conversationId } = useParams();
   const [pics, setPics] = useState([]);
   const [showPics, setShowPics] = useState([]);
   const [modal, setModal] = useState(false);
@@ -19,23 +19,15 @@ function ProfilePics() {
   const getPics = async () => {
     try {
       const request = axios.get(
-        `${ROOT_URL}/api/channels/${channelId}/users`,
+        `${ROOT_URL}/api/conversations/${conversationId}/users`,
         headerConfig
       );
 
       const { data } = await request;
 
       if (data) {
-<<<<<<< HEAD
-        console.log("response", data);
         setPics(data);
         setShowPics(data.slice(0, 5));
-        console.log("pics", pics);
-        console.log("show pics", showPics);
-=======
-        setPics(data);
-        setShowPics(data.slice(0, 5));
->>>>>>> 347e68afe53b2b849ae70860e5f77f52d21be53c
       }
     } catch (error) {
       console.log(error);
@@ -52,13 +44,9 @@ function ProfilePics() {
     return () => {
       cancel = true;
     };
-  }, [channelId]);
+  }, [conversationId]);
 
   const handleClick = () => {
-<<<<<<< HEAD
-    console.log("clicked");
-=======
->>>>>>> 347e68afe53b2b849ae70860e5f77f52d21be53c
     setModal(!modal);
   };
 
