@@ -5,9 +5,7 @@ function Searchbar() {
   return (
     <SearchContainer>
       <Search>
-        <input type="text" placeholder="Search...">
-        <div></div>
-        </input>
+        <input type="text" placeholder="Search..." />
       </Search>
       <Result></Result>
     </SearchContainer>
