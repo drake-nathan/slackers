@@ -17,7 +17,6 @@ function Chat() {
   const [currentChannel, setCurrentChannel] = useState();
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
-  const [socketTrigger, setSocketTrigger] = useState({});
 
   const token = localStorage.getItem('token');
   const headerConfig = {
@@ -68,7 +67,7 @@ function Chat() {
   }, [messages]);
 
   const socketPreConnectSetup = (deadSocket) => {
-    deadSocket.once('connect', () => {
+    deadSocket.on('connect', () => {
       deadSocket.on('new_message', (data) => {
         if (data.conversation_id === parseInt(channelIdRef.current)) {
           setMessages((mgs) => [...mgs, data]);
