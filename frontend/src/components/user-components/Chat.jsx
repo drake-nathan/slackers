@@ -36,8 +36,10 @@ function Chat() {
 
       const { data } = await request;
 
-      if (data) {
+      if (data.status === 200) {
         setCurrentChannel(data[0]);
+      } else {
+        return null;
       }
     } catch (error) {
       console.log(error);

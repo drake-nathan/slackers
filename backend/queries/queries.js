@@ -263,6 +263,9 @@ const getUserDms = (req, res, next) => {
 
 const getConversation = (req, res, next) => {
   const { conversationId } = req.params;
+  // if (!isAllowed(req.user.user_id, conversationId)) {
+  //   return res.send(401, 'You do not have access to that channel');
+  // }
   const query = {
     text: `
     SELECT 
