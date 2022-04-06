@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
@@ -9,9 +8,10 @@ import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 
-function Chat({ channel, channels, setSelectedChannel }) {
+function Chat() {
   const { conversationId } = useParams();
-  const [loading, setLoading] = useState(true);
+  const [currentChannel, setCurrentChannel] = useState();
+
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
@@ -23,6 +23,24 @@ function Chat({ channel, channels, setSelectedChannel }) {
   };
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const getConversation = async () => {
+    try {
+      const request = axios.get(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}`,
+        headerConfig
+      );
+
+      const { data } = await request;
+
+      if (data) {
+        console.log(data);
+        setCurrentChannel(data[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getMessages = async () => {
@@ -42,24 +60,13 @@ function Chat({ channel, channels, setSelectedChannel }) {
     }
   };
 
-  // const checkState = async (state) => {};
-
-  useEffect(() => {
-    setLoading(false);
-  }, [channel]);
-
-  useEffect(() => {
-    setSelectedChannel(
-      channels.filter((ch) => ch.conversation_id === conversationId)
-    );
-  }, []);
-
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
     getMessages();
+    getConversation();
   }, [conversationId]);
 
   useEffect(() => {
@@ -91,22 +98,15 @@ function Chat({ channel, channels, setSelectedChannel }) {
     }
   }, [socketTrigger]);
 
-  const loadChannelInfo = () => {
-    if (loading) {
-      return <h3 className="text-center">Loading...</h3>;
-    }
-    return (
-      <>
-        <ChannelName># {channel.name || ''}</ChannelName>
-        <ChannelInfo>{channel.description}</ChannelInfo>
-      </>
-    );
-  };
-
   return (
     <Container>
       <Header>
-        <Channel>{loadChannelInfo()}</Channel>
+        <Channel>
+          <ChannelName>{currentChannel ? currentChannel.name : ''}</ChannelName>
+          <ChannelInfo>
+            {currentChannel ? currentChannel.description : ''}
+          </ChannelInfo>
+        </Channel>
         <ProfilePics />
       </Header>
       <MessageContainer>
@@ -130,11 +130,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
   );
 }
 
-Chat.propTypes = {
-  channel: PropTypes.any,
-  channels: PropTypes.array,
-  setSelectedChannel: PropTypes.func,
-};
+// Chat.propTypes = {};
 
 export default Chat;
 

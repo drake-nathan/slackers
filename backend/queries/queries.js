@@ -261,6 +261,28 @@ const getUserDms = (req, res, next) => {
   });
 };
 
+const getConversation = (req, res, next) => {
+  const { conversationId } = req.params;
+  const query = {
+    text: `
+    SELECT 
+      conversation_id,
+      name,
+      description
+    FROM conversation 
+    WHERE conversation_id = $1;
+    `,
+    values: [conversationId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      res.send(400, 'Request could not be processed.');
+    }
+    console.log(results.rows);
+    res.send(results.rows);
+  });
+};
 // const deleteChannelMessage = (req, res, next) => {
 //   const { messageId } = req.params;
 
@@ -314,4 +336,5 @@ module.exports = {
   createChannelUser,
   getAllUsers,
   getNonConvoUsers,
+  getConversation,
 };
