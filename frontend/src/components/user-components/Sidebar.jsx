@@ -28,9 +28,9 @@ const Sidebar = ({
     setShowModal(true);
   };
 
-  const handleChannelClick = (channel) => {
-    setSelectedChannel(channel);
-    goToChannel(channel.conversation_id);
+  const handleChannelClick = (conversation) => {
+    setSelectedChannel(conversation);
+    goToChannel(conversation.conversation_id);
   };
 
   return (

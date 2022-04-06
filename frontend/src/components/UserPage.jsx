@@ -52,9 +52,7 @@ function UserPage() {
       );
 
       const { data } = await request;
-      debugger;
       if (data) {
-        // const dmInfo = data.filter((convo, i) => convo.type === 'dm');
         setDms(data);
       }
     } catch (error) {

@@ -259,6 +259,26 @@ const getUserDms = (req, res, next) => {
   });
 };
 
+const getDMUser = (req, res, next) => {
+  const { conversationId } = req.params;
+  const query = {
+    text: `
+    SELECT name
+    FROM user_conversation
+    NATURAL JOIN slacker_users
+    WHERE conversation_id = $1 AND user_id != $2;
+    `,
+    values: [conversationId, req.user.user_id],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      res.send(400, 'Request could not be processed.');
+    }
+    res.send(results.rows);
+  });
+};
+
 const getConversation = (req, res, next) => {
   const { conversationId } = req.params;
   // if (!isAllowed(req.user.user_id, conversationId)) {
@@ -269,7 +289,8 @@ const getConversation = (req, res, next) => {
     SELECT 
       conversation_id,
       name,
-      description
+      description,
+      type
     FROM conversation 
     WHERE conversation_id = $1;
     `,
@@ -337,4 +358,5 @@ module.exports = {
   getAllUsers,
   getNonConvoUsers,
   getConversation,
+  getDMUser,
 };
