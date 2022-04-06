@@ -113,7 +113,8 @@ const getNonConvoUsers = (req, res, next) => {
         
       SELECT DISTINCT
         slacker_users.user_id,
-        slacker_users.name
+        slacker_users.name,
+        slacker_users.image_url
       FROM
         slacker_users
       Left join table_1 on table_1.user_id = slacker_users.user_id

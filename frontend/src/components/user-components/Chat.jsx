@@ -5,12 +5,9 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
 
-import AddBox from '@material-ui/icons/AddBox';
-import { addChannelUser, getNonConvoUsers } from '../../context/actions';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
-
 
 function Chat({ channel, channels, setSelectedChannel }) {
   const { conversationId } = useParams();
@@ -106,43 +103,11 @@ function Chat({ channel, channels, setSelectedChannel }) {
     );
   };
 
-  let [users, setUsers] = useState([]);
-
-  const handleClick = async () => {
-    console.log('hey')
-    users = await getNonConvoUsers(conversationId);
-    console.log(users);
-    setUsers(users);
-  };
-
-  const handleUserClick = async (userObj) => {
-    addChannelUser(conversationId, userObj.user_id);
-  };
-
-  const UserList = (() => {
-    if (users.length > 0) {
-      return (
-        <ul>
-          {users.map((userObj, i) => (
-            <li onClick={() => handleUserClick(userObj)} tabIndex={1} key={i}>
-              {userObj.name}
-            </li>
-          ))}
-        </ul>
-      );
-    } else {
-      return null;
-    }
-  })
-
   return (
     <Container>
       <Header>
         <Channel>{loadChannelInfo()}</Channel>
         <ProfilePics />
-        <AddButton>
-          <AddBox onClick={() => handleClick()} />
-        </AddButton>
       </Header>
       <MessageContainer>
         {messages.length > 0 &&
@@ -166,22 +131,12 @@ function Chat({ channel, channels, setSelectedChannel }) {
 }
 
 Chat.propTypes = {
-  channel: PropTypes.object,
+  channel: PropTypes.any,
   channels: PropTypes.array,
   setSelectedChannel: PropTypes.func,
 };
 
 export default Chat;
-
-const AddButton = styled.div`
-  color: black;
-  fill: #0f2f81;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
-  cursor: pointer;
-`;
 
 const Container = styled.div`
   display: grid;
