@@ -94,7 +94,7 @@ const Sidebar = ({
               tabIndex={1}
               key={i}
             >
-              # {dm.conversation_id}
+              # {dm.name}
             </Channel>
           ))}
         </ChannelsList>
