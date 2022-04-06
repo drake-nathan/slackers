@@ -10,7 +10,7 @@ async function setupDevDatabase(request, response) {
   const numOfUsers = 25;
   const numOfChannels = 20;
   const numOfDMs = numOfUsers * 3;
-  const numOfMessages = 25 * numOfChannels;
+  const numOfMessages = 15 * (numOfChannels + numOfDMs);
 
   const users = fakerFuncs.generateUsers(numOfUsers);
   const channels = fakerFuncs.generateChannels(numOfChannels);
@@ -139,7 +139,7 @@ async function setupDevDatabase(request, response) {
   const messages = fakerFuncs.generateMessages(numOfMessages);
   const distributeMessages = (message, i) => {
     const userId = getRandNum(numOfUsers + 1);
-    const conversationId = getRandNum(numOfChannels);
+    const conversationId = getRandNum(numOfChannels + numOfDMs);
     const { text } = message;
     const date = incrementDate(i, numOfMessages);
 
