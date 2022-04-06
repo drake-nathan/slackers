@@ -1,24 +1,92 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Img from '../../images/man_img.jpeg';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
+
+const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
 function ProfilePics() {
+  const { channelId } = useParams();
+  const [pics, setPics] = useState([]);
+  const [showPics, setShowPics] = useState([]);
+  const [modal, setModal] = useState(false);
+
+  const token = localStorage.getItem('token');
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  const getPics = async () => {
+    try {
+      const request = axios.get(
+        `${ROOT_URL}/api/channels/${channelId}/users`,
+        headerConfig
+      );
+
+      const { data } = await request;
+
+      if (data) {
+        console.log('response', data);
+        setPics(data);
+        setShowPics(data.slice(0, 5));
+        console.log('pics', pics);
+        console.log('show pics', showPics);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    let cancel = false;
+    getPics().then(() => {
+      if (cancel) return;
+    });
+
+    return () => {
+      cancel = true;
+    };
+  }, [channelId]);
+
+  const handleClick = () => {
+    console.log('clicked');
+    setModal(!modal);
+  };
+
+  // These are only the first three images to show - like Slack does
+  const images = showPics.map((user, i) => (
+    <Imgs src={user.image_url} key={i} alt="user" />
+  ));
+
+  const personMap = pics.map((user, i) => (
+    <ListItem key={i * 57890}>
+      <Imgs src={user.image_url} alt="user" />
+      <Name>{user.name}</Name>
+    </ListItem>
+  ));
+
+  const number = pics.length;
+
   return (
-    <Container>
-      <InnerContainer>
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Imgs src={Img} alt="user" />
-        <Number>5</Number>
-      </InnerContainer>
-    </Container>
+    <>
+      <Container onClick={handleClick}>
+        <InnerContainer>
+          {images}
+          <Number>{number}</Number>
+        </InnerContainer>
+      </Container>
+      {modal && (
+        <Modal>
+          <List>{personMap}</List>
+        </Modal>
+      )}
+    </>
   );
 }
 
 const Container = styled.div`
-  padding-right: 2rem;
+  margin: 2rem;
 `;
 const InnerContainer = styled.div`
   display: flex;
@@ -26,8 +94,19 @@ const InnerContainer = styled.div`
   align-items: center;
   margin: 1rem 1rem;
   padding-left: 1rem;
+  background-color: #e9eff6;
+  border-radius: 12px;
 `;
 
+const Modal = styled.div`
+  background-color: #1e1926;
+  position: fixed;
+  padding: 2rem 1rem;
+  top: 100px;
+  right: 80px;
+  box-sizing: border-box;
+  border-radius: 20px;
+`;
 const Imgs = styled.img`
   height: 35px;
   width: 35px;
@@ -40,6 +119,23 @@ const Imgs = styled.img`
 const Number = styled.p`
   font-size: 1.4rem;
   margin: 1rem;
+`;
+
+const Name = styled.p`
+  font-size: 1.4rem;
+  margin: 1rem;
+  color: white;
+`;
+
+const List = styled.ul`
+  padding-left: 1rem;
+`;
+const ListItem = styled.li`
+  list-style: none;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
 `;
 
 export default ProfilePics;

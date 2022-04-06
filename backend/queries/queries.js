@@ -88,6 +88,7 @@ const getChannelUsers = (req, res, next) => {
     SELECT
       slacker_users.user_id,
       slacker_users.name,
+      slacker_users.image_url,
       user_conversation.conversation_id
     FROM
       slacker_users

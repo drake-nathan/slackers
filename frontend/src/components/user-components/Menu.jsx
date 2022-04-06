@@ -17,7 +17,7 @@ function Menu() {
   };
   return (
     <Container>
-      <Name>Hello {username}</Name>
+      <Name>{username}</Name>
       <Button onClick={handleLogout}>Logout</Button>
     </Container>
   );
@@ -31,8 +31,7 @@ const Container = styled.div`
   align-items: center;
   top: 40px;
   right: 20px;
-  width: 150px;
-  height: 150px;
+  width: 100%;
   border-radius: 10px;
   background-color: #1e1926;
   color: white;
@@ -69,6 +68,9 @@ const Name = styled.h1`
   font-size: 1rem;
   font-weight: bold;
   color: white;
+  padding: 1rem;
+  text-align: center;
+  margin: 0 auto;
 `;
 
 export default Menu;
