@@ -1,17 +1,17 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 
-function Chat({ channel }) {
+function Chat({ channel, channels, setSelectedChannel }) {
   const { channelId } = useParams();
+  const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
@@ -38,72 +38,67 @@ function Chat({ channel }) {
     }
   };
 
-  const checkState = async (state) => {};
+  // const checkState = async (state) => {};
+
+  useEffect(() => {
+    setLoading(false);
+  }, [channel]);
+
+  useEffect(() => {
+    setSelectedChannel(
+      channels.filter((ch) => ch.conversation_id === channelId)
+    );
+  }, []);
+
+  useEffect(() => {
+    getMessages();
+  }, [channelId]);
 
   useEffect(() => {
     if (
-      !messages.length ||
-      messages[0].conversation_id !== parseInt(channelId)
+      messages.length &&
+      messages[0].conversation_id === parseInt(channelId)
     ) {
-      getMessages();
+      setSocketTrigger({ ready: true });
     }
+  }, [messages]);
 
-    if (socket) {
-      socket.emit('join_channel', channelId);
-    } else {
-      const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-      connection.once('connect', () => {
-        connection.on('new_message', (data) => {
-          if (data.conversation_id === parseInt(channelId)) {
-            setMessages([...messages, data]);
-          }
+  useEffect(() => {
+    if (socketTrigger.ready) {
+      if (socket) {
+        socket.emit('join_channel', channelId);
+      } else {
+        const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+        connection.once('connect', () => {
+          connection.on('new_message', (data) => {
+            if (data.conversation_id === parseInt(channelId)) {
+              setMessages((mgs) => [...mgs, data]);
+            }
+          });
+          connection.emit('join_channel', channelId);
+          setSocket(connection);
         });
-        connection.emit('join_channel', channelId);
-        setSocket(connection);
-      });
+      }
     }
-  }, [channelId, messages]);
+  }, [socketTrigger]);
 
-  // useEffect(() => {
-  //   if (
-  //     messages.length &&
-  //     messages[0].conversation_id !== parseInt(channelId)
-  //   ) {
-  //     setSocketTrigger({ ready: true });
-  //   }
-  // }, [messages]);
-
-  // useEffect(() => {
-  //   if (socketTrigger.ready) {
-  //     if (socket) {
-  //       socket.emit('join_channel', channelId);
-  //     } else {
-  //       const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-  //       connection.once('connect', () => {
-  //         connection.on('new_message', (data) => {
-  //           if (data.conversation_id === parseInt(channelId)) {
-  //             setMessages([...messages, data]);
-  //           }
-  //         });
-  //         connection.emit('join_channel', channelId);
-  //         setSocket(connection);
-  //       });
-  //     }
-  //   }
-  // }, [socketTrigger]);
+  const loadChannelInfo = () => {
+    if (loading) {
+      return <h3 className="text-center">Loading...</h3>;
+    }
+    return (
+      <>
+        <ChannelName># {channel.name || ''}</ChannelName>
+        <ChannelInfo>{channel.description}</ChannelInfo>
+      </>
+    );
+  };
 
   return (
     <Container>
       <Header>
-        <Channel>
-          <ChannelName># {channel.name || ''}</ChannelName>
-          <ChannelInfo>info</ChannelInfo>
-        </Channel>
+        <Channel>{loadChannelInfo()}</Channel>
         <ProfilePics />
-        {/* <ChannelDetails>
-          <div>Details</div>
-          <InfoOutlinedIcon style={{ marginLeft: '10px' }} />
-        </ChannelDetails> */}
       </Header>
       <MessageContainer>
         {messages.length > 0 &&
@@ -124,6 +119,12 @@ function Chat({ channel }) {
     </Container>
   );
 }
+
+Chat.propTypes = {
+  channel: PropTypes.object,
+  channels: PropTypes.array,
+  setSelectedChannel: PropTypes.func,
+};
 
 export default Chat;
 
@@ -151,35 +152,15 @@ const MessageContainer = styled.div`
 
 const Channel = styled.div``;
 
-const ChannelDetails = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: #373838;
-  font-weight: 400;
-
-  &:hover {
-    color: #f7969e;
-  }
-`;
-
 const ChannelName = styled.div`
   font-weight: 700;
   font-size: 22px;
   color: #f7969e;
-  cursor: pointer;
-
-  &:hover {
-    background: #fafafa;
-    border-radius: 3px;
-    padding-left: 5px;
-    padding-right: 5px;
-  }
 `;
 
 const ChannelInfo = styled.div`
   font-weight: 500;
   color: #606060;
-  font-size 18px;
+  font-size: 13px;
   margin-top: 4px;
 `;

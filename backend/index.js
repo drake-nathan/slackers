@@ -69,13 +69,25 @@ io.on('connection', (socket) => {
       // eslint-disable-next-line camelcase
       values: [userId, channelId, message, SQLDate()],
     };
+    const userQuery = {
+      text: `SELECT name, email FROM slacker_users WHERE user_id=$1;`,
+      values: [userId],
+    };
 
     client.query(query, (err, result) => {
       if (err) {
         socket.emit('db_error', err.toString());
       } else {
-        console.log(channelId);
-        io.to(channelId).emit('new_message', result.rows[0]);
+        client.query(userQuery, (err, userResult) => {
+          if (err) {
+            socket.emit('db_error', err.toString());
+          } else {
+            io.to(channelId).emit('new_message', {
+              ...result.rows[0],
+              ...userResult.rows[0],
+            });
+          }
+        });
       }
     });
   });

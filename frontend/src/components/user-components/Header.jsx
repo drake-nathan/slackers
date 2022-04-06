@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
@@ -11,7 +10,10 @@ const Header = () => {
     setMenu(!menu);
   };
 
-  const userImage = JSON.parse(localStorage.getItem('currentUser')).user.url;
+  const userImage =
+    JSON.parse(localStorage.getItem('currentUser')).user.url ||
+    '../../public/favicon.ico'; // evil bunny!
+  // 'https://i.ibb.co/gMSQPXp/green-avatar.jpg';
   const userName =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';
 
@@ -36,8 +38,6 @@ const Header = () => {
     </Container>
   );
 };
-
-export default Header;
 
 const Container = styled.div`
   background: #0f2f81;
@@ -103,3 +103,5 @@ const UserImage = styled.div`
 `;
 
 const Image = styled.img``;
+
+export default Header;

@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+
+import AddBox from '@material-ui/icons/AddBox';
+import Chat from '@material-ui/icons/Chat';
+import Send from '@material-ui/icons/Send';
 import { Modal } from './AddChannelModal';
 
 const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
@@ -28,7 +31,9 @@ const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
     <Container>
       <WorkSpaceContainer>
         <Name>
-          <h3>Parsity Students</h3>
+          <h2>
+            <strong>Parsity Students</strong>
+          </h2>
         </Name>
       </WorkSpaceContainer>
       <ChannelsContainer>
@@ -36,16 +41,24 @@ const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
           <Modal
             setShowModal={setShowModal}
             setChannels={setChannels}
-            currentChannels={channels}
+            channels={channels}
+            setSelectedChannel={setSelectedChannel}
           />
         ) : null}
         <NewChannelContainer>
           <h3>
+            <strong>People</strong>
+          </h3>
+        </NewChannelContainer>
+        <hr />
+        <NewChannelContainer>
+          <Chat />
+          <h3>
             <strong>Channels</strong>
           </h3>
-          <NewMessage>
-            <AddCircleOutlineIcon onClick={handleAddClick} />
-          </NewMessage>
+          <AddButton>
+            <AddBox onClick={handleAddClick} />
+          </AddButton>
         </NewChannelContainer>
         <ChannelsList>
           {channels.map((channel, i) => (
@@ -60,15 +73,13 @@ const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
         </ChannelsList>
         <hr />
         <NewChannelContainer>
+          <Send />
           <h3>
-            <strong>People</strong>
+            <strong>DMs</strong>
           </h3>
-        </NewChannelContainer>
-        <hr />
-        <NewChannelContainer>
-          <h3>
-            <strong>Direct Messages</strong>
-          </h3>
+          <AddButton>
+            <AddBox />
+          </AddButton>
         </NewChannelContainer>
       </ChannelsContainer>
     </Container>
@@ -87,6 +98,10 @@ const Container = styled.div`
   background: #0063b2;
 `;
 
+// const hr = styled.div`
+//   border: 50%;
+// `;
+
 const WorkSpaceContainer = styled.div`
   color: white;
   height: 64px;
@@ -99,16 +114,12 @@ const WorkSpaceContainer = styled.div`
 
 const Name = styled.div``;
 
-const NewMessage = styled.div`
-  width: 25px;
-  height: 25px;
-  background: white;
-  color: #0f2f81;
+const AddButton = styled.div`
+  color: white;
   fill: #0f2f81;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
   margin-right: 20px;
   cursor: pointer;
 `;

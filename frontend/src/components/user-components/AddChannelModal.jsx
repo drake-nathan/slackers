@@ -1,10 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ReactDom from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
-export const Modal = ({ setShowModal }) => {
+export const Modal = ({
+  setShowModal,
+  channels,
+  setChannels,
+  setSelectedChannel,
+}) => {
   // close the modal when clicking outside the modal.
   const history = useHistory();
   const [name, setName] = useState('');
@@ -54,6 +60,9 @@ export const Modal = ({ setShowModal }) => {
       if (createChannelResponse && addUserResponse) {
         // console.log(createChannelResponse.data);
         // console.log(addUserResponse.data);
+        // debugger;
+        setChannels([...channels, createChannelResponse.data[0]]);
+        setSelectedChannel(createChannelResponse.data[0]);
         setShowModal(false);
         history.push('/user');
         history.push(`user/${conversationId}`);
@@ -109,4 +118,11 @@ export const Modal = ({ setShowModal }) => {
     </div>,
     document.getElementById('portal')
   );
+};
+
+Modal.propTypes = {
+  setShowModal: PropTypes.func.isRequired,
+  channels: PropTypes.array,
+  setChannels: PropTypes.func.isRequired,
+  setSelectedChannel: PropTypes.func.isRequired,
 };

@@ -1,17 +1,12 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Switch, Route, useHistory } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import Header from './user-components/Header';
 import Sidebar from './user-components/Sidebar';
 import Chat from './user-components/Chat';
 import AllUsers from './user-components/AllUsers';
-
-const user = {
-  name: 'Han Solo',
-  image: 'https://i.ibb.co/gMSQPXp/green-avatar.jpg',
-};
 
 function UserPage() {
   const [channels, setChannels] = useState([]);
@@ -47,7 +42,7 @@ function UserPage() {
 
   return (
     <Container>
-      <Header user={user} />
+      <Header />
       <Main>
         <Sidebar
           channels={channels}
@@ -56,7 +51,11 @@ function UserPage() {
         />
         <Switch>
           <Route path="/user/:channelId">
-            <Chat channel={selectedChannel} />
+            <Chat
+              channel={selectedChannel}
+              channels={channels}
+              setSelectedChannel={setSelectedChannel}
+            />
           </Route>
           <Route path="/people">
             <AllUsers />
