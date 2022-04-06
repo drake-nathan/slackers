@@ -142,7 +142,7 @@ function Login() {
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  align-itmes: center;
+  align-items: center;
   background: url(${BackgroundImage});
   background-repeat: no-repeat;
   background-size: 100% 100%;
@@ -158,10 +158,12 @@ const LeftSideWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
   @media (max-width: 1000px) {
     width: 100%;
     padding-top: 2rem;
   }
+
   @media (max-width: 1000px) {
     width: 100%;
   }
@@ -170,6 +172,7 @@ const LeftSideWrapper = styled.div`
 const RightSideWrapper = styled.div`
   width: 55%;
   box-sizing: border-box;
+
   @media (max-width: 1000px) {
     width: 0%;
   }
@@ -205,10 +208,12 @@ const Underline = styled.hr`
   height: 0.5rem;
   box-sizing: border-box;
   transition: 0.4s;
+
   @media (max-width: 1250px) {
     margin-top: -2.5rem;
     width: 75%;
   }
+
   @media (max-width: 1000px) {
     width: 40%;
     margin-top: -2rem;
@@ -218,15 +223,18 @@ const Underline = styled.hr`
     margin-top: -2rem;
     margin-bottom: 1rem;
   }
+
   @media (max-width: 800px) {
     margin-top: -2rem;
     margin-bottom: 1rem;
   }
+
   @media (max-width: 700px) {
     width: 50%;
     margin-top: -2rem;
     margin-bottom: 1rem;
   }
+
   @media (max-width: 700px) {
     width: 55%;
     margin-top: -2rem;
@@ -240,9 +248,12 @@ const Text = styled.p`
   text-align: center;
   margin: 0 auto;
   margin-bottom: 2rem;
+
   @media (max-width: 1200px) {
     margin-top: 1rem;
     margin-bottom: 1.5rem;
+  }
+
   @media (max-width: 1000px) {
     font-size: 1rem;
     margin: 1rem 0;
@@ -299,6 +310,7 @@ const ErrorInput = styled.p`
   color: red;
   text-align: center;
 `;
+
 const ImageBox = styled.img`
   padding: 5rem 4rem 5rem 0;
   height: calc(100% - 100px);
@@ -306,9 +318,11 @@ const ImageBox = styled.img`
   padding-right: 5rem;
   max-width: 90%;
   transition: 0.4s;
+
   @media (max-width: 1300px) {
     height: calc(95% - 100px);
   }
+
   @media (max-width: 1000px) {
     display: none;
   }
