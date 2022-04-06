@@ -5,12 +5,13 @@ import axios from 'axios';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
 
+// import { addChannelUser, getNonConvoUsers } from '../../context/actions';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 
 function Chat({ channel, channels, setSelectedChannel }) {
-  const { channelId } = useParams();
+  const { conversationId } = useParams();
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
@@ -24,7 +25,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
   const getMessages = async () => {
     try {
       const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${channelId}/posts`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/messages`,
         headerConfig
       );
 
@@ -46,18 +47,18 @@ function Chat({ channel, channels, setSelectedChannel }) {
 
   useEffect(() => {
     setSelectedChannel(
-      channels.filter((ch) => ch.conversation_id === channelId)
+      channels.filter((ch) => ch.conversation_id === conversationId)
     );
   }, []);
 
   useEffect(() => {
     getMessages();
-  }, [channelId]);
+  }, [conversationId]);
 
   useEffect(() => {
     if (
       messages.length &&
-      messages[0].conversation_id === parseInt(channelId)
+      messages[0].conversation_id === parseInt(conversationId)
     ) {
       setSocketTrigger({ ready: true });
     }
@@ -66,16 +67,16 @@ function Chat({ channel, channels, setSelectedChannel }) {
   useEffect(() => {
     if (socketTrigger.ready) {
       if (socket) {
-        socket.emit('join_channel', channelId);
+        socket.emit('join_channel', conversationId);
       } else {
         const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
         connection.once('connect', () => {
           connection.on('new_message', (data) => {
-            if (data.conversation_id === parseInt(channelId)) {
+            if (data.conversation_id === parseInt(conversationId)) {
               setMessages((mgs) => [...mgs, data]);
             }
           });
-          connection.emit('join_channel', channelId);
+          connection.emit('join_channel', conversationId);
           setSocket(connection);
         });
       }

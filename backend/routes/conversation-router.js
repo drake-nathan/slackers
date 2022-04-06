@@ -5,15 +5,17 @@ const db = require('../queries/queries');
 router.route('/').get(db.getAllChannels).post(db.addNewChannel);
 
 router
-  .route('/:channelId/posts')
+  .route('/:conversationId/messages')
   .get(db.getConversationMessages)
   .post(db.createConversationMessage);
 
 router
-  .route('/:channelId/users')
+  .route('/:conversationId/users')
   .get(db.getChannelUsers)
   .post(db.createChannelUser)
   .delete((req, res) => res.send('hey'));
+
+router.route('/:conversationId/non-users').get(db.getNonConvoUsers);
 
 router.route('/posts/:messageId/').delete((req, res) => res.send('hey'));
 

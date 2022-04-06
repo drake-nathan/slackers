@@ -8,6 +8,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socketIO = require('socket.io');
+const db = require('./queries/queries');
 
 // Connect to the DB! (no need to end the connection)
 const { client } = require('./queries/queries');
@@ -19,7 +20,7 @@ client.connect((err) => {
 // route level authentication middleware. Expecting a JWT in the header for in the requireAuth middleware.
 const { requireSignIn, requireAuth } = require('./services/authentication');
 
-const channelRouter = require('./routes/channel-router');
+const channelRouter = require('./routes/conversation-router');
 const currentUserRouter = require('./routes/current-user-router');
 const databaseRouter = require('./routes/db-router');
 const { signin } = require('./routes/sign-in');
@@ -34,8 +35,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get('/test', (req, res) => res.send('Beers, Beets, Battlestar Gallactica'));
 app.post('/api/sign-in', requireSignIn, signin);
 app.use('/api/me', requireAuth, currentUserRouter);
-app.use('/api/channels', requireAuth, channelRouter);
+app.use('/api/conversations', requireAuth, channelRouter);
 app.use('/api/database-setup', databaseRouter);
+app.get('/api/users', db.getAllUsers);
 
 // Server Setup
 const port = process.env.PORT || 8000;
