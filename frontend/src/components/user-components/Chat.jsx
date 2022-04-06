@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -16,10 +16,14 @@ function Chat({ channel, channels, setSelectedChannel }) {
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
+  const messagesEndRef = useRef(null);
 
   const token = localStorage.getItem('token');
   const headerConfig = {
     headers: { Authorization: `Bearer ${token}` },
+  };
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const getMessages = async () => {
@@ -50,6 +54,10 @@ function Chat({ channel, channels, setSelectedChannel }) {
       channels.filter((ch) => ch.conversation_id === conversationId)
     );
   }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     getMessages();
@@ -112,6 +120,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
               timestamp={data.createddate}
             />
           ))}
+        <div ref={messagesEndRef} />
       </MessageContainer>
       <ChatInput
         socket={socket}
