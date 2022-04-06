@@ -50,7 +50,7 @@ function ProfilePics() {
     setModal(!modal);
   };
 
-  // These are only the first three images to show - like Slack does
+  // These are only the first few images to show - like Slack does
   const images = showPics.map((user, i) => (
     <Imgs src={user.image_url} key={i} alt="user" />
   ));
@@ -72,9 +72,14 @@ function ProfilePics() {
           <Number>{number}</Number>
         </InnerContainer>
       </Container>
-      {modal && (
+      {modal && number>=5 && (
         <Modal>
           <List>{personMap}</List>
+        </Modal>
+      )}
+        {modal && number<5 && (
+        <Modal>
+          <List>{images}</List>
         </Modal>
       )}
     </>
@@ -104,6 +109,8 @@ const Modal = styled.div`
   right: 80px;
   box-sizing: border-box;
   border-radius: 20px;
+  height: 600px;
+  overflow-y: auto;
 `;
 const Imgs = styled.img`
   height: 35px;
