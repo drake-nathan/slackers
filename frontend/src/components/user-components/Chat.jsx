@@ -17,7 +17,6 @@ function Chat() {
   const [currentConversation, setCurrentConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
-  const [socketTrigger, setSocketTrigger] = useState({});
 
   const token = localStorage.getItem('token');
   const headerConfig = {
@@ -34,7 +33,7 @@ function Chat() {
         headerConfig
       );
 
-      const { data } = await request;
+      const { data, status } = await request;
 
       if (data[0].type === 'dm') {
         const dmRequest = axios.get(
@@ -81,7 +80,7 @@ function Chat() {
   }, [messages]);
 
   const socketPreConnectSetup = (deadSocket) => {
-    deadSocket.on('connect', () => {
+    deadSocket.once('connect', () => {
       deadSocket.on('new_message', (data) => {
         if (data.conversation_id === parseInt(channelIdRef.current)) {
           setMessages((mgs) => [...mgs, data]);
@@ -93,33 +92,21 @@ function Chat() {
   };
 
   useEffect(() => {
+    if (socket) {
+      socket.emit('join_channel', conversationId);
+    }
     getMessages();
     getConversation();
   }, [conversationId]);
 
   useEffect(() => {
-    if (
-      messages.length &&
-      messages[0].conversation_id === parseInt(channelIdRef.current)
-    ) {
-      setSocketTrigger({ ready: true });
-    }
-  }, [messages]);
-
-  useEffect(() => {
-    if (socketTrigger.ready) {
-      if (socket) {
-        socket.emit('join_channel', channelIdRef.current);
-      } else {
-        const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-        socketPreConnectSetup(connection);
-        connection.on('disconnect', () => {
-          socketPreConnectSetup(connection);
-          connection.connect();
-        });
-      }
-    }
-  }, [socketTrigger]);
+    const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+    socketPreConnectSetup(connection);
+    return () => {
+      socket.off();
+      socket.disconnect();
+    };
+  }, []);
 
   const getName = () => {
     if (currentConversation) {

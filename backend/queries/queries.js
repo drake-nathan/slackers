@@ -301,7 +301,6 @@ const getConversation = (req, res, next) => {
     if (error) {
       res.send(400, 'Request could not be processed.');
     }
-    console.log(results.rows);
     res.send(results.rows);
   });
 };
