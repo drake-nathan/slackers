@@ -240,17 +240,15 @@ const getUserChannels = (req, res, next) => {
 const getUserDms = (req, res, next) => {
   const query = {
     text: `
-    SELECT 
-      conversation.conversation_id, 
-      conversation.name, 
-      conversation.description, 
-      conversation.createddate, 
-      conversation.private, 
-      conversation.type 
+    SELECT conversation_id, name
+    FROM user_conversation
+    NATURAL JOIN slacker_users
+    WHERE conversation_id IN (SELECT 
+      conversation.conversation_id
     FROM conversation NATURAL JOIN user_conversation 
-    WHERE type = 'dm' AND user_id = $1;
+    WHERE type = $2 AND user_id = $1) AND user_id != $1;
     `,
-    values: [req.user.user_id],
+    values: [req.user.user_id, 'dm'],
   };
 
   client.query(query, (error, results) => {
