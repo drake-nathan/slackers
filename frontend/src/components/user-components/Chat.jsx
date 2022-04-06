@@ -67,7 +67,7 @@ function Chat() {
   }, [messages]);
 
   const socketPreConnectSetup = (deadSocket) => {
-    deadSocket.on('connect', () => {
+    deadSocket.once('connect', () => {
       deadSocket.on('new_message', (data) => {
         if (data.conversation_id === parseInt(channelIdRef.current)) {
           setMessages((mgs) => [...mgs, data]);
