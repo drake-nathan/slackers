@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { io } from 'socket.io-client';
@@ -12,6 +12,8 @@ import ProfilePics from './ProfilePics';
 
 function Chat({ channel, channels, setSelectedChannel }) {
   const { channelId } = useParams();
+  const channelIdRef = useRef(null);
+  channelIdRef.current = channelId;
   const [loading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
@@ -25,7 +27,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
   const getMessages = async () => {
     try {
       const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${channelId}/posts`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/channels/${channelIdRef.current}/posts`,
         headerConfig
       );
 
@@ -39,7 +41,17 @@ function Chat({ channel, channels, setSelectedChannel }) {
     }
   };
 
-  const checkState = async (state) => {};
+  const socketPreConnectSetup = (deadSocket) => {
+    deadSocket.once('connect', () => {
+      deadSocket.on('new_message', (data) => {
+        if (data.conversation_id === parseInt(channelIdRef.current)) {
+          setMessages((mgs) => [...mgs, data]);
+        }
+      });
+      deadSocket.emit('join_channel', channelIdRef.current);
+      setSocket(deadSocket);
+    });
+  };
 
   useEffect(() => {
     setLoading(false);
@@ -47,37 +59,9 @@ function Chat({ channel, channels, setSelectedChannel }) {
 
   useEffect(() => {
     setSelectedChannel(
-      channels.filter((ch) => ch.conversation_id === channelId)
+      channels.filter((ch) => ch.conversation_id === channelIdRef.current)
     );
   }, []);
-
-  // useEffect(() => {
-  //   if (
-  //     !messages.length ||
-  //     messages[0].conversation_id !== parseInt(channelId)
-  //   ) {
-  //     getMessages();
-  //   }
-
-  //   if (socket) {
-  //     socket.emit('join_channel', channelId);
-  //   } else {
-  //     const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-  //     connection.once('connect', () => {
-  //       connection.on('new_message', (data) => {
-  //         if (data.conversation_id === parseInt(channelId)) {
-  //           setMessages((mgs) => [...mgs, data]);
-  //         }
-  //       });
-  //       connection.emit('join_channel', channelId);
-  //       setSocket(connection);
-  //     });
-  //     return () => {
-  //       connection.off();
-  //       connection.disconnect();
-  //     };
-  //   }
-  // }, [channelId, messages]);
 
   useEffect(() => {
     getMessages();
@@ -86,7 +70,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
   useEffect(() => {
     if (
       messages.length &&
-      messages[0].conversation_id === parseInt(channelId)
+      messages[0].conversation_id === parseInt(channelIdRef.current)
     ) {
       setSocketTrigger({ ready: true });
     }
@@ -95,17 +79,13 @@ function Chat({ channel, channels, setSelectedChannel }) {
   useEffect(() => {
     if (socketTrigger.ready) {
       if (socket) {
-        socket.emit('join_channel', channelId);
+        socket.emit('join_channel', channelIdRef.current);
       } else {
         const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-        connection.once('connect', () => {
-          connection.on('new_message', (data) => {
-            if (data.conversation_id === parseInt(channelId)) {
-              setMessages((mgs) => [...mgs, data]);
-            }
-          });
-          connection.emit('join_channel', channelId);
-          setSocket(connection);
+        socketPreConnectSetup(connection);
+        connection.on('disconnect', () => {
+          socketPreConnectSetup(connection);
+          connection.connect();
         });
       }
     }
