@@ -72,6 +72,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
         const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
         connection.once('connect', () => {
           connection.on('new_message', (data) => {
+            debugger;
             if (data.conversation_id === parseInt(conversationId)) {
               setMessages((mgs) => [...mgs, data]);
             }

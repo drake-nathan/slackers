@@ -84,10 +84,10 @@ export const Modal = ({
     <div className="container" ref={modalRef} onClick={closeModal}>
       <div className="modal">
         <InnerContainer>
-            <Heading>Add Channel</Heading>
-            <Form onSubmit={handleSubmitNewChannelClick}>
-              <InputContainer>
-              <Row >
+          <Heading>Add Channel</Heading>
+          <Form onSubmit={handleSubmitNewChannelClick}>
+            <InputContainer>
+              <Row>
                 <Label htmlFor="nameInput">Channel Name</Label>
                 <Input
                   type="text"
@@ -106,15 +106,14 @@ export const Modal = ({
                   onChange={(event) => setDescription(event.target.value)}
                 />
               </Row>
-              </InputContainer>
-              <br />
-              <Button type="submit">
-                Submit
-              </Button>
-            </Form>
-      </InnerContainer>
-      </div> ,
-    // </div>,
+            </InputContainer>
+            <br />
+            <Button type="submit">Submit</Button>
+          </Form>
+        </InnerContainer>
+      </div>{' '}
+      , //{' '}
+    </div>,
     document.getElementById('portal')
   );
 };
@@ -133,20 +132,19 @@ const InnerContainer = styled.div`
   margin: 2rem;
 `;
 
-const Form = styled.form`
-`;
+const Form = styled.form``;
 
 const InputContainer = styled.form`
-display:flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Row = styled.div`
-display: grid;
-grid-template-columns: 1fr 1fr;
-column-gap: 1rem;
-width: 100%;
-margin-top: 1.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1rem;
+  width: 100%;
+  margin-top: 1.8rem;
 `;
 
 const Input = styled.input`
@@ -161,13 +159,12 @@ const Label = styled.label`
   letter-spacing: 0.4px;
   font-size: 1.4rem;
   margin-right: 4rem;
-  font-family:'Montserrat', sans-serif;
-
-`
-const Heading=styled.h3`
+  font-family: 'Montserrat', sans-serif;
+`;
+const Heading = styled.h3`
   font-size: 2rem;
-  font-family:'Montserrat', sans-serif;
-  font-family: inherit
+  font-family: 'Montserrat', sans-serif;
+  font-family: inherit;
   color: #1e1926;
   text-align: center;
   margin-top: 3rem;
@@ -185,14 +182,14 @@ const Button = styled.button`
   width: 65%;
   padding: 1rem 3.5rem;
   border-radius: 10px;
-  background-color:  #0063b2;
+  background-color: #0063b2;
   border: none;
   outline: none;
   box-shadow: none;
   text-transform: uppercase;
-  font-family:'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
-  font-family:'Montserrat', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   cursor: pointer;
   transform: 0.4s ease-out;
   &:hover {

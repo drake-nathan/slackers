@@ -72,12 +72,12 @@ function ProfilePics() {
           <Number>{number}</Number>
         </InnerContainer>
       </Container>
-      {modal && number>=5 && (
+      {modal && number >= 5 && (
         <Modal>
           <List>{personMap}</List>
         </Modal>
       )}
-        {modal && number<5 && (
+      {modal && number < 5 && (
         <Modal>
           <List>{images}</List>
         </Modal>
