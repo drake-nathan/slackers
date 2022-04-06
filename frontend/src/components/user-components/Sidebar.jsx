@@ -76,17 +76,6 @@ const Sidebar = ({
             </Channel>
           ))}
         </ChannelsList>
-        <ChannelsList>
-          {dms.map((dm, i) => (
-            <Channel
-              onClick={() => handleChannelClick(dm)}
-              tabIndex={1}
-              key={i}
-            >
-              # {dm.name}
-            </Channel>
-          ))}
-        </ChannelsList>
       </ChannelsContainer>
       <WorkSpaceBottomContainer>
         <Send />
