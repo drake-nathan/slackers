@@ -67,7 +67,7 @@ const Sidebar = ({ channels, setChannels, setSelectedChannel }) => {
               tabIndex={1}
               key={i}
             >
-              # {`${channel.name} ${channel.conversation_id}`}
+              # {`${channel.name}`}
             </Channel>
           ))}
         </ChannelsList>
