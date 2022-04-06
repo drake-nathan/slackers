@@ -47,7 +47,7 @@ function UserPage() {
 
     try {
       const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/dms`,
         headerConfig
       );
 
@@ -83,12 +83,7 @@ function UserPage() {
         />
         <Switch>
           <Route path="/user/:conversationId">
-            <Chat
-              channel={selectedChannel}
-              channels={channels}
-              dms={dms}
-              setSelectedChannel={setSelectedChannel}
-            />
+            <Chat getChannels={getChannels} channels={channels} />
           </Route>
           <Route path="/people">
             <AllUsers />

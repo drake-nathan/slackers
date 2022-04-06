@@ -43,7 +43,7 @@ const Name = styled.span`
   line-height: 1.4;
   span {
     font-weight: 400;
-    color: #373838;
+    color: #272727;
     margin-left: 10px;
   }
 `;

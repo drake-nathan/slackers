@@ -56,7 +56,7 @@ const Sidebar = ({
             <strong>People</strong>
           </h3>
         </NewChannelContainer>
-        <hr />
+        <FancyHR />
         <NewChannelContainer>
           <Chat />
           <h3>
@@ -73,11 +73,11 @@ const Sidebar = ({
               tabIndex={1}
               key={i}
             >
-              # {channel.name}
+              # {`${channel.name}`}
             </Channel>
           ))}
         </ChannelsList>
-        <hr />
+        <FancyHR />
         <NewChannelContainer>
           <Send />
           <h3>
@@ -117,9 +117,7 @@ const Container = styled.div`
   background: #0063b2;
 `;
 
-// const hr = styled.div`
-//   border: 50%;
-// `;
+const FancyHR = styled.hr``;
 
 const WorkSpaceContainer = styled.div`
   color: white;

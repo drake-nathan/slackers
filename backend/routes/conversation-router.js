@@ -4,6 +4,8 @@ const db = require('../queries/queries');
 // all routes here are going to /api/channels
 router.route('/').get(db.getAllChannels).post(db.addNewChannel);
 
+router.route('/:conversationId').get(db.getConversation);
+
 router
   .route('/:conversationId/messages')
   .get(db.getConversationMessages)

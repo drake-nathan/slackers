@@ -94,6 +94,7 @@ const Name = styled.div`
 `;
 
 const UserImage = styled.div`
+  background-color: #e9eff6;
   width: 28px;
   height: 28px;
   border: 2px solid #b7a2d7;

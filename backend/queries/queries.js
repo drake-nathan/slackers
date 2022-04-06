@@ -113,7 +113,8 @@ const getNonConvoUsers = (req, res, next) => {
         
       SELECT DISTINCT
         slacker_users.user_id,
-        slacker_users.name
+        slacker_users.name,
+        slacker_users.image_url
       FROM
         slacker_users
       Left join table_1 on table_1.user_id = slacker_users.user_id
@@ -260,6 +261,31 @@ const getUserDms = (req, res, next) => {
   });
 };
 
+const getConversation = (req, res, next) => {
+  const { conversationId } = req.params;
+  // if (!isAllowed(req.user.user_id, conversationId)) {
+  //   return res.send(401, 'You do not have access to that channel');
+  // }
+  const query = {
+    text: `
+    SELECT 
+      conversation_id,
+      name,
+      description
+    FROM conversation 
+    WHERE conversation_id = $1;
+    `,
+    values: [conversationId],
+  };
+
+  client.query(query, (error, results) => {
+    if (error) {
+      res.send(400, 'Request could not be processed.');
+    }
+    console.log(results.rows);
+    res.send(results.rows);
+  });
+};
 // const deleteChannelMessage = (req, res, next) => {
 //   const { messageId } = req.params;
 
@@ -313,4 +339,5 @@ module.exports = {
   createChannelUser,
   getAllUsers,
   getNonConvoUsers,
+  getConversation,
 };

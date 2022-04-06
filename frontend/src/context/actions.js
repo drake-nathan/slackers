@@ -97,7 +97,6 @@ export async function getNonConvoUsers(conversationId) {
     );
     if (response.status === 200) {
       const users = await response.data;
-      console.log(users);
       return users;
     }
     console.log(response.statusText);
