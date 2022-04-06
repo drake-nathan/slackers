@@ -14,7 +14,7 @@ function Chat() {
   channelIdRef.current = conversationId;
   const messagesEndRef = useRef(null);
 
-  const [currentChannel, setCurrentChannel] = useState();
+  const [currentConversation, setCurrentConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
@@ -36,8 +36,21 @@ function Chat() {
 
       const { data } = await request;
 
-      if (data.status === 200) {
-        setCurrentChannel(data[0]);
+      if (data[0].type === 'dm') {
+        const dmRequest = axios.get(
+          `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/other-dm-user`,
+          headerConfig
+        );
+
+        const dmDataResponse = await dmRequest;
+        if (dmDataResponse.status === 200) {
+          setCurrentConversation(dmDataResponse.data[0]);
+        }
+        // todo: need error handling
+      }
+
+      if (data && data[0].type !== 'dm') {
+        setCurrentConversation(data[0]);
       } else {
         return null;
       }
@@ -108,14 +121,20 @@ function Chat() {
     }
   }, [socketTrigger]);
 
+  const getName = () => {
+    if (currentConversation) {
+      console.log(currentConversation);
+      return currentConversation.name;
+    }
+
+    return 'Channel';
+  };
+
   return (
     <Container>
       <Header>
         <Channel>
-          <ChannelName>{currentChannel ? currentChannel.name : ''}</ChannelName>
-          <ChannelInfo>
-            {currentChannel ? currentChannel.description : ''}
-          </ChannelInfo>
+          <ChannelName>{getName()}</ChannelName>
         </Channel>
         <ProfilePics />
       </Header>
