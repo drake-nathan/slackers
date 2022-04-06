@@ -10,12 +10,14 @@ import ProfilePics from './ProfilePics';
 
 function Chat() {
   const { conversationId } = useParams();
-  const [currentChannel, setCurrentChannel] = useState();
+  const channelIdRef = useRef(null);
+  channelIdRef.current = conversationId;
+  const messagesEndRef = useRef(null);
 
+  const [currentChannel, setCurrentChannel] = useState();
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
   const [socketTrigger, setSocketTrigger] = useState({});
-  const messagesEndRef = useRef(null);
 
   const token = localStorage.getItem('token');
   const headerConfig = {
@@ -46,7 +48,7 @@ function Chat() {
   const getMessages = async () => {
     try {
       const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/messages`,
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${channelIdRef.current}/messages`,
         headerConfig
       );
 
@@ -64,6 +66,18 @@ function Chat() {
     scrollToBottom();
   }, [messages]);
 
+  const socketPreConnectSetup = (deadSocket) => {
+    deadSocket.once('connect', () => {
+      deadSocket.on('new_message', (data) => {
+        if (data.conversation_id === parseInt(channelIdRef.current)) {
+          setMessages((mgs) => [...mgs, data]);
+        }
+      });
+      deadSocket.emit('join_channel', channelIdRef.current);
+      setSocket(deadSocket);
+    });
+  };
+
   useEffect(() => {
     getMessages();
     getConversation();
@@ -72,7 +86,7 @@ function Chat() {
   useEffect(() => {
     if (
       messages.length &&
-      messages[0].conversation_id === parseInt(conversationId)
+      messages[0].conversation_id === parseInt(channelIdRef.current)
     ) {
       setSocketTrigger({ ready: true });
     }
@@ -81,18 +95,13 @@ function Chat() {
   useEffect(() => {
     if (socketTrigger.ready) {
       if (socket) {
-        socket.emit('join_channel', conversationId);
+        socket.emit('join_channel', channelIdRef.current);
       } else {
         const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-        connection.once('connect', () => {
-          connection.on('new_message', (data) => {
-            debugger;
-            if (data.conversation_id === parseInt(conversationId)) {
-              setMessages((mgs) => [...mgs, data]);
-            }
-          });
-          connection.emit('join_channel', conversationId);
-          setSocket(connection);
+        socketPreConnectSetup(connection);
+        connection.on('disconnect', () => {
+          socketPreConnectSetup(connection);
+          connection.connect();
         });
       }
     }
