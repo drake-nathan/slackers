@@ -57,9 +57,6 @@ function Chat({ channel, channels, setSelectedChannel }) {
   //     messages[0].conversation_id !== parseInt(channelId)
   //   ) {
   //     getMessages();
-  //     setSelectedChannel(
-  //       channels.filter((ch) => ch.conversation_id === channelId)
-  //     );
   //   }
 
   //   if (socket) {
@@ -69,12 +66,16 @@ function Chat({ channel, channels, setSelectedChannel }) {
   //     connection.once('connect', () => {
   //       connection.on('new_message', (data) => {
   //         if (data.conversation_id === parseInt(channelId)) {
-  //           setMessages([...messages, data]);
+  //           setMessages((mgs) => [...mgs, data]);
   //         }
   //       });
   //       connection.emit('join_channel', channelId);
   //       setSocket(connection);
   //     });
+  //     return () => {
+  //       connection.off();
+  //       connection.disconnect();
+  //     };
   //   }
   // }, [channelId, messages]);
 
@@ -100,7 +101,7 @@ function Chat({ channel, channels, setSelectedChannel }) {
         connection.once('connect', () => {
           connection.on('new_message', (data) => {
             if (data.conversation_id === parseInt(channelId)) {
-              setMessages([...messages, data]);
+              setMessages((mgs) => [...mgs, data]);
             }
           });
           connection.emit('join_channel', channelId);
