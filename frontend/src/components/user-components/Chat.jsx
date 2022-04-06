@@ -34,9 +34,9 @@ function Chat() {
         headerConfig
       );
 
-      const { data } = await request;
+      const { data, status } = await request;
 
-      if (data.status === 200) {
+      if (status === 200) {
         setCurrentChannel(data[0]);
       } else {
         return null;
