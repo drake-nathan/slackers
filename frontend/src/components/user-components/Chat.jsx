@@ -68,7 +68,7 @@ function Chat() {
   }, [messages]);
 
   const socketPreConnectSetup = (deadSocket) => {
-    deadSocket.on('connect', () => {
+    deadSocket.once('connect', () => {
       deadSocket.on('new_message', (data) => {
         if (data.conversation_id === parseInt(channelIdRef.current)) {
           setMessages((mgs) => [...mgs, data]);
@@ -80,33 +80,45 @@ function Chat() {
   };
 
   useEffect(() => {
+    if (socket) {
+      socket.emit('join_channel', conversationId);
+    }
     getMessages();
     getConversation();
   }, [conversationId]);
 
-  useEffect(() => {
-    if (
-      messages.length &&
-      messages[0].conversation_id === parseInt(channelIdRef.current)
-    ) {
-      setSocketTrigger({ ready: true });
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   if (
+  //     messages.length &&
+  //     messages[0].conversation_id === parseInt(channelIdRef.current)
+  //   ) {
+  //     setSocketTrigger({ ready: true });
+  //   }
+  // }, [messages]);
 
   useEffect(() => {
-    if (socketTrigger.ready) {
-      if (socket) {
-        socket.emit('join_channel', channelIdRef.current);
-      } else {
-        const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-        socketPreConnectSetup(connection);
-        connection.on('disconnect', () => {
-          socketPreConnectSetup(connection);
-          connection.connect();
-        });
-      }
-    }
-  }, [socketTrigger]);
+    const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+    socketPreConnectSetup(connection);
+    return () => {
+      socket.off();
+      socket.disconnect();
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   if (socketTrigger.ready) {
+  //     if (socket) {
+  //       socket.emit('join_channel', channelIdRef.current);
+  //     } else {
+  //       const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
+  //       socketPreConnectSetup(connection);
+  //       connection.on('disconnect', () => {
+  //         socketPreConnectSetup(connection);
+  //         connection.connect();
+  //       });
+  //     }
+  //   }
+  // }, [socketTrigger]);
 
   return (
     <Container>
