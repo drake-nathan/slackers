@@ -62,14 +62,14 @@ const SQLDate = () => new Date().toISOString().slice(0, 19).replace('T', ' ');
 // attach socket listeners here.
 io.on('connection', (socket) => {
   console.log(`User ${socket.id} connected`);
-  socket.on('message', (userId, message, channelId) => {
+  socket.on('message', (userId, message, conversationId) => {
     const query = {
       text: `
       INSERT INTO message (user_id, conversation_id, text, createddate)
         VALUES ($1, $2, $3, $4) RETURNING *;
       `,
       // eslint-disable-next-line camelcase
-      values: [userId, channelId, message, SQLDate()],
+      values: [userId, conversationId, message, SQLDate()],
     };
     const userQuery = {
       text: `SELECT name, email FROM slacker_users WHERE user_id=$1;`,
@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
           if (err) {
             socket.emit('db_error', err.toString());
           } else {
-            io.to(channelId).emit('new_message', {
+            io.to(conversationId).emit('new_message', {
               ...result.rows[0],
               ...userResult.rows[0],
             });
@@ -93,10 +93,10 @@ io.on('connection', (socket) => {
       }
     });
   });
-  socket.on('join_channel', (channelId) => {
-    if (!socket.rooms.has(channelId)) {
-      socket.join(channelId);
-      console.log(`${socket.id} joined room ${channelId}`);
+  socket.on('join_channel', (conversationId) => {
+    if (!socket.rooms.has(conversationId)) {
+      socket.join(conversationId);
+      console.log(`${socket.id} joined room ${conversationId}`);
     }
   });
   socket.on('disconnect', () => {

@@ -52,7 +52,7 @@ const Button = styled.button`
   width: 90%;
   padding: 0.6rem 3.5rem;
   border-radius: 10px;
-  background-color:  #0063b2;
+  background-color: #0063b2;
   border: none;
   outline: none;
   box-shadow: none;

@@ -172,6 +172,7 @@ const getConversationMessages = (req, res, next) => {
 	  INNER JOIN slacker_users ON slacker_users.user_id = message.user_id
     INNER JOIN conversation ON conversation.conversation_id = message.conversation_id
     WHERE message.conversation_id = $1
+    ORDER BY createddate ASC;
     `,
     values: [conversationId],
   };

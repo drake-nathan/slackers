@@ -3,11 +3,10 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import SendIcon from '@material-ui/icons/Send';
-import { sendMessage } from '../../context/actions';
 
 const ChatInput = ({ socket }) => {
   const [input, setInput] = useState('');
-  const { channelId } = useParams();
+  const { conversationId } = useParams();
 
   const submitMessage = (e) => {
     e.preventDefault();
@@ -16,9 +15,9 @@ const ChatInput = ({ socket }) => {
       socket.send(
         JSON.parse(localStorage.getItem('currentUser')).user.user_id,
         input,
-        channelId
+        conversationId
       );
-      console.log(channelId);
+      console.log(conversationId);
     } catch (error) {
       console.log(error);
     }
