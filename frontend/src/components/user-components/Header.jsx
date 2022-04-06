@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import Menu from './Menu';
+import { useState } from "react";
+import styled from "styled-components";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Menu from "./Menu";
+import Searchbar from "./Searchbar";
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
@@ -11,21 +12,22 @@ const Header = () => {
   };
 
   const userImage =
-    JSON.parse(localStorage.getItem('currentUser')).user.url ||
-    '../../public/favicon.ico'; // evil bunny!
+    JSON.parse(localStorage.getItem("currentUser")).user.url ||
+    "../../public/favicon.ico"; // evil bunny!
   // 'https://i.ibb.co/gMSQPXp/green-avatar.jpg';
   const userName =
-    JSON.parse(localStorage.getItem('currentUser')).user.name || '';
+    JSON.parse(localStorage.getItem("currentUser")).user.name || "";
 
   return (
     <Container>
       <Main>
         <AccessTimeIcon />
-        <SearchContainer>
+        <Searchbar />
+        {/* <SearchContainer>
           <Search>
             <input type="text" placeholder="Search..." />
           </Search>
-        </SearchContainer>
+        </SearchContainer > */}
         <HelpOutlineIcon />
       </Main>
       <UserContainer>

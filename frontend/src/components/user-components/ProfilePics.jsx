@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
@@ -11,7 +11,7 @@ function ProfilePics() {
   const [showPics, setShowPics] = useState([]);
   const [modal, setModal] = useState(false);
 
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   const headerConfig = {
     headers: { Authorization: `Bearer ${token}` },
   };
@@ -26,11 +26,11 @@ function ProfilePics() {
       const { data } = await request;
 
       if (data) {
-        console.log('response', data);
+        console.log("response", data);
         setPics(data);
         setShowPics(data.slice(0, 5));
-        console.log('pics', pics);
-        console.log('show pics', showPics);
+        console.log("pics", pics);
+        console.log("show pics", showPics);
       }
     } catch (error) {
       console.log(error);
@@ -50,7 +50,7 @@ function ProfilePics() {
   }, [channelId]);
 
   const handleClick = () => {
-    console.log('clicked');
+    console.log("clicked");
     setModal(!modal);
   };
 
