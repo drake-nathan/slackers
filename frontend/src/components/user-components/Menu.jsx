@@ -32,6 +32,7 @@ const Container = styled.div`
   top: 40px;
   right: 20px;
   width: 100%;
+  min-width: 220px;
   border-radius: 10px;
   background-color: #1e1926;
   color: white;
@@ -51,7 +52,7 @@ const Button = styled.button`
   width: 90%;
   padding: 0.6rem 3.5rem;
   border-radius: 10px;
-  background-color: #362b48;
+  background-color:  #0063b2;
   border: none;
   outline: none;
   box-shadow: none;
@@ -71,6 +72,7 @@ const Name = styled.h1`
   padding: 1rem;
   text-align: center;
   margin: 0 auto;
+  overflow-wrap: break-word;
 `;
 
 export default Menu;

@@ -26,11 +26,8 @@ function ProfilePics() {
       const { data } = await request;
 
       if (data) {
-        console.log('response', data);
         setPics(data);
         setShowPics(data.slice(0, 5));
-        console.log('pics', pics);
-        console.log('show pics', showPics);
       }
     } catch (error) {
       console.log(error);
@@ -50,11 +47,10 @@ function ProfilePics() {
   }, [channelId]);
 
   const handleClick = () => {
-    console.log('clicked');
     setModal(!modal);
   };
 
-  // These are only the first three images to show - like Slack does
+  // These are only the first few images to show - like Slack does
   const images = showPics.map((user, i) => (
     <Imgs src={user.image_url} key={i} alt="user" />
   ));
@@ -76,9 +72,14 @@ function ProfilePics() {
           <Number>{number}</Number>
         </InnerContainer>
       </Container>
-      {modal && (
+      {modal && number>=5 && (
         <Modal>
           <List>{personMap}</List>
+        </Modal>
+      )}
+        {modal && number<5 && (
+        <Modal>
+          <List>{images}</List>
         </Modal>
       )}
     </>
@@ -108,6 +109,8 @@ const Modal = styled.div`
   right: 80px;
   box-sizing: border-box;
   border-radius: 20px;
+  height: 600px;
+  overflow-y: auto;
 `;
 const Imgs = styled.img`
   height: 35px;

@@ -28,8 +28,8 @@ code {
 }
 .container .modal {
   z-index: 1;
-  width: 500px;
-  height: 300px;
+  width: 700px;
+  height: 400px;
   background: white;
   display: flex;
   align-items: center;
