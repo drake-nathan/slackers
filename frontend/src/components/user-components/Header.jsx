@@ -12,7 +12,8 @@ const Header = () => {
 
   const userImage =
     JSON.parse(localStorage.getItem('currentUser')).user.url ||
-    'https://i.ibb.co/gMSQPXp/green-avatar.jpg';
+    '../../public/favicon.ico'; // evil bunny!
+  // 'https://i.ibb.co/gMSQPXp/green-avatar.jpg';
   const userName =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';
 

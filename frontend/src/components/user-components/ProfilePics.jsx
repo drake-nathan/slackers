@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
@@ -41,6 +40,7 @@ function ProfilePics() {
   useEffect(() => {
     let cancel = false;
     getPics().then(() => {
+      // eslint-disable-next-line no-useless-return
       if (cancel) return;
     });
 
@@ -87,7 +87,9 @@ function ProfilePics() {
 
 const Container = styled.div`
   margin: 2rem;
+  cursor: pointer;
 `;
+
 const InnerContainer = styled.div`
   display: flex;
   justify-content: center;

@@ -42,7 +42,7 @@ function Login() {
 
   const history = useHistory();
 
-  //This is supposed to prevent an error when pressing return before pressing submit//
+  // This is supposed to prevent an error when pressing return before pressing submit//
   const checkKeyDown = (e) => {
     if (e.code === 'Enter') e.preventDefault();
   };
@@ -103,7 +103,10 @@ function Login() {
         {errorMessage ? <ErrorMsg>{errorMessage}</ErrorMsg> : null}
         <Underline />
         <Text>where those who slack go to chat</Text>
-        <Form onSubmit={handleSubmit(handleFormSubmit)} onKeyDown={(e) => checkKeyDown(e)}>
+        <Form
+          onSubmit={handleSubmit(handleFormSubmit)}
+          onKeyDown={(e) => checkKeyDown(e)}
+        >
           <Input
             {...register('email', { required: true })}
             placeholder="email"
