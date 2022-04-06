@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 function Searchbar() {
   return (
@@ -7,7 +7,7 @@ function Searchbar() {
       <Search>
         <input type="text" placeholder="Search..." />
       </Search>
-      <Result></Result>
+      <Result />
     </SearchContainer>
   );
 }
@@ -37,7 +37,4 @@ const Search = styled.div`
   }
 `;
 
-
-const Result = styled.div`
-
-`;
+const Result = styled.div``;

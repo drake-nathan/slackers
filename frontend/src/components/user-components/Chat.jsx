@@ -166,7 +166,7 @@ const Channel = styled.div``;
 const ChannelName = styled.div`
   font-weight: 700;
   font-size: 22px;
-  color: #f7969e;
+  color: #272727;
 `;
 
 const ChannelInfo = styled.div`
