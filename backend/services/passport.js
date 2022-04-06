@@ -45,6 +45,10 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   });
 });
 
+const checkUserAccess = new JwtStrategy(jwtOptions, (payload, done) => {
+  client.query(someQuery, )
+})
+
 // Tell passport to use this strategy
 passport.use(jwtLogin);
 passport.use(localLogin);
