@@ -87,15 +87,6 @@ function Chat() {
     getConversation();
   }, [conversationId]);
 
-  // useEffect(() => {
-  //   if (
-  //     messages.length &&
-  //     messages[0].conversation_id === parseInt(channelIdRef.current)
-  //   ) {
-  //     setSocketTrigger({ ready: true });
-  //   }
-  // }, [messages]);
-
   useEffect(() => {
     const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
     socketPreConnectSetup(connection);
@@ -104,21 +95,6 @@ function Chat() {
       socket.disconnect();
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (socketTrigger.ready) {
-  //     if (socket) {
-  //       socket.emit('join_channel', channelIdRef.current);
-  //     } else {
-  //       const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
-  //       socketPreConnectSetup(connection);
-  //       connection.on('disconnect', () => {
-  //         socketPreConnectSetup(connection);
-  //         connection.connect();
-  //       });
-  //     }
-  //   }
-  // }, [socketTrigger]);
 
   return (
     <Container>
