@@ -156,6 +156,7 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 64px auto min-content;
   min-height: 0;
+  margin-bottom: 2rem;
 `;
 
 const ChatHeader = styled.div`
