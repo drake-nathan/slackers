@@ -2,9 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-
 import Menu from './Menu';
-import Searchbar from './Searchbar';
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
@@ -22,14 +20,14 @@ const Header = () => {
   return (
     <Container>
       <Main>
-        <AccessTimeIcon />
-        <Searchbar />
+        <Heading>slackers</Heading>
+        {/* <AccessTimeIcon /> */}
         {/* <SearchContainer>
           <Search>
             <input type="text" placeholder="Search..." />
           </Search>
         </SearchContainer > */}
-        <HelpOutlineIcon />
+        {/* <HelpOutlineIcon /> */}
       </Main>
       <UserContainer>
         <Name>{userName}</Name>
@@ -69,6 +67,13 @@ const UserContainer = styled.div`
 
 const Name = styled.div`
   padding-right: 16px;
+`;
+
+const Heading = styled.h1`
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: white;
 `;
 
 const UserImage = styled.div`
