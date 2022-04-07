@@ -112,7 +112,6 @@ function Chat() {
 
   const getName = () => {
     if (currentConversation) {
-      console.log(currentConversation);
       return currentConversation.name;
     }
 
