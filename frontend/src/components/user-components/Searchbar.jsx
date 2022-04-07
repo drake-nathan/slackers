@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
-import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-// import { ChannelMessageContext } from '../../context/context';
+import { ChannelMessageContext } from '../../context/context';
 // import { getChannels, getMessages, sendMessage } from '../../context/actions';
 
 function Searchbar() {

@@ -333,6 +333,15 @@ const ImageBox = styled.img`
     height: calc(60% - 50px);
   }
 
+  @media (max-width: 1400px) {
+    height: calc(70% - 70px);
+    padding: 2rem;
+  }
+
+  @media (max-width: 1200px) {
+    height: calc(60% - 50px);
+  }
+
   @media (max-width: 1000px) {
     display: none;
   }
