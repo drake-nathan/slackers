@@ -1,34 +1,38 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import ReactDom from 'react-dom';
 import { useAuthDispatch, logout } from '../../context';
 
-function Menu() {
+function Menu({ setAway }) {
   const dispatch = useAuthDispatch();
   const history = useHistory();
-
-  const modalRef = useRef();
-  const closeModal = (e) => {
-    if (e.target === modalRef.current) {
-      // setShowModal(false);
-    }
-  };
 
   const username =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';
 
   const handleLogout = () => {
-    console.log(username);
     logout(dispatch);
     history.push('/');
   };
 
+  const handleAway = () => {
+    setAway(true);
+    console.log(away);
+  }
+
+  const handleActive = () => {
+    setAway(false);
+    console.log(away);
+  }
+
   return ReactDom.createPortal(
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <Backdrop ref={modalRef} onClick={closeModal}>
+    <Backdrop >
       <Container>
         <Name>{username}</Name>
+        <BtnAway onClick={handleAway}>Set as away</BtnAway>
+        <BtnActive onClick={handleActive}>Set as active</BtnActive>
         <Button onClick={handleLogout}>Logout</Button>
       </Container>
     </Backdrop>,
@@ -102,6 +106,56 @@ const Name = styled.h1`
   text-align: center;
   margin: 0 auto;
   overflow-wrap: break-word;
+`;
+
+const BtnAway = styled.button`
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    letter-spacing: 0.5px;
+    width: 90%;
+    padding: 0.6rem 2rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    background-color: transparent;
+    border: 1px solid darkgrey;
+    outline: none;
+    box-shadow: none;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    cursor: pointer;
+    transform: 0.4s ease-out;
+    &:hover {
+       border: 3px solid darkgrey;
+    }
+`;
+
+const BtnActive = styled.button`
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    letter-spacing: 0.5px;
+    width: 90%;
+    padding: 0.6rem 3.5rem;
+    margin-top: 2rem;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid #48b300;
+    outline: none;
+    box-shadow: none;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    cursor: pointer;
+    transform: 0.4s ease-out;
+    &:hover {
+      border: 3px solid #48b300;
+    }
 `;
 
 export default Menu;

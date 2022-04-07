@@ -186,7 +186,7 @@ const RightSideWrapper = styled.div`
   flex-direciton: column;
   align-items: flex-start;
   box-sizing: border-box;
-
+  margin-bottom: 3rem;
   @media (max-width: 1000px) {
     width: 0%;
   }
