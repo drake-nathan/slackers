@@ -107,7 +107,8 @@ const getAllUsers = (req, res, next) => {
     text: `
     SELECT
       slacker_users.user_id,
-      slacker_users.name
+      slacker_users.name,
+      slacker_users.image_url
     FROM
       slacker_users
     `,

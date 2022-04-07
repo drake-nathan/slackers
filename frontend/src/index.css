@@ -38,3 +38,16 @@ code {
   position: relative;
   animation: animate 0.3s;
 }
+
+.container .dm-modal {
+  z-index: 1;
+  width: 450px;
+  height: 600px;
+  background: white;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  padding: 20px;
+  position: relative;
+  animation: animate 0.3s;
+}

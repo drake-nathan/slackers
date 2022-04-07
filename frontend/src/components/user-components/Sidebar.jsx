@@ -65,13 +65,6 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             <AddBox onClick={handleAddClick} />
           </AddButton>
         </NewChannelContainer>
-        {showDmModal ? (
-          <AddDmModal
-            setShowDmModal={setShowDmModal}
-            setDms={setDms}
-            dms={dms}
-          />
-        ) : null}
         <ChannelsList>
           {channels.map((channel, i) => (
             <Channel
@@ -84,6 +77,13 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
           ))}
         </ChannelsList>
         <FancyHR />
+        {showDmModal ? (
+          <AddDmModal
+            setShowDmModal={setShowDmModal}
+            setDms={setDms}
+            dms={dms}
+          />
+        ) : null}
         <NewChannelContainer>
           <Send />
           <h3>
@@ -100,7 +100,7 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
               tabIndex={1}
               key={i}
             >
-              # {dm.conversation_id}
+              # {dm.name}
             </Channel>
           ))}
         </ChannelsList>

@@ -36,6 +36,7 @@ function UserPage() {
     } catch (error) {
       console.log(error);
     }
+    // eslint-disable-next-line
   };
 
   const getDms = async () => {
