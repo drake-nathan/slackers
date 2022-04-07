@@ -10,7 +10,6 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
   // close the modal when clicking outside the modal.
   const history = useHistory();
   const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
   const [users, setUsers] = useState([]);
   const modalRef = useRef();
   const closeModal = (e) => {
@@ -47,10 +46,7 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
   }, []);
 
   const postNewDm = async () => {
-    const data = {
-      name,
-      description,
-    };
+    const data = name;
 
     // update end point for adding channel
     try {
@@ -88,18 +84,17 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
     }
   };
 
+  const handleAddDmClick = (e) => {
+    console.log(e.target.innerHTML);
+    // postNewDm();
+  };
+
   const personMap = users.map((u, index) => (
-    <ListItem key={index * 3000}>
+    <ListItem key={index * 3000} onClick={handleAddDmClick}>
       <Img src={u.image_url} alt="user" />
       <Name>{u.name}</Name>
     </ListItem>
   ));
-
-  const handleAddDmClick = (e) => {
-    // send post request to channels
-    e.preventDefault();
-    postNewDm();
-  };
 
   // render the modal JSX in the portal div.
   return ReactDom.createPortal(
@@ -114,17 +109,13 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
   );
 };
 
-AddDmModal.propTypes = {
-  setShowDmModal: PropTypes.func.isRequired,
-  dms: PropTypes.array,
-  setDms: PropTypes.func.isRequired,
-};
-
 const Modal = styled.div`
   overflow-y: scroll;
 `;
 
-const List = styled.ul``;
+const List = styled.ul`
+  margin-right: 15px;
+`;
 
 const ListItem = styled.li`
   list-style: none;
