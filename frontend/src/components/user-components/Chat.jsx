@@ -199,7 +199,7 @@ const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding-top: 10px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const Channel = styled.div``;
