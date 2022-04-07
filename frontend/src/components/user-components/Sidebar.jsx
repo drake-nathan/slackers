@@ -139,7 +139,7 @@ const AddButton = styled.div`
   color: white;
   fill: #0f2f81;
   display: flex;
-  margin-left 52%;
+  margin-left: 52%;
   cursor: pointer;
 `;
 

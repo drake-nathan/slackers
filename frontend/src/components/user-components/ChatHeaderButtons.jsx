@@ -71,8 +71,8 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 
   return (
     <ButtonDiv>
-      <Button onClick={() => handleLeaveChannel()}>Leave</Button>
-      <Button onClick={() => handleAddUserClick()}>
+      <Button onClick={handleLeaveClick}>Leave</Button>
+      <Button onClick={handleAddUserClick}>
         <AddIcon /> Users
       </Button>
       {modal2 && nonUsers.length > 0 && (
