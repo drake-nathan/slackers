@@ -109,6 +109,7 @@ function Login() {
         >
           <Input
             {...register('email', { required: true })}
+            name="name"
             placeholder="email"
             value={email}
             onChange={(e) => handleEmailChange(e)}
@@ -118,6 +119,7 @@ function Login() {
           ) : null}
           <Input
             {...register('password', { required: true })}
+            name="password"
             placeholder="password"
             value={password}
             type="password"
