@@ -62,8 +62,8 @@ function ProfilePics() {
   const imagesFew = showPics.map((user, i) => (
     <ListItem key={i * 740}>
       <Imgs src={user.image_url} alt="user" />
-    <Name>{user.name}</Name>
-  </ListItem>
+      <Name>{user.name}</Name>
+    </ListItem>
   ));
 
   const personMap = pics.map((user, i) => (

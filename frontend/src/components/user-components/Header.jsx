@@ -67,7 +67,6 @@ const UserContainer = styled.div`
   right: 0;
 `;
 
-
 const Name = styled.div`
   padding-right: 16px;
 `;
