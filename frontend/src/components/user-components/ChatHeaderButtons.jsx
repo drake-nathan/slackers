@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 
 import { getNonConvoUsers } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
@@ -46,6 +47,9 @@ const ChatHeaderButtons = () => {
     <ListItem key={i} userId={user.user_id}>
       <Imgs src={user.image_url} alt="user" />
       <Name>{user.name}</Name>
+      <AddButton>
+        <AddOutlinedIcon />
+      </AddButton>
     </ListItem>
   ));
 
@@ -63,6 +67,15 @@ const ChatHeaderButtons = () => {
 };
 
 export default ChatHeaderButtons;
+
+const AddButton = styled.div`
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-right: 20px;
+  cursor: pointer;
+`;
 
 const ButtonDiv = styled.div`
   justify-content: space-between;
