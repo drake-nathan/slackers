@@ -35,7 +35,6 @@ function Chat() {
       );
 
       const { data, status } = await request;
-
       if (data[0].type === 'dm') {
         const dmRequest = axios.get(
           `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/other-dm-user`,
