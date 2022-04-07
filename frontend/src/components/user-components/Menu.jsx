@@ -23,13 +23,6 @@ function Menu() {
     logout(dispatch);
     history.push('/');
   };
-  //   return (
-  //     <Container>
-  //       <Name>{username}</Name>
-  //       <Button onClick={handleLogout}>Logout</Button>
-  //     </Container>
-  //   );
-  // }
 
   return ReactDom.createPortal(
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
