@@ -59,6 +59,13 @@ function ProfilePics() {
     <Imgs src={user.image_url} key={i} alt="user" />
   ));
 
+  const imagesFew = showPics.map((user, i) => (
+    <ListItem key={i * 740}>
+      <Imgs src={user.image_url} alt="user" />
+    <Name>{user.name}</Name>
+  </ListItem>
+  ));
+
   const personMap = pics.map((user, i) => (
     <ListItem key={i * 57890}>
       <Imgs src={user.image_url} alt="user" />
@@ -83,7 +90,7 @@ function ProfilePics() {
       )}
       {modal1 && number < 5 && (
         <Modal>
-          <List>{images}</List>
+          <List>{imagesFew}</List>
         </Modal>
       )}
     </>

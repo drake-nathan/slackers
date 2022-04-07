@@ -151,7 +151,7 @@ const Container = styled.div`
 `;
 
 const LeftSideWrapper = styled.div`
-  width: 45%;
+  width: 55%;
   min-width: auto;
   box-sizing: border-box;
   display: flex;
@@ -170,7 +170,7 @@ const LeftSideWrapper = styled.div`
 `;
 
 const RightSideWrapper = styled.div`
-  width: 55%;
+  width: 45%;
   box-sizing: border-box;
 
   @media (max-width: 1000px) {
@@ -202,7 +202,7 @@ const Underline = styled.hr`
   background-color: rgba(60, 21, 214);
   opacity: 50%;
   border: none;
-  width: 65%;
+  width: 50%;
   margin-top: -3rem;
   margin-bottom: 1.5rem;
   height: 0.5rem;
@@ -211,7 +211,7 @@ const Underline = styled.hr`
 
   @media (max-width: 1250px) {
     margin-top: -2.5rem;
-    width: 75%;
+    width: 65%;
   }
 
   @media (max-width: 1000px) {
@@ -312,15 +312,25 @@ const ErrorInput = styled.p`
 `;
 
 const ImageBox = styled.img`
-  padding: 5rem 4rem 5rem 0;
   height: calc(100% - 100px);
   box-sizing: border-box;
+  justify-self: flex-start;
   padding-right: 5rem;
+  margin-top: -150px;
   max-width: 90%;
   transition: 0.4s;
 
-  @media (max-width: 1300px) {
-    height: calc(95% - 100px);
+  @media (max-width: 1600px) {
+    height: calc(90% - 100px);
+  }
+
+  @media (max-width: 1400px) {
+    height: calc(70% - 70px);
+    padding: 2rem;
+  }
+
+  @media (max-width: 1200px) {
+    height: calc(60% - 50px);
   }
 
   @media (max-width: 1000px) {
