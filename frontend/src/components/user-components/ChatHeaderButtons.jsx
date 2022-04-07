@@ -3,6 +3,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import AddBox from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
 
 import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
@@ -60,8 +61,10 @@ const ChatHeaderButtons = () => {
 
   return (
     <ButtonDiv>
-      <Button onClick={() => handleLeaveChannel()}>Leave</Button>
-      <Button onClick={() => handleAddUserClick()}>Add</Button>
+      <Button onClick={() => handleLeaveChannel()}>Leave Chat</Button>
+      <Button onClick={() => handleAddUserClick()}>
+        <AddIcon /> People
+      </Button>
       {modal2 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
@@ -91,33 +94,27 @@ const AddUserTitle = styled.div`
 `;
 
 const ButtonDiv = styled.div`
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
 `;
 
 const Button = styled.button`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   color: white;
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-align: center;
+  background: #f7969e;
+  border-radius: 4px;
+  width: 80px;
+  height: 32px;
   display: flex;
-  justify-content: center;
-  letter-spacing: 0.5px;
-  width: 90%;
-  padding: 0.6rem 3.5rem;
-  border-radius: 10px;
-  background-color: #0063b2;
+  font-size: 13px;
+  font-weight: 500;
+  align-items: center;
   border: none;
-  outline: none;
-  box-shadow: none;
-  text-transform: uppercase;
-  box-sizing: border-box;
+  justify-content: center;
+  margin-right: 5px;
   cursor: pointer;
   transform: 0.4s ease-out;
   &:hover {
-    background-color: #b7a2d7;
+    background-color: #d4838a;
   }
 `;

@@ -111,6 +111,7 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
 
 const Modal = styled.div`
   overflow-y: scroll;
+  background: rgba(30, 25, 38, 0.3) important!;
 `;
 
 const List = styled.ul`

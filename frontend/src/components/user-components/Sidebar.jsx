@@ -3,7 +3,8 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import AddBox from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
+import PeopleIcon from '@material-ui/icons/People';
 import Chat from '@material-ui/icons/Chat';
 import Send from '@material-ui/icons/Send';
 import { Modal } from './AddChannelModal';
@@ -42,6 +43,13 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
           </h2>
         </Name>
       </WorkSpaceContainer>
+      <WorkSpaceContainer>
+        <h3>
+          <strong>
+            <PeopleIcon style={{ marginRight: '4px' }} /> People
+          </strong>
+        </h3>
+      </WorkSpaceContainer>
       <ChannelsContainer>
         {showModal ? (
           <Modal
@@ -50,21 +58,15 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             channels={channels}
           />
         ) : null}
-        <NewChannelContainer>
-          <h3>
-            <strong>People</strong>
-          </h3>
-        </NewChannelContainer>
-        <FancyHR />
-        <NewChannelContainer>
-          <Chat />
+        <WorkSpaceContainer>
+          <Chat style={{ marginRight: '8px' }} />
           <h3>
             <strong>Channels</strong>
           </h3>
           <AddButton>
-            <AddBox onClick={handleAddClick} />
+            <AddIcon style={{ marginLeft: '-158%' }} onClick={handleAddClick} />
           </AddButton>
-        </NewChannelContainer>
+        </WorkSpaceContainer>
         <ChannelsList>
           {channels.map((channel, i) => (
             <Channel
@@ -76,7 +78,6 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             </Channel>
           ))}
         </ChannelsList>
-        <FancyHR />
         {showDmModal ? (
           <AddDmModal
             setShowDmModal={setShowDmModal}
@@ -84,15 +85,6 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             dms={dms}
           />
         ) : null}
-        <NewChannelContainer>
-          <Send />
-          <h3>
-            <strong>DMs</strong>
-          </h3>
-          <AddButton onClick={handleAddDmClick}>
-            <AddBox />
-          </AddButton>
-        </NewChannelContainer>
         <ChannelsList>
           {dms.map((dm, i) => (
             <Channel
@@ -104,6 +96,15 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             </Channel>
           ))}
         </ChannelsList>
+        <WorkSpaceContainerBottom>
+          <Send style={{ marginRight: '8px' }} />
+          <h3>
+            <strong>DMs</strong>
+          </h3>
+          <AddButton onClick={handleAddDmClick}>
+            <AddIcon />
+          </AddButton>
+        </WorkSpaceContainerBottom>
       </ChannelsContainer>
     </Container>
   );
@@ -122,15 +123,13 @@ const Container = styled.div`
   background: #0063b2;
 `;
 
-const FancyHR = styled.hr``;
-
 const WorkSpaceContainer = styled.div`
   color: white;
   height: 64px;
   display: flex;
   align-items: center;
   padding-left: 19px;
-  justify-content: space-between;
+  justify-content: left;
   border-bottom: 1px solid rgba(250, 250, 250, 0.4);
 `;
 
@@ -140,9 +139,7 @@ const AddButton = styled.div`
   color: white;
   fill: #0f2f81;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 20px;
+  margin-left 52%;
   cursor: pointer;
 `;
 
@@ -158,7 +155,6 @@ const MainChannelItem = styled.div`
   align-items: center;
   padding-left: 19px;
   cursor: pointer;
-  margin-bottom: 8px;
 
   &:hover {
     background: #0f2f81;
@@ -187,14 +183,17 @@ const NewChannelContainer = styled.div`
   padding-right: 32px;
 `;
 
-const ChannelsList = styled.div``;
+const ChannelsList = styled.div`
+  margin-top: 16px;
+  margin-bottom: 12px;
+`;
 
 const Channel = styled.div`
   height: 36px;
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding-left: 19px;
+  padding-left: 32px;
 
   &:hover {
     background: #0f2f81;
@@ -203,4 +202,15 @@ const Channel = styled.div`
     background: #f7969e;
     color: white;
   }
+`;
+
+const WorkSpaceContainerBottom = styled.div`
+  color: white;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding-left: 19px;
+  justify-content: left;
+  border-bottom: 1px solid rgba(250, 250, 250, 0.4);
+  border-top: 1px solid rgba(250, 250, 250, 0.4);
 `;

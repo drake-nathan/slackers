@@ -23,7 +23,7 @@ const Container = styled.div`
   display: grid;
   gap: 2.5rem;
   grid-template-columns: repeat(4, 1fr);
-  width: min(85%, 70rem);
+  width: min(75%, 70rem);
   padding-block: 2rem;
   margin-inline: auto;
 `;
