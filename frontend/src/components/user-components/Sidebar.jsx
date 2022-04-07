@@ -3,13 +3,15 @@ import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
+import AddBox from '@material-ui/icons/AddBox';
 import Chat from '@material-ui/icons/Chat';
 import Send from '@material-ui/icons/Send';
 import { Modal } from './AddChannelModal';
+import { AddDmModal } from './AddDmModal';
 
 const Sidebar = ({ dms, setDms, channels, setChannels }) => {
   const [showModal, setShowModal] = useState(false);
+  const [showDmModal, setShowDmModal] = useState(false);
   const history = useHistory();
 
   const goToChannel = (id) => {
@@ -26,6 +28,11 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
     goToChannel(conversation.conversation_id);
   };
 
+  const handleAddDmClick = (e) => {
+    e.preventDefault();
+    setShowDmModal(true);
+  };
+
   return (
     <Container>
       <WorkSpaceContainer>
@@ -35,20 +42,6 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
           </h2>
         </Name>
       </WorkSpaceContainer>
-      <WorkSpaceContainer>
-        <h3>
-          <strong>People</strong>
-        </h3>
-      </WorkSpaceContainer>
-      <WorkSpaceContainer>
-        <Chat />
-        <h3>
-          <strong>Channels</strong>
-        </h3>
-        <AddButton>
-          <AddOutlinedIcon onClick={handleAddClick} />
-        </AddButton>
-      </WorkSpaceContainer>
       <ChannelsContainer>
         {showModal ? (
           <Modal
@@ -57,6 +50,21 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             channels={channels}
           />
         ) : null}
+        <NewChannelContainer>
+          <h3>
+            <strong>People</strong>
+          </h3>
+        </NewChannelContainer>
+        <FancyHR />
+        <NewChannelContainer>
+          <Chat />
+          <h3>
+            <strong>Channels</strong>
+          </h3>
+          <AddButton>
+            <AddBox onClick={handleAddClick} />
+          </AddButton>
+        </NewChannelContainer>
         <ChannelsList>
           {channels.map((channel, i) => (
             <Channel
@@ -68,6 +76,23 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
             </Channel>
           ))}
         </ChannelsList>
+        <FancyHR />
+        {showDmModal ? (
+          <AddDmModal
+            setShowDmModal={setShowDmModal}
+            setDms={setDms}
+            dms={dms}
+          />
+        ) : null}
+        <NewChannelContainer>
+          <Send />
+          <h3>
+            <strong>DMs</strong>
+          </h3>
+          <AddButton onClick={handleAddDmClick}>
+            <AddBox />
+          </AddButton>
+        </NewChannelContainer>
         <ChannelsList>
           {dms.map((dm, i) => (
             <Channel
@@ -75,20 +100,11 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
               tabIndex={1}
               key={i}
             >
-              # {dm.conversation_id}
+              # {dm.name}
             </Channel>
           ))}
         </ChannelsList>
       </ChannelsContainer>
-      <WorkSpaceBottomContainer>
-        <Send />
-        <h3>
-          <strong>DMs</strong>
-        </h3>
-        <AddButton>
-          <AddOutlinedIcon />
-        </AddButton>
-      </WorkSpaceBottomContainer>
     </Container>
   );
 };
@@ -97,7 +113,7 @@ Sidebar.propTypes = {
   channels: PropTypes.array.isRequired,
   setChannels: PropTypes.func.isRequired,
   dms: PropTypes.array.isRequired,
-  setDms: PropTypes.func,
+  setDms: PropTypes.func.isRequired,
 };
 
 export default Sidebar;
@@ -106,29 +122,15 @@ const Container = styled.div`
   background: #0063b2;
 `;
 
+const FancyHR = styled.hr``;
+
 const WorkSpaceContainer = styled.div`
   color: white;
   height: 64px;
   display: flex;
   align-items: center;
   padding-left: 19px;
-  /* justify-content: space-between; */
-  border-bottom: 1px solid rgba(250, 250, 250, 0.4);
-
-  h3 {
-    padding-left: 10px;
-    padding-right: 80px;
-  }
-`;
-
-const WorkSpaceBottomContainer = styled.div`
-  color: white;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  padding-left: 19px;
   justify-content: space-between;
-  border-top: 1px solid rgba(250, 250, 250, 0.4);
   border-bottom: 1px solid rgba(250, 250, 250, 0.4);
 `;
 
@@ -136,6 +138,7 @@ const Name = styled.div``;
 
 const AddButton = styled.div`
   color: white;
+  fill: #0f2f81;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -182,12 +185,9 @@ const NewChannelContainer = styled.div`
   height: 36px;
   padding-left: 19px;
   padding-right: 32px;
-  border-bottom: 1px solid rgba(250, 250, 250, 0.4);
 `;
 
-const ChannelsList = styled.div`
-  padding-bottom: 10px;
-`;
+const ChannelsList = styled.div``;
 
 const Channel = styled.div`
   height: 36px;

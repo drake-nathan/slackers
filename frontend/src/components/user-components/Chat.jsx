@@ -35,7 +35,6 @@ function Chat() {
       );
 
       const { data, status } = await request;
-
       if (data[0].type === 'dm') {
         const dmRequest = axios.get(
           `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/other-dm-user`,
@@ -46,9 +45,7 @@ function Chat() {
         if (dmDataResponse.status === 200) {
           setCurrentConversation(dmDataResponse.data[0]);
         }
-        // todo: need error handling
       }
-
       if (data && data[0].type !== 'dm' && status === 200) {
         setCurrentConversation(data[0]);
       } else {
