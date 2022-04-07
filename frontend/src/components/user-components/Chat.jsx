@@ -110,20 +110,22 @@ function Chat() {
     };
   }, []);
 
-  const getName = () => {
+  const getChannelStuff = () => {
     if (currentConversation) {
-      return currentConversation.name;
+      return (
+        <>
+          <ChannelName># {currentConversation.name}</ChannelName>
+          <ChannelInfo>{currentConversation.description}</ChannelInfo>
+        </>
+      );
     }
-
-    return 'Channel';
+    return <ChannelName>'Channel'</ChannelName>;
   };
 
   return (
     <Container>
       <Header>
-        <Channel>
-          <ChannelName>{getName()}</ChannelName>
-        </Channel>
+        <Channel>{getChannelStuff()}</Channel>
         <ProfilePics />
       </Header>
       <MessageContainer>
