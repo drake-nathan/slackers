@@ -193,6 +193,8 @@ const NewChannelContainer = styled.div`
 const ChannelsList = styled.div`
   margin-top: 16px;
   margin-bottom: 12px;
+  max-height: 30vh;
+  overflow-y: auto;
 `;
 
 const Channel = styled.div`
