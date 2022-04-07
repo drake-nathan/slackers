@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import AddBox from '@material-ui/icons/AddBox';
 import PropTypes from 'prop-types';
+import AddBox from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
 
 import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
@@ -66,7 +67,9 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   return (
     <ButtonDiv>
       <Button onClick={() => handleLeaveChannel()}>Leave</Button>
-      <Button onClick={() => handleAddUserClick()}>Add</Button>
+      <Button onClick={() => handleAddUserClick()}>
+        <AddIcon /> Users
+      </Button>
       {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
