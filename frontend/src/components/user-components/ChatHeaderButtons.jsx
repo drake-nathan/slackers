@@ -13,6 +13,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
+  const [leaveModal, setLeaveModal] = useState(false);
 
   const history = useHistory();
 
@@ -54,6 +55,10 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
     });
   };
 
+  const handleLeaveClick = () => {
+    setLeaveModal(!leaveModal);
+  };
+
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <Imgs src={user.image_url} alt="user" />
@@ -80,6 +85,25 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
         <EmptyModal>
           <AddUserTitle>No Users to Add!</AddUserTitle>
         </EmptyModal>
+      )}
+      {leaveModal && (
+        <LeaveModal>
+          <AddUserTitle>Are you sure?</AddUserTitle>
+          <button
+            onClick={() => setLeaveModal(!leaveModal)}
+            type="button"
+            className="btn btn-danger btn-sm"
+          >
+            No
+          </button>
+          <button
+            onClick={() => handleLeaveChannel()}
+            type="button"
+            className="btn btn-danger btn-sm"
+          >
+            Yes
+          </button>
+        </LeaveModal>
       )}
     </ButtonDiv>
   );
@@ -110,6 +134,18 @@ const EmptyModal = styled.div`
   box-sizing: border-box;
   border-radius: 20px;
   height: 100px;
+  overflow-y: auto;
+`;
+
+const LeaveModal = styled.div`
+  background-color: #1e1926;
+  position: fixed;
+  padding: 2rem 1rem;
+  top: 100px;
+  right: 100px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: 200px;
   overflow-y: auto;
 `;
 
