@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Switch, Route, useHistory } from 'react-router-dom';
@@ -36,7 +35,6 @@ function UserPage() {
     } catch (error) {
       console.log(error);
     }
-    // eslint-disable-next-line
   };
 
   const getDms = async () => {
