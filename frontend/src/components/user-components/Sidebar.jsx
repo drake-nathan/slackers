@@ -8,13 +8,7 @@ import Chat from '@material-ui/icons/Chat';
 import Send from '@material-ui/icons/Send';
 import { Modal } from './AddChannelModal';
 
-const Sidebar = ({
-  dms,
-  setDms,
-  channels,
-  setChannels,
-  setSelectedChannel,
-}) => {
+const Sidebar = ({ dms, setDms, channels, setChannels }) => {
   const [showModal, setShowModal] = useState(false);
   const history = useHistory();
 
@@ -28,9 +22,8 @@ const Sidebar = ({
     setShowModal(true);
   };
 
-  const handleChannelClick = (channel) => {
-    setSelectedChannel(channel);
-    goToChannel(channel.conversation_id);
+  const handleChannelClick = (conversation) => {
+    goToChannel(conversation.conversation_id);
   };
 
   return (
@@ -62,7 +55,6 @@ const Sidebar = ({
             setShowModal={setShowModal}
             setChannels={setChannels}
             channels={channels}
-            setSelectedChannel={setSelectedChannel}
           />
         ) : null}
         <ChannelsList>
@@ -106,7 +98,6 @@ Sidebar.propTypes = {
   setChannels: PropTypes.func.isRequired,
   dms: PropTypes.array.isRequired,
   setDms: PropTypes.func,
-  setSelectedChannel: PropTypes.func.isRequired,
 };
 
 export default Sidebar;

@@ -6,12 +6,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-export const Modal = ({
-  setShowModal,
-  channels,
-  setChannels,
-  setSelectedChannel,
-}) => {
+export const Modal = ({ setShowModal, channels, setChannels }) => {
   // close the modal when clicking outside the modal.
   const history = useHistory();
   const [name, setName] = useState('');
@@ -59,10 +54,7 @@ export const Modal = ({
       const addUserResponse = await addCurrentUserToNewChannelRequest;
 
       if (createChannelResponse && addUserResponse) {
-        // console.log(createChannelResponse.data);
-        // console.log(addUserResponse.data);
         setChannels([...channels, createChannelResponse.data[0]]);
-        setSelectedChannel(createChannelResponse.data[0]);
         setShowModal(false);
         history.push('/user');
         history.push(`user/${conversationId}`);
@@ -122,7 +114,6 @@ Modal.propTypes = {
   setShowModal: PropTypes.func.isRequired,
   channels: PropTypes.array,
   setChannels: PropTypes.func.isRequired,
-  setSelectedChannel: PropTypes.func.isRequired,
 };
 
 const InnerContainer = styled.div`
