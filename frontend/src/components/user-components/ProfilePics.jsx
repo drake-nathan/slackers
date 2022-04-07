@@ -81,6 +81,10 @@ function ProfilePics() {
     console.log(nonUsers);
   };
 
+  const handleLeaveChannel = async () => {
+    console.log('bye');
+  };
+
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <Imgs src={user.image_url} alt="user" />
@@ -98,6 +102,7 @@ function ProfilePics() {
       </Container>
       {modal1 && number >= 5 && (
         <Modal>
+          <Button onClick={() => handleLeaveChannel()}>Leave Channel</Button>
           <Button onClick={() => handleAddUserClick()}>
             Add Users to Channel
           </Button>
@@ -189,7 +194,6 @@ const ListItem = styled.li`
 `;
 
 const Button = styled.button`
-  margin-top: 4rem;
   margin-bottom: 1rem;
   color: white;
   font-weight: 600;
