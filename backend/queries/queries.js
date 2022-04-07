@@ -325,14 +325,14 @@ const getConversation = (req, res, next) => {
 
 const deleteChannelUser = (req, res, next) => {
   const { conversationId } = req.params;
-  const { userid } = req.body;
+  const { user_id } = req.user;
 
   const query = {
     text: `
     DELETE FROM user_conversation
     WHERE user_id = $1 AND conversation_id = $2
     `,
-    values: [userid, conversationId],
+    values: [user_id, parseInt(conversationId)],
   };
 
   client.query(query, (error, results) => {
