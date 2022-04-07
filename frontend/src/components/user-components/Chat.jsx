@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
+import ChatHeaderButtons from './ChatHeaderButtons';
 
 function Chat() {
   const { conversationId } = useParams();
@@ -124,10 +125,11 @@ function Chat() {
 
   return (
     <Container>
-      <Header>
+      <ChatHeader>
         <Channel>{getChannelStuff()}</Channel>
         <ProfilePics />
-      </Header>
+        <ChatHeaderButtons />
+      </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
           messages.map((data, index) => (
@@ -159,7 +161,7 @@ const Container = styled.div`
   min-height: 0;
 `;
 
-const Header = styled.div`
+const ChatHeader = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   display: flex;
