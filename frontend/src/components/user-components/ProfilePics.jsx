@@ -117,18 +117,6 @@ export const Modal = styled.div`
   overflow-y: auto;
 `;
 
-const Modal2 = styled.div`
-  background-color: #1e1926;
-  position: fixed;
-  padding: 2rem 1rem;
-  top: 100px;
-  left: 40%;
-  box-sizing: border-box;
-  border-radius: 20px;
-  height: 600px;
-  overflow-y: auto;
-`;
-
 export const Imgs = styled.img`
   height: 35px;
   width: 35px;
