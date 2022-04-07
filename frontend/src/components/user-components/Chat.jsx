@@ -121,11 +121,11 @@ function Chat({ channel, channels, setSelectedChannel }) {
   );
 }
 
-Chat.propTypes = {
-  channel: PropTypes.object,
-  channels: PropTypes.array,
-  setSelectedChannel: PropTypes.func,
-};
+// Chat.propTypes = {
+//   channel: PropTypes.object,
+//   channels: PropTypes.array,
+//   setSelectedChannel: PropTypes.func,
+// };
 
 export default Chat;
 
