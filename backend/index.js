@@ -51,7 +51,7 @@ const server = http.createServer(app);
 // the socket object represents the connection between the server and a particular client
 const io = new socketIO.Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
   },
 });
 
