@@ -171,6 +171,9 @@ const LeftSideWrapper = styled.div`
 
 const RightSideWrapper = styled.div`
   width: 45%;
+  display: flex;
+  flex-direciton: column;
+  align-items: flex-start;
   box-sizing: border-box;
 
   @media (max-width: 1000px) {
