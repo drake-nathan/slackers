@@ -323,25 +323,25 @@ const getConversation = (req, res, next) => {
 //   });
 // };
 
-// const deleteChannelUser = (req, res, next) => {
-//   const { channelId } = req.params;
-//   const { userid } = req.body;
+const deleteChannelUser = (req, res, next) => {
+  const { conversationId } = req.params;
+  const { userid } = req.body;
 
-//   const query = {
-//     text: `
-//     DELETE FROM user_channel
-//     WHERE user_id = $1 AND channel_id = $2
-//     `,
-//     values: [userid, channelId],
-//   };
+  const query = {
+    text: `
+    DELETE FROM user_conversation
+    WHERE user_id = $1 AND conversation_id = $2
+    `,
+    values: [userid, conversationId],
+  };
 
-//   client.query(query, (error, results) => {
-//     if (error) {
-//       throw error;
-//     }
-//     res.send('sweet!!');
-//   });
-// };
+  client.query(query, (error, results) => {
+    if (error) {
+      throw error;
+    }
+    res.send(results.rows);
+  });
+};
 
 module.exports = {
   strings,
@@ -359,4 +359,5 @@ module.exports = {
   getNonConvoUsers,
   getConversation,
   getDMUser,
+  deleteChannelUser,
 };
