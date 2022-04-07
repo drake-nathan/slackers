@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import ReactDom from 'react-dom';
@@ -11,7 +11,7 @@ function Menu() {
   const modalRef = useRef();
   const closeModal = (e) => {
     if (e.target === modalRef.current) {
-      setShowModal(false);
+      // setShowModal(false);
     }
   };
 
@@ -23,25 +23,25 @@ function Menu() {
     logout(dispatch);
     history.push('/');
   };
-//   return (
-//     <Container>
-//       <Name>{username}</Name>
-//       <Button onClick={handleLogout}>Logout</Button>
-//     </Container>
-//   );
-// }
+  //   return (
+  //     <Container>
+  //       <Name>{username}</Name>
+  //       <Button onClick={handleLogout}>Logout</Button>
+  //     </Container>
+  //   );
+  // }
 
-return ReactDom.createPortal(
-  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-  <Backdrop ref={modalRef} onClick={closeModal}>
-    <Container>
-      <Name>{username}</Name>
-      <Button onClick={handleLogout}>Logout</Button>
-    </Container>
+  return ReactDom.createPortal(
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <Backdrop ref={modalRef} onClick={closeModal}>
+      <Container>
+        <Name>{username}</Name>
+        <Button onClick={handleLogout}>Logout</Button>
+      </Container>
     </Backdrop>,
-  document.getElementById('portal')
-);
-};
+    document.getElementById('portal')
+  );
+}
 
 const Backdrop = styled.div`
   position: fixed;
@@ -54,7 +54,7 @@ const Backdrop = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 `;

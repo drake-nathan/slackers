@@ -114,7 +114,7 @@ const InnerContainer = styled.div`
   border-radius: 12px;
 `;
 
-const Modal = styled.div`
+export const Modal = styled.div`
   background-color: rgba(30, 25, 38, 0.8);
   position: fixed;
   padding: 1.6rem 1rem;
