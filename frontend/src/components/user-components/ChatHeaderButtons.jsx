@@ -61,15 +61,18 @@ const ChatHeaderButtons = () => {
 
   return (
     <ButtonDiv>
-      <Button onClick={() => handleLeaveChannel()}>Leave Chat</Button>
-      <Button onClick={() => handleAddUserClick()}>
-        <AddIcon /> People
-      </Button>
-      {modal2 && (
+      <Button onClick={() => handleLeaveChannel()}>Leave</Button>
+      <Button onClick={() => handleAddUserClick()}>Add</Button>
+      {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
           <List>{nonUserMap}</List>
         </Modal>
+      )}
+      {modal2 && nonUsers.length === 0 && (
+        <EmptyModal>
+          <AddUserTitle>No Users to Add!</AddUserTitle>
+        </EmptyModal>
       )}
     </ButtonDiv>
   );
@@ -84,6 +87,18 @@ const AddButton = styled.div`
   align-items: center;
   margin-right: 20px;
   cursor: pointer;
+`;
+
+const EmptyModal = styled.div`
+  background-color: #1e1926;
+  position: fixed;
+  padding: 2rem 1rem;
+  top: 100px;
+  right: 80px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: 100px;
+  overflow-y: auto;
 `;
 
 const AddUserTitle = styled.div`
