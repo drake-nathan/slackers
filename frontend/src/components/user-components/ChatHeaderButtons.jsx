@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import AddBox from '@material-ui/icons/AddBox';
 
-import { getNonConvoUsers } from '../../context/actions';
+import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
 const ChatHeaderButtons = () => {
@@ -42,10 +43,18 @@ const ChatHeaderButtons = () => {
     }
   };
 
+  const handleNonUserClick = (userId) => {
+    addChannelUser(conversationId, userId);
+    getNonConvoUsers(conversationId).then((res) => setNonUsers(res));
+  };
+
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <Imgs src={user.image_url} alt="user" />
       <Name>{user.name}</Name>
+      <AddButton>
+        <AddBox onClick={() => handleNonUserClick(user.user_id)} />
+      </AddButton>
     </ListItem>
   ));
 
@@ -55,6 +64,7 @@ const ChatHeaderButtons = () => {
       <Button onClick={() => handleAddUserClick()}>Add</Button>
       {modal2 && (
         <Modal>
+          <AddUserTitle>Add Users</AddUserTitle>
           <List>{nonUserMap}</List>
         </Modal>
       )}
@@ -63,6 +73,22 @@ const ChatHeaderButtons = () => {
 };
 
 export default ChatHeaderButtons;
+
+const AddButton = styled.div`
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-right: 20px;
+  cursor: pointer;
+`;
+
+const AddUserTitle = styled.div`
+  color: white;
+  align-items: center;
+  font-size: 30px;
+  text-align: center;
+`;
 
 const ButtonDiv = styled.div`
   justify-content: space-between;

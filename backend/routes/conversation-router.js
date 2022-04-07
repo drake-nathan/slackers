@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const db = require('../queries/queries');
 
-// all routes here are going to /api/channels
+// all routes here are going to /api/conversations
 router.route('/').get(db.getAllChannels).post(db.addNewChannel);
 
 router.route('/:conversationId').get(db.getConversation);
