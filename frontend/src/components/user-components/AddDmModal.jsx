@@ -35,11 +35,16 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
     const { data, status } = await request;
 
     if (status === 200) {
-      if (dms.length) {
-        setUsers((user) => dms.some((dm) => dm.name !== user.name));
-      } else {
-        setUsers(data);
-      }
+      setUsers(
+        data.filter((user) => user.user_id !== userInfoObj.user.user_id)
+      );
+      // if (dms.length) {
+      //   setUsers(
+      //     data.filter((user) => dms.some((dm) => dm.name !== user.name))
+      //   );
+      // } else {
+      //   setUsers(data);
+      // }
     } else {
       return null;
     }
@@ -50,37 +55,25 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
   }, []);
 
   const postNewDm = async (userId) => {
-    const data = name;
+    const body = { userToDm: userId };
 
     // update end point for adding channel
     try {
-      const createChannelRequest = axios.post(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations`,
-        data,
+      const dmRequest = axios.post(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/dms`,
+        body,
         headerConfig
       );
-      const createChannelResponse = await createChannelRequest;
 
-      const responseData = {
-        userId: userInfoObj.user.user_id,
-      };
+      const { data, status } = await dmRequest;
 
-      const conversationId = createChannelResponse.data[0].conversation_id;
-
-      const addCurrentUserToNewChannelRequest = axios.post(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/users`,
-        responseData,
-        headerConfig
-      );
-      const addUserResponse = await addCurrentUserToNewChannelRequest;
-
-      if (createChannelResponse && addUserResponse) {
-        // console.log(createChannelResponse.data);
-        // console.log(addUserResponse.data);
-        setDms([...dms, createChannelResponse.data[0]]);
+      if (status === 200) {
         setShowDmModal(false);
+        setDms((prev) => [...prev, data]);
         history.push('/user');
-        history.push(`user/${conversationId}`);
+        history.push(`user/${data.conversation_id}`);
+      } else {
+        return null;
       }
     } catch (error) {
       console.log(error);
@@ -89,7 +82,21 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
   };
 
   const handleAddDmClick = (userId) => {
-    postNewDm(userId);
+    let conv = '';
+    const existingDm = dms.find((dm) => {
+      if (dm.user_id === userId) {
+        conv = dm.conversation_id;
+        return true;
+      }
+      return false;
+    });
+
+    if (existingDm) {
+      setShowDmModal(false);
+      history.push(`/user/${conv}`);
+    } else {
+      postNewDm(userId);
+    }
   };
 
   const personMap = users.map((u, index) => (

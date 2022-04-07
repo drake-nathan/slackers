@@ -87,31 +87,43 @@ const addNewChannel = (req, res, next) => {
 const addNewDm = (req, res) => {
   // eslint-disable-next-line
   const { user_id } = req.user;
-  const userToDm = req.body.user_id;
+  const { userToDm } = req.body;
 
   const query1 = `
       INSERT INTO conversation (type, private, createddate)
-      VALUES (dm, true, Now()) RETURNING conversation_id;
+      VALUES ('dm', true, Now()) RETURNING conversation_id;
     `;
 
   const query2 = {
     text: `
       INSERT INTO user_conversation (user_id, conversation_id)
-      VALUES ($1, $3), ($2, $3)
+      VALUES ($1, $3), ($2, $3);
     `,
     values: [user_id, userToDm],
   };
 
-  client.query(query1, (err, result) => {
-    if (err) res.send(500, 'DB error');
-    query2.values.push(result.rows[0].conversation_id);
-    client.query(query2, (err) => {
-      if (err) {
-        res.send(500, 'DB error');
-      } else {
-        res.send(result.rows[0].conversation_id);
-      }
-    });
+  client.query(query1, (err, result1) => {
+    if (err) {
+      res.send(500, `DB error ${err}`);
+    } else {
+      query2.values.push(result1.rows[0].conversation_id);
+      client.query(query2, (err, result2) => {
+        if (err) {
+          res.send(500, `DB error ${err}`);
+        } else {
+          client.query(strings.userById(userToDm), (err, result3) => {
+            if (err) {
+              res.send(500, `DB error ${err}`);
+            } else {
+              res.send({
+                name: result3.rows[0].name,
+                conversation_id: result1.rows[0].conversation_id,
+              });
+            }
+          });
+        }
+      });
+    }
   });
 };
 
@@ -298,7 +310,7 @@ const getUserChannels = (req, res, next) => {
 const getUserDms = (req, res, next) => {
   const query = {
     text: `
-    SELECT conversation_id, name
+    SELECT conversation_id, name, user_id
     FROM user_conversation
     NATURAL JOIN slacker_users
     WHERE conversation_id IN (SELECT 
