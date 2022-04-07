@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Menu from './Menu';
 import logoImg from '../../images/S.png';
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
+  const [away, setAway] = useState(false);
+
   const handleLogout = () => {
     setMenu(!menu);
   };
@@ -26,8 +28,12 @@ const Header = () => {
         <Name>{userName}</Name>
         <UserImage>
           <Image src={userImage} onClick={handleLogout} />
-          {menu && <Menu />}
+          {menu && <Menu setAway={setAway} />}
         </UserImage>
+        {!away &&
+          <Icon /> }
+        {away &&
+          <AwayIcon />}
       </UserContainer>
     </Container>
   );
@@ -88,6 +94,26 @@ const UserImage = styled.div`
     width: 100%;
   }
 `;
+
+const Icon = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #5ce600;
+  position: absolute;
+  top: 20px;
+  right: 12px;
+`
+
+const AwayIcon = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: darkgrey;
+  position: absolute;
+  top: 20px;
+  right: 12px;
+`
 
 const Image = styled.img``;
 
