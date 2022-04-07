@@ -19,6 +19,8 @@ router
 
 router.route('/:conversationId/non-users').get(db.getNonConvoUsers);
 
+router.route('/:conversationId/other-dm-user').get(db.getDMUser);
+
 router.route('/posts/:messageId/').delete((req, res) => res.send('hey'));
 
 module.exports = router;
