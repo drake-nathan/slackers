@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { getNonConvoUsers } from '../../context/actions';
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
 function ProfilePics() {
+  const history = useHistory();
   const { conversationId } = useParams();
   const [pics, setPics] = useState([]);
   const [showPics, setShowPics] = useState([]);
@@ -82,7 +83,21 @@ function ProfilePics() {
   };
 
   const handleLeaveChannel = async () => {
-    console.log('bye');
+    try {
+      const request = axios.delete(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/users`,
+        headerConfig
+      );
+
+      const { status } = await request;
+      if (status === 200) {
+        history.push('/user');
+      } else {
+        // what should happen
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const nonUserMap = nonUsers.map((user, i) => (
