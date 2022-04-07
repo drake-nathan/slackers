@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
+// eslint-disable-next-line import/no-named-as-default
 import ChatHeaderButtons from './ChatHeaderButtons';
 
 function Chat() {
