@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
+import ChatHeaderButtons from './ChatHeaderButtons';
 
 function Chat() {
   const { conversationId } = useParams();
@@ -35,23 +36,19 @@ function Chat() {
 
       const { data, status } = await request;
 
-      if (status === 200) {
-        if (data[0].type === 'dm') {
-          const dmRequest = axios.get(
-            `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/other-dm-user`,
-            headerConfig
-          );
+      if (data[0].type === 'dm') {
+        const dmRequest = axios.get(
+          `${process.env.REACT_APP_ROOT_SERVER_URL}/api/conversations/${conversationId}/other-dm-user`,
+          headerConfig
+        );
 
-          const dmDataResponse = await dmRequest;
-          if (dmDataResponse.status === 200) {
-            setCurrentConversation(dmDataResponse.data[0]);
-          }
-          // todo: need error handling
+        const dmDataResponse = await dmRequest;
+        if (dmDataResponse.status === 200) {
+          setCurrentConversation(dmDataResponse.data[0]);
         }
-
-        if (data && data[0].type !== 'dm') {
-          setCurrentConversation(data[0]);
-        }
+      }
+      if (data && data[0].type !== 'dm' && status === 200) {
+        setCurrentConversation(data[0]);
       } else {
         return null;
       }
@@ -69,8 +66,10 @@ function Chat() {
 
       const data = await request;
 
-      if (data) {
+      if (data.status === 200) {
         setMessages(data.data);
+      } else {
+        return null;
       }
     } catch (error) {
       console.log(error);
@@ -110,23 +109,25 @@ function Chat() {
     };
   }, []);
 
-  const getName = () => {
+  const getChannelStuff = () => {
     if (currentConversation) {
-      console.log(currentConversation);
-      return currentConversation.name;
+      return (
+        <>
+          <ChannelName># {currentConversation.name}</ChannelName>
+          <ChannelInfo>{currentConversation.description}</ChannelInfo>
+        </>
+      );
     }
-
-    return 'Channel';
+    return <ChannelName>'Channel'</ChannelName>;
   };
 
   return (
     <Container>
-      <Header>
-        <Channel>
-          <ChannelName>{getName()}</ChannelName>
-        </Channel>
+      <ChatHeader>
+        <Channel>{getChannelStuff()}</Channel>
         <ProfilePics />
-      </Header>
+        <ChatHeaderButtons />
+      </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
           messages.map((data, index) => (
@@ -158,7 +159,7 @@ const Container = styled.div`
   min-height: 0;
 `;
 
-const Header = styled.div`
+const ChatHeader = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   display: flex;

@@ -15,7 +15,7 @@ router
   .route('/:conversationId/users')
   .get(db.getChannelUsers)
   .post(db.createChannelUser)
-  .delete((req, res) => res.send('hey'));
+  .delete(db.deleteChannelUser);
 
 router.route('/:conversationId/non-users').get(db.getNonConvoUsers);
 

@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import Header from './user-components/Header';
@@ -10,9 +10,9 @@ import Chat from './user-components/Chat';
 import AllUsers from './user-components/AllUsers';
 
 function UserPage() {
+  const history = useHistory();
   const [channels, setChannels] = useState([]);
   const [dms, setDms] = useState([]);
-  const [selectedChannel, setSelectedChannel] = useState(null);
 
   const getChannels = async () => {
     const token = localStorage.getItem('token');
@@ -31,7 +31,7 @@ function UserPage() {
 
       if (data) {
         setChannels(data);
-        setSelectedChannel(data[0]);
+        history.push(`/user/${data[0].conversation_id}`);
       }
     } catch (error) {
       console.log(error);
@@ -62,9 +62,6 @@ function UserPage() {
 
   useEffect(() => {
     getChannels();
-  }, []);
-
-  useEffect(() => {
     getDms();
   }, []);
 
@@ -75,13 +72,12 @@ function UserPage() {
         <Sidebar
           channels={channels}
           dms={dms}
-          // setDms={setDms}
+          setDms={setDms}
           setChannels={setChannels}
-          setSelectedChannel={setSelectedChannel}
         />
         <Switch>
           <Route path="/user/:conversationId">
-            <Chat getChannels={getChannels} channels={channels} />
+            <Chat />
           </Route>
           <Route path="/people">
             <AllUsers />
