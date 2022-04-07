@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
-function ProfilePics() {
+function ProfilePics({ pics, showPics, getPics }) {
   const { conversationId } = useParams();
-  const [pics, setPics] = useState([]);
-  const [showPics, setShowPics] = useState([]);
+  // const [pics, setPics] = useState([]);
+  // const [showPics, setShowPics] = useState([]);
   const [modal1, setModal1] = useState(false);
 
   useEffect(() => {
@@ -16,27 +17,27 @@ function ProfilePics() {
   }, [conversationId]);
 
   const token = localStorage.getItem('token');
-  const headerConfig = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  // const headerConfig = {
+  //   headers: { Authorization: `Bearer ${token}` },
+  // };
 
-  const getPics = async () => {
-    try {
-      const request = axios.get(
-        `${ROOT_URL}/api/conversations/${conversationId}/users`,
-        headerConfig
-      );
+  // const getPics = async () => {
+  //   try {
+  //     const request = axios.get(
+  //       `${ROOT_URL}/api/conversations/${conversationId}/users`,
+  //       headerConfig
+  //     );
 
-      const { data } = await request;
+  //     const { data } = await request;
 
-      if (data) {
-        setPics(data);
-        setShowPics(data.slice(0, 3));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     if (data) {
+  //       setPics(data);
+  //       setShowPics(data.slice(0, 5));
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     let cancel = false;
@@ -98,6 +99,12 @@ function ProfilePics() {
     </>
   );
 }
+
+ProfilePics.propTypes = {
+  pics: PropTypes.array,
+  showPics: PropTypes.func,
+  getPics: PropTypes.func,
+};
 
 const Container = styled.div`
   margin: 2rem;

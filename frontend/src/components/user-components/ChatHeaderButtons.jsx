@@ -3,12 +3,12 @@ import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import AddBox from '@material-ui/icons/AddBox';
-import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types';
 
 import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
-const ChatHeaderButtons = () => {
+const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
@@ -36,6 +36,7 @@ const ChatHeaderButtons = () => {
       const { status } = await request;
       if (status === 200) {
         history.push('/user');
+        getChannels();
       } else {
         // what should happen
       }
@@ -46,7 +47,10 @@ const ChatHeaderButtons = () => {
 
   const handleNonUserClick = (userId) => {
     addChannelUser(conversationId, userId);
-    getNonConvoUsers(conversationId).then((res) => setNonUsers(res));
+    getNonConvoUsers(conversationId).then((res) => {
+      setNonUsers(res);
+      getPics();
+    });
   };
 
   const nonUserMap = nonUsers.map((user, i) => (
@@ -76,6 +80,11 @@ const ChatHeaderButtons = () => {
       )}
     </ButtonDiv>
   );
+};
+
+ChatHeaderButtons.propTypes = {
+  getPics: PropTypes.func,
+  getChannels: PropTypes.func,
 };
 
 export default ChatHeaderButtons;
