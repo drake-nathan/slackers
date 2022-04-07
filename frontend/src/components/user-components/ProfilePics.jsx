@@ -74,7 +74,7 @@ function ProfilePics({ pics, showPics, getPics }) {
 
 ProfilePics.propTypes = {
   pics: PropTypes.array,
-  showPics: PropTypes.func,
+  showPics: PropTypes.array,
   getPics: PropTypes.func,
 };
 
