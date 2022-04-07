@@ -125,7 +125,7 @@ const Container = styled.div`
 
 const WorkSpaceContainer = styled.div`
   color: white;
-  height: 64px;
+  height: 80px;
   display: flex;
   align-items: center;
   padding-left: 19px;

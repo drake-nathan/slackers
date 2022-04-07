@@ -10,8 +10,12 @@ import MainImage from '../images/main-image.png';
 import { loginUser, useAuthState, useAuthDispatch } from '../context';
 
 function Login() {
+
+  // const { field: email } = useController();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
 
   const userSchema = yup
     .object()
@@ -24,6 +28,7 @@ function Login() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(userSchema),
@@ -111,8 +116,10 @@ function Login() {
             {...register('email', { required: true })}
             name="email"
             placeholder="email"
+            id="email"
             value={email}
             onChange={(e) => handleEmailChange(e)}
+            autoComplete="off"
           />
           {emailErr ? (
             <ErrorInput>Please enter a valid email</ErrorInput>
@@ -120,9 +127,11 @@ function Login() {
           <Input
             {...register('password', { required: true })}
             name="password"
+            id="password"
             placeholder="password"
             value={password}
             type="password"
+            autoComplete="off"
             onChange={(e) => {
               handlePasswordChange(e);
             }}

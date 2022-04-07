@@ -137,7 +137,7 @@ function Chat({ getChannels }) {
 
       if (data) {
         setPics(data);
-        setShowPics(data.slice(0, 5));
+        setShowPics(data.slice(0, 3));
       }
     } catch (error) {
       console.log(error);
@@ -180,9 +180,9 @@ export default Chat;
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 64px auto min-content;
+  grid-template-rows: 80px auto min-content;
   min-height: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 5rem;
 `;
 
 const ChatHeader = styled.div`
@@ -192,6 +192,7 @@ const ChatHeader = styled.div`
   align-items: center;
   border-bottom: 1px solid rgba(83, 39, 83, 0.13);
   justify-content: space-between;
+  box-sizing: border-box;
 `;
 
 const MessageContainer = styled.div`
@@ -207,11 +208,14 @@ const ChannelName = styled.div`
   font-weight: 700;
   font-size: 22px;
   color: #272727;
+  margin-top: 10px;
 `;
 
 const ChannelInfo = styled.div`
   font-weight: 500;
   color: #606060;
-  font-size: 13px;
-  margin-top: 4px;
+  font-size: 12px;
+  margin: 4px 0;
+  max-width: 90%;
+  line-height: 1.2;
 `;

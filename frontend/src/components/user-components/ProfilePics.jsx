@@ -79,6 +79,9 @@ ProfilePics.propTypes = {
 };
 
 const Container = styled.div`
+  position: absolute;
+  top: 16px;
+  right: 180px;
   margin: 2rem;
   cursor: pointer;
 `;
@@ -87,8 +90,7 @@ const InnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1rem 1rem;
-  padding: 0 2rem;
+  padding: 0 0.6rem;
   background-color: #e9eff6;
   border-radius: 12px;
 `;
