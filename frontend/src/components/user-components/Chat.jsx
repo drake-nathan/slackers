@@ -48,7 +48,7 @@ function Chat() {
         // todo: need error handling
       }
 
-      if (data && data[0].type !== 'dm') {
+      if (data && data[0].type !== 'dm' && status === 200) {
         setCurrentConversation(data[0]);
       } else {
         return null;
