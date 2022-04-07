@@ -88,12 +88,9 @@ const InnerContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 1rem 1rem;
-  padding: 0 1rem;
+  padding: 0 2rem;
   background-color: #e9eff6;
   border-radius: 12px;
-  position: absolute;
-  top: 25px;
-  right: 80px;
 `;
 
 export const Modal = styled.div`

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import Menu from './Menu';
-import logoImg from '../../images/S.png'
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
@@ -21,7 +20,6 @@ const Header = () => {
   return (
     <Container>
       <Main>
-        <Logo src={logoImg}/>
         <Heading>slackers</Heading>
         {/* <AccessTimeIcon /> */}
         {/* <SearchContainer>
@@ -53,14 +51,6 @@ const Container = styled.div`
   padding: 10px;
 `;
 
-const Logo = styled.img`
-    width: 35px;
-    height: 35px;
-    position: absolute;
-    top: 0;
-    left: 20px;
-
-`;
 const Main = styled.div`
   display: flex;
   margin-left: 16px;
