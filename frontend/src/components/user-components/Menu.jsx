@@ -18,17 +18,15 @@ function Menu({ setAway }) {
 
   const handleAway = () => {
     setAway(true);
-    console.log(away);
-  }
+  };
 
   const handleActive = () => {
     setAway(false);
-    console.log(away);
-  }
+  };
 
   return ReactDom.createPortal(
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <Backdrop >
+    <Backdrop>
       <Container>
         <Name>{username}</Name>
         <BtnAway onClick={handleAway}>Set as away</BtnAway>
@@ -109,53 +107,53 @@ const Name = styled.h1`
 `;
 
 const BtnAway = styled.button`
-    color: white;
-    font-weight: 600;
-    font-size: 0.8rem;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    letter-spacing: 0.5px;
-    width: 90%;
-    padding: 0.6rem 2rem;
-    border-radius: 10px;
-    margin-top: 1rem;
-    background-color: transparent;
-    border: 1px solid darkgrey;
-    outline: none;
-    box-shadow: none;
-    text-transform: uppercase;
-    box-sizing: border-box;
-    cursor: pointer;
-    transform: 0.4s ease-out;
-    &:hover {
-       border: 3px solid darkgrey;
-    }
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  width: 90%;
+  padding: 0.6rem 2rem;
+  border-radius: 10px;
+  margin-top: 1rem;
+  background-color: transparent;
+  border: 1px solid darkgrey;
+  outline: none;
+  box-shadow: none;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  cursor: pointer;
+  transform: 0.4s ease-out;
+  &:hover {
+    border: 3px solid darkgrey;
+  }
 `;
 
 const BtnActive = styled.button`
-    color: white;
-    font-weight: 600;
-    font-size: 0.8rem;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    letter-spacing: 0.5px;
-    width: 90%;
-    padding: 0.6rem 3.5rem;
-    margin-top: 2rem;
-    border-radius: 10px;
-    background: transparent;
-    border: 1px solid #48b300;
-    outline: none;
-    box-shadow: none;
-    text-transform: uppercase;
-    box-sizing: border-box;
-    cursor: pointer;
-    transform: 0.4s ease-out;
-    &:hover {
-      border: 3px solid #48b300;
-    }
+  color: white;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  letter-spacing: 0.5px;
+  width: 90%;
+  padding: 0.6rem 3.5rem;
+  margin-top: 2rem;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #48b300;
+  outline: none;
+  box-shadow: none;
+  text-transform: uppercase;
+  box-sizing: border-box;
+  cursor: pointer;
+  transform: 0.4s ease-out;
+  &:hover {
+    border: 3px solid #48b300;
+  }
 `;
 
 export default Menu;

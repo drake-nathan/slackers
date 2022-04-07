@@ -30,10 +30,8 @@ const Header = () => {
           <Image src={userImage} onClick={handleLogout} />
           {menu && <Menu setAway={setAway} />}
         </UserImage>
-        {!away &&
-          <Icon /> }
-        {away &&
-          <AwayIcon />}
+        {!away && <Icon />}
+        {away && <AwayIcon />}
       </UserContainer>
     </Container>
   );
@@ -103,7 +101,7 @@ const Icon = styled.div`
   position: absolute;
   top: 20px;
   right: 12px;
-`
+`;
 
 const AwayIcon = styled.div`
   width: 15px;
@@ -113,7 +111,7 @@ const AwayIcon = styled.div`
   position: absolute;
   top: 20px;
   right: 12px;
-`
+`;
 
 const Image = styled.img``;
 
