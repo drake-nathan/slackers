@@ -35,7 +35,11 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
     const { data, status } = await request;
 
     if (status === 200) {
-      setUsers(data.filter((user) => dms.some((dm) => dm.name !== user.name)));
+      if (dms.length) {
+        setUsers((user) => dms.some((dm) => dm.name !== user.name));
+      } else {
+        setUsers(data);
+      }
     } else {
       return null;
     }
@@ -45,7 +49,7 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
     nonDmUsers();
   }, []);
 
-  const postNewDm = async () => {
+  const postNewDm = async (userId) => {
     const data = name;
 
     // update end point for adding channel
@@ -84,15 +88,16 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
     }
   };
 
-  const handleAddDmClick = (e) => {
-    console.log(e.target.innerHTML);
-    // postNewDm();
+  const handleAddDmClick = (userId) => {
+    postNewDm(userId);
   };
 
   const personMap = users.map((u, index) => (
-    <ListItem key={index * 3000} onClick={handleAddDmClick}>
-      <Img src={u.image_url} alt="user" />
-      <Name>{u.name}</Name>
+    <ListItem key={index * 3000}>
+      <Button onClick={() => handleAddDmClick(u.user_id)}>
+        <Img src={u.image_url} alt="user" />
+        <Name>{u.name}</Name>
+      </Button>
     </ListItem>
   ));
 
@@ -101,7 +106,7 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div className="container" ref={modalRef} onClick={closeModal}>
       <Modal className="dm-modal">
-        <Heading>Add A Dm</Heading>
+        <Heading>Direct Message</Heading>
         <List>{personMap}</List>
       </Modal>
     </div>,
@@ -111,6 +116,20 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
 
 const Modal = styled.div`
   overflow-y: scroll;
+`;
+
+const Button = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: transparent;
+  &:hover {
+    background-color: #e9eff6;
+  }
 `;
 
 const List = styled.ul`
@@ -136,7 +155,7 @@ const Img = styled.img`
 
 const Name = styled.p`
   font-size: 1.4rem;
-  margin: 1rem;
+  margin-left: 2rem;
   color: #221b1b;
 `;
 
@@ -147,4 +166,5 @@ const Heading = styled.h3`
   color: #1e1926;
   text-align: center;
   margin-top: 2rem;
+  margin-left: 1rem;
 `;

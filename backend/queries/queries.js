@@ -84,6 +84,37 @@ const addNewChannel = (req, res, next) => {
   });
 };
 
+const addNewDm = (req, res) => {
+  // eslint-disable-next-line
+  const { user_id } = req.user;
+  const userToDm = req.body.user_id;
+
+  const query1 = `
+      INSERT INTO conversation (type, private, createddate)
+      VALUES (dm, true, Now()) RETURNING conversation_id;
+    `;
+
+  const query2 = {
+    text: `
+      INSERT INTO user_conversation (user_id, conversation_id)
+      VALUES ($1, $3), ($2, $3)
+    `,
+    values: [user_id, userToDm],
+  };
+
+  client.query(query1, (err, result) => {
+    if (err) res.send(500, 'DB error');
+    query2.values.push(result.rows[0].conversation_id);
+    client.query(query2, (err) => {
+      if (err) {
+        res.send(500, 'DB error');
+      } else {
+        res.send(result.rows[0].conversation_id);
+      }
+    });
+  });
+};
+
 const createChannelUser = (req, res, next) => {
   const { conversationId } = req.params;
   const { userId } = req.body;
@@ -382,6 +413,7 @@ module.exports = {
   getUserChannels,
   getUserDms,
   addNewChannel,
+  addNewDm,
   createChannelUser,
   getAllUsers,
   getNonConvoUsers,
