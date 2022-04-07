@@ -67,8 +67,10 @@ function Chat() {
 
       const data = await request;
 
-      if (data) {
+      if (data.status === 200) {
         setMessages(data.data);
+      } else {
+        return null;
       }
     } catch (error) {
       console.log(error);

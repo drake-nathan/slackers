@@ -10,6 +10,29 @@ const pool = new Pool(parser(process.env.DATABASE_URL));
 
 const strings = {};
 
+const isAllowed = async (userId, conversationId) => {
+  const query = {
+    text: `
+    SELECT 
+      conversation_id
+    FROM user_conversation 
+    WHERE user_id = $1;
+    `,
+    values: [userId],
+  };
+
+  try {
+    const res = await client.query(query);
+    const conversations = res.rows.map((row) => row.conversation_id);
+    if (conversations.includes(conversationId)) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // ------------- QUERIES GO HERE---------------------
 
 strings.allUsers = () => `SELECT * FROM slacker_users`;
@@ -157,8 +180,11 @@ const getChannelUsers = (req, res, next) => {
   });
 };
 
-const getConversationMessages = (req, res, next) => {
+const getConversationMessages = async (req, res, next) => {
   const { conversationId } = req.params;
+  if (!(await isAllowed(req.user.user_id, parseInt(conversationId)))) {
+    return res.send(401, 'You do not have access to that channel');
+  }
 
   const query = {
     text: `
@@ -182,7 +208,7 @@ const getConversationMessages = (req, res, next) => {
     if (error) {
       throw error;
     }
-    res.send(results.rows);
+    return res.send(results.rows);
   });
 };
 
@@ -279,11 +305,12 @@ const getDMUser = (req, res, next) => {
   });
 };
 
-const getConversation = (req, res, next) => {
+const getConversation = async (req, res, next) => {
   const { conversationId } = req.params;
-  // if (!isAllowed(req.user.user_id, conversationId)) {
-  //   return res.send(401, 'You do not have access to that channel');
-  // }
+
+  if (!(await isAllowed(req.user.user_id, parseInt(conversationId)))) {
+    return res.send(401, 'You do not have access to that channel');
+  }
   const query = {
     text: `
     SELECT 
