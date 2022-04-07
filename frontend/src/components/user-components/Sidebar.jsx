@@ -46,7 +46,9 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
       <WorkSpaceContainer>
         <h3>
           <strong>
-            <PeopleIcon style={{ marginRight: '4px' }} /> People
+            <a href="/people">
+              <PeopleIcon style={{ marginRight: '4px' }} /> People
+            </a>
           </strong>
         </h3>
       </WorkSpaceContainer>
@@ -131,6 +133,11 @@ const WorkSpaceContainer = styled.div`
   padding-left: 19px;
   justify-content: left;
   border-bottom: 1px solid rgba(250, 250, 250, 0.4);
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
 `;
 
 const Name = styled.div``;

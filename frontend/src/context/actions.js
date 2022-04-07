@@ -106,3 +106,24 @@ export async function getNonConvoUsers(conversationId) {
     return null;
   }
 }
+
+export async function getAllUsers() {
+  const token = localStorage.getItem('token');
+
+  const headerConfig = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  try {
+    const response = await axios.get(`${ROOT_URL}/api/users`, headerConfig);
+    if (response.status === 200) {
+      const users = await response.data;
+      return users;
+    }
+    console.log(response.statusText);
+    return response.status;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

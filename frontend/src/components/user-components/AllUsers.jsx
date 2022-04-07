@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { userItems } from '../../data/UserData';
+import { getAllUsers } from '../../context/actions';
 
-const AllUsers = () => (
-  <Container>
-    {userItems.map((item, index) => (
-      <UserCard key={index}>
-        <img src={item.photo} alt="user" />
-        <Name>{item.name}</Name>
-        <span>
-          <AddToChannel>Add To Channel</AddToChannel>
-          <SendDm>Send Dm</SendDm>
-        </span>
-      </UserCard>
-    ))}
-  </Container>
-);
+const AllUsers = () => {
+  const [allUsers, setAllUsers] = useState([]);
+
+  getAllUsers().then((res) => setAllUsers(res));
+
+  return (
+    <Container>
+      {allUsers.map((user, index) => (
+        <UserCard key={index}>
+          <img src={user.image_url} alt="user" />
+          <Name>{user.name}</Name>
+          <span>
+            <AddToChannel>Add To Channel</AddToChannel>
+            <SendDm>Send Dm</SendDm>
+          </span>
+        </UserCard>
+      ))}
+    </Container>
+  );
+};
 
 export default AllUsers;
 
