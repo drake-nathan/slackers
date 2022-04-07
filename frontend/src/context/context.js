@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useReducer, useState } from 'react';
 import PropTypes from 'prop-types';
 import { AuthReducer, initialState } from './reducer';
 
@@ -34,13 +34,19 @@ export function useAuthDispatch() {
 export const AuthProvider = ({ children }) => {
   // note that useReducer starts with this as a means of keeping/managing state using useReducer. Note that it references a specific reducer and returns an array with the current state and the dispatch method for triggering state updates/changes,
   const [user, dispatch] = useReducer(AuthReducer, initialState);
+  const [messages, setMessages] = useState([]);
+  const [channels, setChannels] = useState([]);
 
   return (
-    <AuthStateContext.Provider value={user}>
-      <AuthDispatchContext.Provider value={dispatch}>
-        {children}
-      </AuthDispatchContext.Provider>
-    </AuthStateContext.Provider>
+    <ChannelMessageContext.Provider
+      value={{ messages, setMessages, channels, setChannels }}
+    >
+      <AuthStateContext.Provider value={user}>
+        <AuthDispatchContext.Provider value={dispatch}>
+          {children}
+        </AuthDispatchContext.Provider>
+      </AuthStateContext.Provider>
+    </ChannelMessageContext.Provider>
   );
 };
 

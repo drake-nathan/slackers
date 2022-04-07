@@ -3,12 +3,12 @@ import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import AddBox from '@material-ui/icons/AddBox';
-import AddIcon from '@material-ui/icons/Add';
+import PropTypes from 'prop-types';
 
 import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
-const ChatHeaderButtons = () => {
+const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
@@ -36,6 +36,7 @@ const ChatHeaderButtons = () => {
       const { status } = await request;
       if (status === 200) {
         history.push('/user');
+        getChannels();
       } else {
         // what should happen
       }
@@ -46,7 +47,10 @@ const ChatHeaderButtons = () => {
 
   const handleNonUserClick = (userId) => {
     addChannelUser(conversationId, userId);
-    getNonConvoUsers(conversationId).then((res) => setNonUsers(res));
+    getNonConvoUsers(conversationId).then((res) => {
+      setNonUsers(res);
+      getPics();
+    });
   };
 
   const nonUserMap = nonUsers.map((user, i) => (
@@ -61,18 +65,26 @@ const ChatHeaderButtons = () => {
 
   return (
     <ButtonDiv>
-      <Button onClick={() => handleLeaveChannel()}>Leave Chat</Button>
-      <Button onClick={() => handleAddUserClick()}>
-        <AddIcon /> People
-      </Button>
-      {modal2 && (
+      <Button onClick={() => handleLeaveChannel()}>Leave</Button>
+      <Button onClick={() => handleAddUserClick()}>Add</Button>
+      {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
           <List>{nonUserMap}</List>
         </Modal>
       )}
+      {modal2 && nonUsers.length === 0 && (
+        <EmptyModal>
+          <AddUserTitle>No Users to Add!</AddUserTitle>
+        </EmptyModal>
+      )}
     </ButtonDiv>
   );
+};
+
+ChatHeaderButtons.propTypes = {
+  getPics: PropTypes.func,
+  getChannels: PropTypes.func,
 };
 
 export default ChatHeaderButtons;
@@ -84,6 +96,18 @@ const AddButton = styled.div`
   align-items: center;
   margin-right: 20px;
   cursor: pointer;
+`;
+
+const EmptyModal = styled.div`
+  background-color: #1e1926;
+  position: fixed;
+  padding: 2rem 1rem;
+  top: 100px;
+  right: 80px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: 100px;
+  overflow-y: auto;
 `;
 
 const AddUserTitle = styled.div`
