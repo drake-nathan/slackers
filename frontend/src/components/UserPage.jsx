@@ -78,9 +78,6 @@ function UserPage() {
           <Route path="/user/:conversationId">
             <Chat getChannels={getChannels} />
           </Route>
-          <Route path="/people">
-            <AllUsers />
-          </Route>
         </Switch>
       </Main>
     </Container>
