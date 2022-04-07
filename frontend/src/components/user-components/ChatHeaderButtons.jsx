@@ -2,14 +2,18 @@ import { useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import PropTypes from 'prop-types';
+import AddBox from '@material-ui/icons/AddBox';
+import AddIcon from '@material-ui/icons/Add';
 
-import { getNonConvoUsers } from '../../context/actions';
+import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
-const ChatHeaderButtons = () => {
+const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
+  const [leaveModal, setLeaveModal] = useState(false);
 
   const history = useHistory();
 
@@ -34,6 +38,7 @@ const ChatHeaderButtons = () => {
       const { status } = await request;
       if (status === 200) {
         history.push('/user');
+        getChannels();
       } else {
         // what should happen
       }
@@ -42,56 +47,137 @@ const ChatHeaderButtons = () => {
     }
   };
 
+  const handleNonUserClick = (userId) => {
+    addChannelUser(conversationId, userId);
+    getNonConvoUsers(conversationId).then((res) => {
+      setNonUsers(res);
+      getPics();
+    });
+  };
+
+  const handleLeaveClick = () => {
+    setLeaveModal(!leaveModal);
+  };
+
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <Imgs src={user.image_url} alt="user" />
       <Name>{user.name}</Name>
+      <AddButton>
+        <AddBox onClick={() => handleNonUserClick(user.user_id)} />
+      </AddButton>
     </ListItem>
   ));
 
   return (
     <ButtonDiv>
       <Button onClick={() => handleLeaveChannel()}>Leave</Button>
-      <Button onClick={() => handleAddUserClick()}>Add</Button>
-      {modal2 && (
+      <Button onClick={() => handleAddUserClick()}>
+        <AddIcon /> Users
+      </Button>
+      {modal2 && nonUsers.length > 0 && (
         <Modal>
+          <AddUserTitle>Add Users</AddUserTitle>
           <List>{nonUserMap}</List>
         </Modal>
+      )}
+      {modal2 && nonUsers.length === 0 && (
+        <EmptyModal>
+          <AddUserTitle>No Users to Add!</AddUserTitle>
+        </EmptyModal>
+      )}
+      {leaveModal && (
+        <LeaveModal>
+          <AddUserTitle>Are you sure?</AddUserTitle>
+          <button
+            onClick={() => setLeaveModal(!leaveModal)}
+            type="button"
+            className="btn btn-danger btn-sm"
+          >
+            No
+          </button>
+          <button
+            onClick={() => handleLeaveChannel()}
+            type="button"
+            className="btn btn-danger btn-sm"
+          >
+            Yes
+          </button>
+        </LeaveModal>
       )}
     </ButtonDiv>
   );
 };
 
+ChatHeaderButtons.propTypes = {
+  getPics: PropTypes.func,
+  getChannels: PropTypes.func,
+};
+
 export default ChatHeaderButtons;
 
+const AddButton = styled.div`
+  color: white;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-right: 20px;
+  cursor: pointer;
+`;
+
+const EmptyModal = styled.div`
+  background-color: #1e1926;
+  position: fixed;
+  padding: 2rem 1rem;
+  top: 100px;
+  right: 80px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: 100px;
+  overflow-y: auto;
+`;
+
+const LeaveModal = styled.div`
+  background-color: #1e1926;
+  position: fixed;
+  padding: 2rem 1rem;
+  top: 100px;
+  right: 100px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: 200px;
+  overflow-y: auto;
+`;
+
+const AddUserTitle = styled.div`
+  color: white;
+  align-items: center;
+  font-size: 30px;
+  text-align: center;
+`;
+
 const ButtonDiv = styled.div`
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
 `;
 
 const Button = styled.button`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
   color: white;
-  font-weight: 600;
-  font-size: 0.8rem;
-  text-align: center;
+  background: #f7969e;
+  border-radius: 4px;
+  width: 80px;
+  height: 32px;
   display: flex;
-  justify-content: center;
-  letter-spacing: 0.5px;
-  width: 90%;
-  padding: 0.6rem 3.5rem;
-  border-radius: 10px;
-  background-color: #0063b2;
+  font-size: 13px;
+  font-weight: 500;
+  align-items: center;
   border: none;
-  outline: none;
-  box-shadow: none;
-  text-transform: uppercase;
-  box-sizing: border-box;
+  justify-content: center;
+  margin-right: 5px;
   cursor: pointer;
   transform: 0.4s ease-out;
   &:hover {
-    background-color: #b7a2d7;
+    background-color: #d4838a;
   }
 `;

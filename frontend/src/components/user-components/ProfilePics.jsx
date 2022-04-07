@@ -1,42 +1,15 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
-
-function ProfilePics() {
+function ProfilePics({ pics, showPics, getPics }) {
   const { conversationId } = useParams();
-  const [pics, setPics] = useState([]);
-  const [showPics, setShowPics] = useState([]);
   const [modal1, setModal1] = useState(false);
 
   useEffect(() => {
     setModal1(false);
   }, [conversationId]);
-
-  const token = localStorage.getItem('token');
-  const headerConfig = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  const getPics = async () => {
-    try {
-      const request = axios.get(
-        `${ROOT_URL}/api/conversations/${conversationId}/users`,
-        headerConfig
-      );
-
-      const { data } = await request;
-
-      if (data) {
-        setPics(data);
-        setShowPics(data.slice(0, 5));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     let cancel = false;
@@ -85,17 +58,25 @@ function ProfilePics() {
       </Container>
       {modal1 && number >= 5 && (
         <Modal>
+          <Header>Channel Members</Header>
           <List>{personMap}</List>
         </Modal>
       )}
       {modal1 && number < 5 && (
         <Modal>
+          <Header>Channel Members</Header>
           <List>{imagesFew}</List>
         </Modal>
       )}
     </>
   );
 }
+
+ProfilePics.propTypes = {
+  pics: PropTypes.array,
+  showPics: PropTypes.array,
+  getPics: PropTypes.func,
+};
 
 const Container = styled.div`
   margin: 2rem;
@@ -107,15 +88,15 @@ const InnerContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 1rem 1rem;
-  padding-left: 1rem;
+  padding: 0 2rem;
   background-color: #e9eff6;
   border-radius: 12px;
 `;
 
 export const Modal = styled.div`
-  background-color: #1e1926;
+  background-color: rgba(30, 25, 38, 0.8);
   position: fixed;
-  padding: 2rem 1rem;
+  padding: 1.6rem 1rem;
   top: 100px;
   right: 80px;
   box-sizing: border-box;
@@ -136,11 +117,21 @@ export const Imgs = styled.img`
 const Number = styled.p`
   font-size: 1.4rem;
   margin: 1rem;
+  margin-left: 2rem;
+`;
+
+const Header = styled.p`
+  margin: 1rem;
+  margin-bottom: 1.6rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1.6rem;
+  text-align: center;
 `;
 
 export const Name = styled.p`
   font-size: 1.4rem;
-  margin: 1rem;
+  margin-left: 1rem;
   color: white;
 `;
 

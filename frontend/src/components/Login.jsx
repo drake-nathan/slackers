@@ -109,6 +109,7 @@ function Login() {
         >
           <Input
             {...register('email', { required: true })}
+            name="email"
             placeholder="email"
             value={email}
             onChange={(e) => handleEmailChange(e)}
@@ -118,6 +119,7 @@ function Login() {
           ) : null}
           <Input
             {...register('password', { required: true })}
+            name="password"
             placeholder="password"
             value={password}
             type="password"
@@ -171,6 +173,9 @@ const LeftSideWrapper = styled.div`
 
 const RightSideWrapper = styled.div`
   width: 45%;
+  display: flex;
+  flex-direciton: column;
+  align-items: flex-start;
   box-sizing: border-box;
 
   @media (max-width: 1000px) {
@@ -322,6 +327,15 @@ const ImageBox = styled.img`
 
   @media (max-width: 1600px) {
     height: calc(90% - 100px);
+  }
+
+  @media (max-width: 1400px) {
+    height: calc(70% - 70px);
+    padding: 2rem;
+  }
+
+  @media (max-width: 1200px) {
+    height: calc(60% - 50px);
   }
 
   @media (max-width: 1400px) {

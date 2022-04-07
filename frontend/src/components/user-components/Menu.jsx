@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import ReactDom from 'react-dom';
 import { useAuthDispatch, logout } from '../../context';
 
 function Menu() {
   const dispatch = useAuthDispatch();
   const history = useHistory();
+
+  const modalRef = useRef();
+  const closeModal = (e) => {
+    if (e.target === modalRef.current) {
+      // setShowModal(false);
+    }
+  };
 
   const username =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';
@@ -15,13 +23,41 @@ function Menu() {
     logout(dispatch);
     history.push('/');
   };
-  return (
-    <Container>
-      <Name>{username}</Name>
-      <Button onClick={handleLogout}>Logout</Button>
-    </Container>
+  //   return (
+  //     <Container>
+  //       <Name>{username}</Name>
+  //       <Button onClick={handleLogout}>Logout</Button>
+  //     </Container>
+  //   );
+  // }
+
+  return ReactDom.createPortal(
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <Backdrop ref={modalRef} onClick={closeModal}>
+      <Container>
+        <Name>{username}</Name>
+        <Button onClick={handleLogout}>Logout</Button>
+      </Container>
+    </Backdrop>,
+    document.getElementById('portal')
   );
 }
+
+const Backdrop = styled.div`
+  position: fixed;
+  top: 40px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+`;
 
 const Container = styled.div`
   position: absolute;
@@ -31,12 +67,12 @@ const Container = styled.div`
   align-items: center;
   top: 40px;
   right: 20px;
-  width: 100%;
-  min-width: 220px;
+  min-width: 250px;
   border-radius: 10px;
   background-color: #1e1926;
   color: white;
   box-sizing: border-box;
+  z-index: 999;
 `;
 
 const Button = styled.button`

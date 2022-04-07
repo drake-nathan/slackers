@@ -2,20 +2,35 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ChatMessage = ({ text, name, timestamp }) => (
-  <Container>
-    {/* <UserAvatar>
+const ChatMessage = ({ text, name, timestamp }) => {
+  const date = new Date(timestamp);
+  const dateString = new Date(timestamp).toDateString();
+  date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  const offset = -480;
+  const estDate = new Date(date.getTime() + offset * 60 * 1000);
+  const timeString = estDate.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+
+  return (
+    <Container>
+      {/* <UserAvatar>
       <img src={image} alt="avatar" />
     </UserAvatar> */}
-    <MessageContent>
-      <Name>
-        {name}
-        <span>{new Date(timestamp).toDateString()}</span>
-      </Name>
-      <Text>{text}</Text>
-    </MessageContent>
-  </Container>
-);
+      <MessageContent>
+        <Name>
+          {name}
+          <span>
+            {dateString} {timeString}
+          </span>
+        </Name>
+        <Text>{text}</Text>
+      </MessageContent>
+    </Container>
+  );
+};
 
 export default ChatMessage;
 

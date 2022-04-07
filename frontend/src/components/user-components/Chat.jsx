@@ -3,13 +3,15 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
+// eslint-disable-next-line import/no-named-as-default
 import ChatHeaderButtons from './ChatHeaderButtons';
 
-function Chat() {
+function Chat({ getChannels }) {
   const { conversationId } = useParams();
   const channelIdRef = useRef(null);
   channelIdRef.current = conversationId;
@@ -18,6 +20,10 @@ function Chat() {
   const [currentConversation, setCurrentConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [socket, setSocket] = useState(null);
+  const [pics, setPics] = useState([]);
+  const [showPics, setShowPics] = useState([]);
+
+  const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
   const token = localStorage.getItem('token');
   const headerConfig = {
@@ -120,12 +126,30 @@ function Chat() {
     return <ChannelName>'Channel'</ChannelName>;
   };
 
+  const getPics = async () => {
+    try {
+      const request = axios.get(
+        `${ROOT_URL}/api/conversations/${conversationId}/users`,
+        headerConfig
+      );
+
+      const { data } = await request;
+
+      if (data) {
+        setPics(data);
+        setShowPics(data.slice(0, 5));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
       <ChatHeader>
         <Channel>{getChannelStuff()}</Channel>
-        <ProfilePics />
-        <ChatHeaderButtons />
+        <ProfilePics pics={pics} showPics={showPics} getPics={getPics} />
+        <ChatHeaderButtons getPics={getPics} getChannels={getChannels} />
       </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
@@ -148,7 +172,9 @@ function Chat() {
   );
 }
 
-// Chat.propTypes = {};
+Chat.propTypes = {
+  getChannels: PropTypes.func,
+};
 
 export default Chat;
 
@@ -156,6 +182,7 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: 64px auto min-content;
   min-height: 0;
+  margin-bottom: 2rem;
 `;
 
 const ChatHeader = styled.div`
