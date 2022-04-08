@@ -5,6 +5,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import AddBox from '@material-ui/icons/AddBox';
 import AddIcon from '@material-ui/icons/Add';
+import PeopleIcon from '@material-ui/icons/People';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GlobalStyles from '../../../globalStyles';
 
 import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
@@ -106,14 +108,12 @@ const ChatHeaderButtons = ({
   return (
     <ButtonDiv>
       <GlobalStyles />
-      {currentConversation && currentConversation.type !== 'dm' && (
-        <Button onClick={handleLeaveClick}>Leave</Button>
-      )}
-      {currentConversation && currentConversation.type !== 'dm' && (
-        <Button onClick={handleAddUserClick}>
-          <AddIcon /> Users
-        </Button>
-      )}
+      <Button title="Add People to Channel" onClick={handleAddUserClick}>
+        <AddIcon /> <PeopleIcon />
+      </Button>
+      <Button title="Leave Channel" onClick={handleLeaveClick}>
+        <ExitToAppIcon />
+      </Button>
       {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
@@ -215,15 +215,17 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-right: 25px;
 `;
 
 const Button = styled.button`
   color: white;
   background: #f7969e;
   border-radius: 4px;
-  width: 80px;
+  width: 60px;
   height: 32px;
   display: flex;
+  padding: 2px;
   font-size: 1rem;
   font-weight: 500;
   align-items: center;
