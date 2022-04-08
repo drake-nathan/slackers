@@ -73,28 +73,28 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
     };
   }, []);
 
-    // This is to allow closing of the Add User Btn by clicking anywhere outside the modal. I know repetitive code - ugh!
-    useEffect(() => {
-      const closeDropdown = (e) => {
-        console.log(e)
-        if (e.path[0].localName !== 'button') {
-          setModal2(false);
-        }
-      };
-      document.body.addEventListener('click', closeDropdown);
-      return () => {
-        document.body.removeEventListener('click', closeDropdown);
-      };
-    }, []);
+  // This is to allow closing of the Add User Btn by clicking anywhere outside the modal. I know repetitive code - ugh!
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      console.log(e);
+      if (e.path[0].localName !== 'button') {
+        setModal2(false);
+      }
+    };
+    document.body.addEventListener('click', closeDropdown);
+    return () => {
+      document.body.removeEventListener('click', closeDropdown);
+    };
+  }, []);
 
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <InnerRow>
-      <Imgs src={user.image_url} alt="user" />
-      <Name>{user.name}</Name>
-      <AddButton>
-        <AddBox onClick={() => handleNonUserClick(user.user_id)} />
-      </AddButton>
+        <Imgs src={user.image_url} alt="user" />
+        <Name>{user.name}</Name>
+        <AddButton>
+          <AddBox onClick={() => handleNonUserClick(user.user_id)} />
+        </AddButton>
       </InnerRow>
     </ListItem>
   ));
@@ -147,7 +147,6 @@ ChatHeaderButtons.propTypes = {
 };
 
 export default ChatHeaderButtons;
-
 
 const InnerRow = styled.div`
   width: 100%;
