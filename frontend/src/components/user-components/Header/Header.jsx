@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Menu from './Menu';
-import logoImg from '../../images/S.png';
+import logoImg from '../../../images/S.png';
 
 const Header = () => {
   const [menu, setMenu] = useState(false);

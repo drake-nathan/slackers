@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { userItems } from '../../data/UserData';
 import { getAllUsers } from '../../context/actions';
 
 const AllUsers = () => {

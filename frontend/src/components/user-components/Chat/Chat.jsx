@@ -8,7 +8,6 @@ import PropTypes from 'prop-types';
 import ChatInput from './ChatInput';
 import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
-// eslint-disable-next-line import/no-named-as-default
 import ChatHeaderButtons from './ChatHeaderButtons';
 
 function Chat({ getChannels }) {
@@ -159,6 +158,7 @@ function Chat({ getChannels }) {
               text={data.text}
               name={data.name}
               timestamp={data.createddate}
+              image={data.image}
             />
           ))}
         <div ref={messagesEndRef} />

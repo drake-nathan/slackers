@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-const ChatMessage = ({ text, name, timestamp }) => {
+const ChatMessage = ({ text, name, timestamp, image }) => {
   const date = new Date(timestamp);
   const dateString = new Date(timestamp).toDateString();
   date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
@@ -17,8 +16,8 @@ const ChatMessage = ({ text, name, timestamp }) => {
   return (
     <Container>
       {/* <UserAvatar>
-      <img src={image} alt="avatar" />
-    </UserAvatar> */}
+        <img src={image} alt="avatar" />
+      </UserAvatar> */}
       <MessageContent>
         <Name>
           {name}
@@ -30,6 +29,13 @@ const ChatMessage = ({ text, name, timestamp }) => {
       </MessageContent>
     </Container>
   );
+};
+
+ChatMessage.propTypes = {
+  text: PropTypes.string,
+  name: PropTypes.string,
+  timestamp: PropTypes.string,
+  image: PropTypes.string,
 };
 
 export default ChatMessage;

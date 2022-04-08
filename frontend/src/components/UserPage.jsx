@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-import Header from './user-components/Header';
-import Sidebar from './user-components/Sidebar';
-import Chat from './user-components/Chat';
-import AllUsers from './user-components/AllUsers';
+import Header from './user-components/Header/Header';
+import Sidebar from './user-components/Sidebar/Sidebar';
+import Chat from './user-components/Chat/Chat';
 
 function UserPage() {
   const history = useHistory();

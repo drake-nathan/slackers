@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -150,28 +150,6 @@ const AddButton = styled.div`
   cursor: pointer;
 `;
 
-const MainChannels = styled.div`
-  padding-top: 20px;
-`;
-
-const MainChannelItem = styled.div`
-  color: #fafafa;
-  display: grid;
-  grid-template-columns: 15% auto;
-  height: 36px;
-  align-items: center;
-  padding-left: 19px;
-  cursor: pointer;
-
-  &:hover {
-    background: #0f2f81;
-  }
-  &:focus {
-    background: #f7969e;
-    color: white;
-  }
-`;
-
 const ChannelsContainer = styled.div`
   color: #fafafa;
   margin-top: 10px;
@@ -181,18 +159,10 @@ const ChannelsContainer = styled.div`
   }
 `;
 
-const NewChannelContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 36px;
-  padding-left: 19px;
-  padding-right: 32px;
-`;
-
 const ChannelsList = styled.div`
   margin-top: 16px;
   margin-bottom: 12px;
+  margin-right: 5px;
   max-height: 30vh;
   overflow-y: auto;
 `;
@@ -223,3 +193,34 @@ const WorkSpaceContainerBottom = styled.div`
   border-bottom: 1px solid rgba(250, 250, 250, 0.4);
   border-top: 1px solid rgba(250, 250, 250, 0.4);
 `;
+
+// const MainChannels = styled.div`
+//   padding-top: 20px;
+// `;
+
+// const MainChannelItem = styled.div`
+//   color: #fafafa;
+//   display: grid;
+//   grid-template-columns: 15% auto;
+//   height: 36px;
+//   align-items: center;
+//   padding-left: 19px;
+//   cursor: pointer;
+
+//   &:hover {
+//     background: #0f2f81;
+//   }
+//   &:focus {
+//     background: #f7969e;
+//     color: white;
+//   }
+// `;
+
+// const NewChannelContainer = styled.div`
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   height: 36px;
+//   padding-left: 19px;
+//   padding-right: 32px;
+// `;

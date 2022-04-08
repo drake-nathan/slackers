@@ -5,9 +5,9 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import AddBox from '@material-ui/icons/AddBox';
 import AddIcon from '@material-ui/icons/Add';
-import GlobalStyles from '../../globalStyles';
+import GlobalStyles from '../../../globalStyles';
 
-import { getNonConvoUsers, addChannelUser } from '../../context/actions';
+import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
 const ChatHeaderButtons = ({ getPics, getChannels }) => {
@@ -106,7 +106,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
           <AddUserTitle>Are you sure?</AddUserTitle>
           <Text>Leaving a channel may be permanent.</Text>
           <LeaveBtn
-            onClick={() => handleLeaveChannel()}
+            onClick={handleLeaveChannel}
             type="button"
             className="btn btn-danger btn-sm"
           >
