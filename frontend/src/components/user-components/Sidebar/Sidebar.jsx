@@ -10,7 +10,7 @@ import Send from '@material-ui/icons/Send';
 import { Modal } from './AddChannelModal';
 import { AddDmModal } from './AddDmModal';
 
-const Sidebar = ({ dms, setDms, channels, setChannels }) => {
+const Sidebar = ({ dms, setDms, channels, setChannels, setAddDmEvent }) => {
   const [showModal, setShowModal] = useState(false);
   const [showDmModal, setShowDmModal] = useState(false);
   const history = useHistory();
@@ -89,6 +89,7 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
               setShowDmModal={setShowDmModal}
               setDms={setDms}
               dms={dms}
+              setAddDmEvent={setAddDmEvent}
             />
           ) : null}
           <WorkSpaceContainerBottom>
@@ -122,6 +123,7 @@ Sidebar.propTypes = {
   setChannels: PropTypes.func.isRequired,
   dms: PropTypes.array.isRequired,
   setDms: PropTypes.func.isRequired,
+  setAddDmEvent: PropTypes.func,
 };
 
 export default Sidebar;

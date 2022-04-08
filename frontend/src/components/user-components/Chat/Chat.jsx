@@ -10,7 +10,7 @@ import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 import ChatHeaderButtons from './ChatHeaderButtons';
 
-function Chat({ getChannels, getDms }) {
+function Chat({ getChannels, getDms, addDmEvent }) {
   const { conversationId } = useParams();
   const channelIdRef = useRef(null);
   channelIdRef.current = conversationId;
@@ -104,6 +104,12 @@ function Chat({ getChannels, getDms }) {
   };
 
   useEffect(() => {
+    if (socket && socket.connected && addDmEvent) {
+      socket.emit('add_to_channel', addDmEvent.dmId, addDmEvent.userId);
+    }
+  }, [addDmEvent]);
+
+  useEffect(() => {
     if (socket) {
       socket.emit('join_channel', conversationId);
     }
@@ -187,6 +193,7 @@ function Chat({ getChannels, getDms }) {
 Chat.propTypes = {
   getChannels: PropTypes.func,
   getDms: PropTypes.func,
+  addDmEvent: PropTypes.func,
 };
 
 export default Chat;

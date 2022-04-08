@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
-export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
+export const AddDmModal = ({ setShowDmModal, dms, setDms, setAddDmEvent }) => {
   const history = useHistory();
   const [users, setUsers] = useState([]);
   const modalRef = useRef();
@@ -60,6 +60,7 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
       if (status === 200) {
         setShowDmModal(false);
         setDms((prev) => [...prev, data]);
+        setAddDmEvent({ userId, dmId: data.conversation_id });
         history.push('/user');
         history.push(`user/${data.conversation_id}`);
       } else {
