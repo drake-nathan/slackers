@@ -13,10 +13,6 @@ const AllUsers = () => {
         <UserCard key={index}>
           <img src={user.image_url} alt="user" />
           <Name>{user.name}</Name>
-          <span>
-            <AddToChannel>Add To Channel</AddToChannel>
-            <SendDm>Send Dm</SendDm>
-          </span>
         </UserCard>
       ))}
     </Container>
