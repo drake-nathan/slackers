@@ -91,6 +91,15 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
               dms={dms}
             />
           ) : null}
+          <WorkSpaceContainerBottom>
+            <Send style={{ marginRight: '8px' }} />
+            <h3>
+              <strong>DMs</strong>
+            </h3>
+            <AddButton onClick={handleAddDmClick}>
+              <AddIcon />
+            </AddButton>
+          </WorkSpaceContainerBottom>
           <ChannelsList>
             {dms.map((dm, i) => (
               <Channel
@@ -102,15 +111,6 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
               </Channel>
             ))}
           </ChannelsList>
-          <WorkSpaceContainerBottom>
-            <Send style={{ marginRight: '8px' }} />
-            <h3>
-              <strong>DMs</strong>
-            </h3>
-            <AddButton onClick={handleAddDmClick}>
-              <AddIcon />
-            </AddButton>
-          </WorkSpaceContainerBottom>
         </ChannelsContainer>
       </InnerContainer>
     </Container>
