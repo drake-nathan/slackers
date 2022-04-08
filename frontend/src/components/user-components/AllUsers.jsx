@@ -26,9 +26,6 @@ const AllUsers = () => {
           <UserCard key={index}>
             <img src={user.image_url} alt="user" />
             <Name>{user.name}</Name>
-            <span>
-              <SendDm>Send Dm</SendDm>
-            </span>
           </UserCard>
         ))}
       </PeopleContainer>
