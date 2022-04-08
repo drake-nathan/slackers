@@ -11,9 +11,9 @@ const socketIO = require('socket.io');
 const db = require('./queries/queries');
 
 // Connect to the DB! (no need to end the connection)
-const { client } = require('./queries/queries');
+const { pool } = require('./queries/queries');
 
-client.connect((err) => {
+pool.connect((err) => {
   if (err) console.log(err);
 });
 
@@ -91,11 +91,11 @@ io.on('connection', (socket) => {
       values: [userId],
     };
 
-    client.query(query, (err, result) => {
+    pool.query(query, (err, result) => {
       if (err) {
         socket.emit('db_error', err.toString());
       } else {
-        client.query(userQuery, (err, userResult) => {
+        pool.query(userQuery, (err, userResult) => {
           if (err) {
             socket.emit('db_error', err.toString());
           } else {

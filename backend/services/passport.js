@@ -5,12 +5,12 @@ const { ExtractJwt } = require('passport-jwt');
 const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local');
 const keys = require('../config/keys');
-const { client, strings } = require('../queries/queries');
+const { pool, strings } = require('../queries/queries');
 
 const localLogin = new LocalStrategy(
   { usernameField: 'email' },
   (email, password, done) => {
-    client.query(strings.oneUser(email), (err, results) => {
+    pool.query(strings.oneUser(email), (err, results) => {
       if (err) {
         return done(err);
       }
@@ -33,7 +33,7 @@ const jwtOptions = {
 
 // Create JWT strategy
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  client.query(strings.userById(payload.sub), (err, results) => {
+  pool.query(strings.userById(payload.sub), (err, results) => {
     if (err) {
       return done(err);
     }

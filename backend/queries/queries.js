@@ -1,12 +1,19 @@
 /* eslint-disable camelcase */
-// instructions to setting up test database below
-// https://parsity-fulltime-3.atlassian.net/jira/software/projects/PFTC3AP/boards/1?selectedIssue=PFTC3AP-9
-const { Pool, Client } = require('pg');
-const parser = require('pg-connection-string').parse;
 
-const client = new Client(parser(process.env.DATABASE_URL));
+const { Pool } = require('pg');
+// const parser = require('pg-connection-string').parse;
 
-const pool = new Pool(parser(process.env.DATABASE_URL));
+// const client = new Client(parser(process.env.DATABASE_URL));
+const pool = (() => {
+  if (process.env.NODE_ENV !== 'production') {
+    return new Pool({
+      connectionString: `${process.env.DATABASE_URL}`,
+    });
+  }
+  return new Pool({
+    connectionString: `${process.env.DATABASE_URL}?sslmode=require`,
+  });
+})();
 
 const strings = {};
 
@@ -22,7 +29,7 @@ const isAllowed = async (userId, conversationId) => {
   };
 
   try {
-    const res = await client.query(query);
+    const res = await pool.query(query);
     const conversations = res.rows.map((row) => row.conversation_id);
     if (conversations.includes(conversationId)) {
       return true;
@@ -55,7 +62,7 @@ const getAllChannels = (req, res, next) => {
   `,
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -76,7 +83,7 @@ const addNewChannel = (req, res, next) => {
     values: [name, description, 'channel', true],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -102,16 +109,16 @@ const addNewDm = (req, res) => {
     values: [user_id, userToDm],
   };
 
-  client.query(query1, (err, result1) => {
+  pool.query(query1, (err, result1) => {
     if (err) {
       res.send(500, `DB error ${err}`);
     } else {
       query2.values.push(result1.rows[0].conversation_id);
-      client.query(query2, (err, result2) => {
+      pool.query(query2, (err, result2) => {
         if (err) {
           res.send(500, `DB error ${err}`);
         } else {
-          client.query(strings.userById(userToDm), (err, result3) => {
+          pool.query(strings.userById(userToDm), (err, result3) => {
             if (err) {
               res.send(500, `DB error ${err}`);
             } else {
@@ -137,7 +144,7 @@ const createChannelUser = (req, res, next) => {
     `,
     values: [userId, parseInt(conversationId)],
   };
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -156,7 +163,7 @@ const getAllUsers = (req, res, next) => {
       slacker_users
     `,
   };
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -190,7 +197,7 @@ const getNonConvoUsers = (req, res, next) => {
     values: [conversationId],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -216,7 +223,7 @@ const getChannelUsers = (req, res, next) => {
     values: [conversationId],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -248,7 +255,7 @@ const getConversationMessages = async (req, res, next) => {
     values: [conversationId],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -269,7 +276,7 @@ const createConversationMessage = (req, res, next) => {
     values: [user_id, conversationId, text, createddate],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -299,7 +306,7 @@ const getUserChannels = (req, res, next) => {
     values: [user_id, 'channel'],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -321,7 +328,7 @@ const getUserDms = (req, res, next) => {
     values: [req.user.user_id, 'dm'],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       res.send(400, 'Request could not be processed.');
     }
@@ -341,7 +348,7 @@ const getDMUser = (req, res, next) => {
     values: [conversationId, req.user.user_id],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       res.send(400, 'Request could not be processed.');
     }
@@ -368,7 +375,7 @@ const getConversation = async (req, res, next) => {
     values: [conversationId],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       res.send(400, 'Request could not be processed.');
     }
@@ -406,7 +413,7 @@ const deleteChannelUser = (req, res, next) => {
     values: [user_id, parseInt(conversationId)],
   };
 
-  client.query(query, (error, results) => {
+  pool.query(query, (error, results) => {
     if (error) {
       throw error;
     }
@@ -417,7 +424,6 @@ const deleteChannelUser = (req, res, next) => {
 module.exports = {
   strings,
   pool,
-  client,
   getAllChannels,
   getConversationMessages,
   getChannelUsers,

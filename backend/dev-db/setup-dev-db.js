@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const falso = require('@ngneat/falso');
-const { client } = require('../queries/queries');
+const { pool } = require('../queries/queries');
 const fakerFuncs = require('./generate-fake-data');
 
 async function setupDevDatabase(request, response) {
@@ -151,33 +151,33 @@ async function setupDevDatabase(request, response) {
       VALUES ${messages.map(distributeMessages)};
     `;
 
-  await client.query(createUserTable).catch((err) => {
+  await pool.query(createUserTable).catch((err) => {
     console.log(err);
     console.log('----- slacker_users table could not be created :(');
   });
   console.log('+++++ slacker_users table exists or was successfully created');
 
-  await client.query(populateUserTable).catch((err) => {
+  await pool.query(populateUserTable).catch((err) => {
     console.log(err);
     console.log('----- slacker_users table could not be populated :(');
   });
   console.log('+++++ slacker_users table was successfully populated');
 
-  await client.query(createConversationsTable).catch((err) => {
+  await pool.query(createConversationsTable).catch((err) => {
     console.log(err);
     console.log('conversation table could not be created :(');
   });
   console.log('+++++ conversation table exists or was successfully created');
 
-  await client.query(populateChannels).catch((err) => {});
+  await pool.query(populateChannels).catch((err) => {});
   console.log(
     '+++++ conversation table was successfully populated with channels'
   );
 
-  await client.query(populateDMs).catch((err) => {});
+  await pool.query(populateDMs).catch((err) => {});
   console.log('+++++ conversation table was successfully populated with DMs');
 
-  await client.query(createUserConversationsJunction).catch((err) => {
+  await pool.query(createUserConversationsJunction).catch((err) => {
     console.log(err);
     console.log('user_conversation table could not be created :(');
   });
@@ -185,25 +185,25 @@ async function setupDevDatabase(request, response) {
     '+++++ user_conversation table exists or was successfully created'
   );
 
-  await client.query(populateUserChannels).catch((err) => {
+  await pool.query(populateUserChannels).catch((err) => {
     console.log(err);
     console.log('----- user channels table could not be populated :(');
   });
   console.log('+++++ user channels table was successfully populated');
 
-  await client.query(populateUserDMs).catch((err) => {
+  await pool.query(populateUserDMs).catch((err) => {
     console.log(err);
     console.log('----- user DMs table could not be populated :(');
   });
   console.log('+++++ user DMs table was successfully populated');
 
-  await client.query(createMessageTable).catch((err) => {
+  await pool.query(createMessageTable).catch((err) => {
     console.log(err);
     console.log('message table could not be created :(');
   });
   console.log('+++++ message table exists or was successfully created');
 
-  await client.query(populateMessageTable).catch((err) => {
+  await pool.query(populateMessageTable).catch((err) => {
     console.log(err);
     console.log('----- message table could not be populated :(');
   });
