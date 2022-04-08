@@ -15,9 +15,9 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
 
   return (
     <Container>
-      {/* <UserAvatar>
+      <UserAvatar>
         <img src={image} alt="avatar" />
-      </UserAvatar> */}
+      </UserAvatar>
       <MessageContent>
         <Name>
           {name}
@@ -52,6 +52,9 @@ const UserAvatar = styled.div`
   height: 48px;
   border-radius: 4px;
   overflow: hidden;
+  background-color: #e9eff6;
+  border: 1px solid;
+  border-color: #646464;
 
   img {
     width: 100%;

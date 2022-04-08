@@ -87,6 +87,7 @@ function Chat({ getChannels }) {
   const socketPreConnectSetup = (deadSocket) => {
     deadSocket.once('connect', () => {
       deadSocket.on('new_message', (data) => {
+        console.log(data);
         if (data.conversation_id === parseInt(channelIdRef.current)) {
           setMessages((mgs) => [...mgs, data]);
         }
@@ -152,13 +153,13 @@ function Chat({ getChannels }) {
       </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
-          messages.map((data, index) => (
+          messages.map((data, i) => (
             <ChatMessage
-              key={index}
+              key={i}
               text={data.text}
               name={data.name}
               timestamp={data.createddate}
-              image={data.image}
+              image={data.image_url}
             />
           ))}
         <div ref={messagesEndRef} />
