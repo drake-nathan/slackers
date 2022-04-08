@@ -75,11 +75,13 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
+      <InnerRow>
       <Imgs src={user.image_url} alt="user" />
       <Name>{user.name}</Name>
       <AddButton>
         <AddBox onClick={() => handleNonUserClick(user.user_id)} />
       </AddButton>
+      </InnerRow>
     </ListItem>
   ));
 
@@ -132,13 +134,24 @@ ChatHeaderButtons.propTypes = {
 
 export default ChatHeaderButtons;
 
+
+const InnerRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+`;
+
 const AddButton = styled.div`
   color: white;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
   margin-right: 20px;
   cursor: pointer;
+  margin-left: auto;
+  transition: 0.4s;
+  &:hover {
+    background-color: #1748c6;
+  }
 `;
 
 const EmptyModal = styled.div`
