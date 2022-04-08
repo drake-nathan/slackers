@@ -10,8 +10,8 @@ function ProfilePics({ pics, showPics, getPics }) {
   // This is to allow closing by clicking anywhere outside the modal
   useEffect(() => {
     const closeDropdown = (e) => {
-      console.log(e)
-      if ( e.path[1].localName !== "button") {
+      console.log(e);
+      if (e.path[1].localName !== 'button') {
         setModal1(false);
       }
     };
@@ -73,7 +73,7 @@ function ProfilePics({ pics, showPics, getPics }) {
         </Modal>
       )}
       {modal1 && number < 5 && (
-        <Modal >
+        <Modal>
           <Header>Channel Members</Header>
           <List>{imagesFew}</List>
         </Modal>
@@ -104,6 +104,7 @@ const InnerContainer = styled.button`
   background-color: #e9eff6;
   border-radius: 12px;
   border: none;
+  cursor: pointer;
 `;
 
 export const Modal = styled.div`
@@ -125,6 +126,7 @@ export const Imgs = styled.img`
   margin-right: -0.9rem;
   border: 3px solid #fdf2e9;
   max-width: 100%;
+  background-color: #dad6d6;
 `;
 
 const Number = styled.p`
