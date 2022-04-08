@@ -13,22 +13,56 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
     hour12: true,
   });
 
+  // Get today's date to compare with other dates
+  const todayDate = new Date().toDateString();
+  const todayArray = todayDate.split(' ');
+  const dateStringArray = dateString.split(' ');
+
+  let dateForShow = dateString;
+
+  if (
+    todayArray[1] === dateStringArray[1] &&
+    todayArray[2] === dateStringArray[2] &&
+    todayArray[3] === dateStringArray[3]
+  ) {
+    dateForShow = 'Today';
+  }
+
   return (
-    <Container>
-      {/* <UserAvatar>
-        <img src={image} alt="avatar" />
-      </UserAvatar> */}
-      <MessageContent>
-        <Name>
-          {name}
-          <span>
-            {dateString} {timeString}
-          </span>
-        </Name>
-        <Text>{text}</Text>
-      </MessageContent>
-    </Container>
+    <OuterContainer>
+      <HorizontalRule />
+      <DateSpan>{dateForShow}</DateSpan>
+      <Container>
+        <UserAvatar>
+          <img src={image} alt="avatar" />
+        </UserAvatar>
+        <MessageContent>
+          <Name>
+            {name}
+            <TimeSpan>{timeString}</TimeSpan>
+          </Name>
+          <Text>{text}</Text>
+        </MessageContent>
+      </Container>
+    </OuterContainer>
   );
+
+  // return (
+  //   <Container>
+  //     <UserAvatar>
+  //       <img src={image} alt="avatar" />
+  //     </UserAvatar>
+  //     <MessageContent>
+  //       <Name>
+  //         {name}
+  //         <span>
+  //           {dateString} {timeString}
+  //         </span>
+  //       </Name>
+  //       <Text>{text}</Text>
+  //     </MessageContent>
+  //   </Container>
+  // );
 };
 
 ChatMessage.propTypes = {
@@ -47,11 +81,38 @@ const Container = styled.div`
   height: 64px;
 `;
 
+const OuterContainer = styled.div`
+  width: 100%;
+`;
+
+const HorizontalRule = styled.hr`
+  width: 90%;
+  margin: 2.4rem;
+`;
+const TimeSpan = styled.span`
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-left: 1.4rem;
+`;
+
+const DateSpan = styled.p`
+  text-align: center;
+  border: 1px solid lightgrey;
+  background-color: white;
+  border-radius: 20px;
+  width: 200px;
+  margin: 0 auto;
+  margin-top: -3.1rem;
+`;
 const UserAvatar = styled.div`
   width: 48px;
   height: 48px;
-  border-radius: 4px;
+  border-radius: 10px;
+  border: none;
   overflow: hidden;
+  background-color: #e9eff6;
+  // border: 1px solid;
+  border-color: #646464;
 
   img {
     width: 100%;
@@ -62,11 +123,13 @@ const Name = styled.span`
   font-weight: 900;
   font-size: 15px;
   line-height: 1.4;
-  span {
-    font-weight: 400;
-    color: #272727;
-    margin-left: 10px;
-  }
+  margin-bottom: 0.6rem;
+  margin-right: 2rem;
+  // span {
+  //   font-weight: 400;
+  //   color: #272727;
+  //   margin-left: 10px;
+  // }
 `;
 
 const MessageContent = styled.div`

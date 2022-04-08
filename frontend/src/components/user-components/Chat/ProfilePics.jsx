@@ -10,7 +10,7 @@ function ProfilePics({ pics, showPics, getPics }) {
   // This is to allow closing by clicking anywhere outside the modal
   useEffect(() => {
     const closeDropdown = (e) => {
-      if (e.path[1].className !== 'sc-ehmTmK gRppqb') {
+      if (e.path[1].localName !== 'button') {
         setModal1(false);
       }
     };
@@ -89,19 +89,23 @@ ProfilePics.propTypes = {
 
 const Container = styled.div`
   position: absolute;
-  top: 16px;
+  top: 19px;
   right: 180px;
   margin: 2rem;
   cursor: pointer;
 `;
 
-const InnerContainer = styled.div`
+const InnerContainer = styled.button`
   display: flex;
+  background: white;
   justify-content: center;
   align-items: center;
-  padding: 0 0.6rem;
-  background-color: #e9eff6;
+  height: 52px;
+  padding-left: 4px;
+  padding-right: 4px;
   border-radius: 12px;
+  border: 3px solid #c3dcdf;
+  cursor: pointer;
 `;
 
 export const Modal = styled.div`
@@ -119,16 +123,19 @@ export const Modal = styled.div`
 export const Imgs = styled.img`
   height: 35px;
   width: 35px;
-  border-radius: 50%;
+  border-radius: 20%;
   margin-right: -0.9rem;
-  border: 3px solid #fdf2e9;
+  border: 5px solid white;
   max-width: 100%;
+  background-color: #c3dcdf;
 `;
 
 const Number = styled.p`
   font-size: 1.4rem;
+  font-weight: bold;
   margin: 1rem;
   margin-left: 2rem;
+  color: rgba(30, 25, 38, 0.8);
 `;
 
 const Header = styled.p`

@@ -235,6 +235,7 @@ const getConversationMessages = async (req, res, next) => {
 	    message.createddate,
       message.user_id,
       slacker_users.name,
+      slacker_users.image_url,
       conversation.conversation_id
     FROM
       message

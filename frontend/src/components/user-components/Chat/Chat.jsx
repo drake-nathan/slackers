@@ -152,13 +152,13 @@ function Chat({ getChannels }) {
       </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
-          messages.map((data, index) => (
+          messages.map((data, i) => (
             <ChatMessage
-              key={index}
+              key={i}
               text={data.text}
               name={data.name}
               timestamp={data.createddate}
-              image={data.image}
+              image={data.image_url}
             />
           ))}
         <div ref={messagesEndRef} />

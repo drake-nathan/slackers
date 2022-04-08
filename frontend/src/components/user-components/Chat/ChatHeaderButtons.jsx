@@ -5,6 +5,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import AddBox from '@material-ui/icons/AddBox';
 import AddIcon from '@material-ui/icons/Add';
+import PeopleIcon from '@material-ui/icons/People';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GlobalStyles from '../../../globalStyles';
 
 import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
@@ -26,7 +28,6 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const handleAddUserClick = async () => {
     getNonConvoUsers(conversationId).then((res) => setNonUsers(res));
     setModal2(!modal2);
-    console.log(nonUsers);
   };
 
   const handleLeaveChannel = async () => {
@@ -60,7 +61,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
     setLeaveModal(!leaveModal);
   };
 
-  // This is to allow closing by clicking anywhere outside the modal
+  // This is to allow closing of the Leave Btn by clicking anywhere outside the modal
   useEffect(() => {
     const closeDropdown = (e) => {
       if (e.path[0].localName !== 'button') {
@@ -73,22 +74,39 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
     };
   }, []);
 
+  // This is to allow closing of the Add User Btn by clicking anywhere outside the modal. I know repetitive code - ugh!
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      if (e.path[0].localName !== 'button') {
+        setModal2(false);
+      }
+    };
+    document.body.addEventListener('click', closeDropdown);
+    return () => {
+      document.body.removeEventListener('click', closeDropdown);
+    };
+  }, []);
+
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
-      <Imgs src={user.image_url} alt="user" />
-      <Name>{user.name}</Name>
-      <AddButton>
-        <AddBox onClick={() => handleNonUserClick(user.user_id)} />
-      </AddButton>
+      <InnerRow>
+        <Imgs src={user.image_url} alt="user" />
+        <Name>{user.name}</Name>
+        <AddButton>
+          <AddBox onClick={() => handleNonUserClick(user.user_id)} />
+        </AddButton>
+      </InnerRow>
     </ListItem>
   ));
 
   return (
     <ButtonDiv>
       <GlobalStyles />
-      <Button onClick={handleLeaveClick}>Leave</Button>
-      <Button onClick={handleAddUserClick}>
-        <AddIcon /> Users
+      <Button title="Add People to Channel" onClick={handleAddUserClick}>
+        <AddIcon /> <PeopleIcon />
+      </Button>
+      <Button title="Leave Channel" onClick={handleLeaveClick}>
+        <ExitToAppIcon />
       </Button>
       {modal2 && nonUsers.length > 0 && (
         <Modal>
@@ -108,14 +126,14 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
           <LeaveBtn
             onClick={handleLeaveChannel}
             type="button"
-            className="btn btn-danger btn-sm"
+            // className="btn btn-danger btn-sm"
           >
             Leave Channel
           </LeaveBtn>
           <CancelBtn
             onClick={() => setLeaveModal(!leaveModal)}
             type="button"
-            className="btn btn-danger btn-sm"
+            // className="btn btn-danger btn-sm"
           >
             CANCEL
           </CancelBtn>
@@ -132,13 +150,23 @@ ChatHeaderButtons.propTypes = {
 
 export default ChatHeaderButtons;
 
+const InnerRow = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+`;
+
 const AddButton = styled.div`
   color: white;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
   margin-right: 20px;
   cursor: pointer;
+  margin-left: auto;
+  transition: 0.4s;
+  &:hover {
+    background-color: #1748c6;
+  }
 `;
 
 const EmptyModal = styled.div`
@@ -179,15 +207,17 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-right: 25px;
 `;
 
 const Button = styled.button`
   color: white;
   background: #f7969e;
   border-radius: 4px;
-  width: 80px;
+  width: 60px;
   height: 32px;
   display: flex;
+  padding: 2px;
   font-size: 1rem;
   font-weight: 500;
   align-items: center;
