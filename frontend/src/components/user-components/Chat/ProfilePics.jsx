@@ -126,7 +126,7 @@ export const Imgs = styled.img`
   margin-right: -0.9rem;
   border: 3px solid #fdf2e9;
   max-width: 100%;
-  background-color: #dad6d6;
+  background-color: #c3dcdf;
 `;
 
 const Number = styled.p`
