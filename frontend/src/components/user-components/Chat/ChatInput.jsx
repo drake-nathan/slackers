@@ -1,8 +1,8 @@
-/* eslint-disable react/prop-types */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import SendIcon from '@material-ui/icons/Send';
+import PropTypes from 'prop-types';
 
 const ChatInput = ({ socket }) => {
   const [input, setInput] = useState('');
@@ -41,6 +41,10 @@ const ChatInput = ({ socket }) => {
       </InputContainer>
     </Container>
   );
+};
+
+ChatInput.propTypes = {
+  socket: PropTypes.object,
 };
 
 export default ChatInput;

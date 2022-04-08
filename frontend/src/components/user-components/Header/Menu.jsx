@@ -1,20 +1,12 @@
-import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import ReactDom from 'react-dom';
-import { useAuthDispatch, logout } from '../../context';
-import GlobalStyles from '../../globalStyles';
+import { useAuthDispatch, logout } from '../../../context';
+import GlobalStyles from '../../../globalStyles';
 
-function Menu({ setAway, setShowModal }) {
+function Menu({ setAway }) {
   const dispatch = useAuthDispatch();
   const history = useHistory();
-
-  const modalRef = useRef();
-  const closeModal = (e) => {
-    if (e.target === modalRef.current) {
-      setShowModal(false);
-    }
-  };
 
   const username =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';

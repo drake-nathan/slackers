@@ -3,13 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import ReactDom from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
-  // close the modal when clicking outside the modal.
   const history = useHistory();
-  const [name, setName] = useState('');
   const [users, setUsers] = useState([]);
   const modalRef = useRef();
   const closeModal = (e) => {
@@ -38,13 +35,6 @@ export const AddDmModal = ({ setShowDmModal, dms, setDms }) => {
       setUsers(
         data.filter((user) => user.user_id !== userInfoObj.user.user_id)
       );
-      // if (dms.length) {
-      //   setUsers(
-      //     data.filter((user) => dms.some((dm) => dm.name !== user.name))
-      //   );
-      // } else {
-      //   setUsers(data);
-      // }
     } else {
       return null;
     }
