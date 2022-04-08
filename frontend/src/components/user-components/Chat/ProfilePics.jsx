@@ -90,7 +90,7 @@ ProfilePics.propTypes = {
 const Container = styled.div`
   position: absolute;
   top: 19px;
-  right: 180px;
+  right: 200px;
   margin: 2rem;
   cursor: pointer;
 `;
