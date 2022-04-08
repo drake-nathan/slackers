@@ -15,23 +15,21 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
 
   return (
     <OuterContainer>
-    <Container>
-      <UserAvatar>
-        <img src={image} alt="avatar" />
-      </UserAvatar>
-      <MessageContent>
-        <Name>
-          {name} 
-          <TimeSpan>{timeString}</TimeSpan>
-        </Name>
-        <Text>{text}</Text>
-      </MessageContent>
-    </Container>
-    <HorizontalRule />
-    <DateSpan>
-          {dateString} 
-        </DateSpan>
-        </OuterContainer>
+      <Container>
+        <UserAvatar>
+          <img src={image} alt="avatar" />
+        </UserAvatar>
+        <MessageContent>
+          <Name>
+            {name}
+            <TimeSpan>{timeString}</TimeSpan>
+          </Name>
+          <Text>{text}</Text>
+        </MessageContent>
+      </Container>
+      <HorizontalRule />
+      <DateSpan>{dateString}</DateSpan>
+    </OuterContainer>
   );
 
   // return (
@@ -70,12 +68,12 @@ const Container = styled.div`
 
 const OuterContainer = styled.div`
   width: 100%;
-`
+`;
 
 const HorizontalRule = styled.hr`
   width: 90%;
   margin: 2.4rem;
-`
+`;
 const TimeSpan = styled.span`
   font-size: 0.8rem;
   font-weight: 400;
@@ -90,12 +88,12 @@ const DateSpan = styled.p`
   width: 200px;
   margin: 0 auto;
   margin-top: -3.1rem;
-`
+`;
 const UserAvatar = styled.div`
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  border:none;
+  border: none;
   overflow: hidden;
   background-color: #e9eff6;
   // border: 1px solid;
