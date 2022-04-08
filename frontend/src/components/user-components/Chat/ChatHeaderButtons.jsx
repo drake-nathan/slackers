@@ -26,7 +26,6 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const handleAddUserClick = async () => {
     getNonConvoUsers(conversationId).then((res) => setNonUsers(res));
     setModal2(!modal2);
-    console.log(nonUsers);
   };
 
   const handleLeaveChannel = async () => {
@@ -76,7 +75,6 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   // This is to allow closing of the Add User Btn by clicking anywhere outside the modal. I know repetitive code - ugh!
   useEffect(() => {
     const closeDropdown = (e) => {
-      console.log(e);
       if (e.path[0].localName !== 'button') {
         setModal2(false);
       }
