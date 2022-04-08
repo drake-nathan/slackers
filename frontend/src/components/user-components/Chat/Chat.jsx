@@ -21,6 +21,7 @@ function Chat({ getChannels }) {
   const [socket, setSocket] = useState(null);
   const [pics, setPics] = useState([]);
   const [showPics, setShowPics] = useState([]);
+  const [firstDate, setFirstDate] = useState(null);
 
   const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
@@ -151,17 +152,20 @@ function Chat({ getChannels }) {
         <ChatHeaderButtons getPics={getPics} getChannels={getChannels} />
       </ChatHeader>
       <MessageContainer>
+        {firstDate}
         {messages.length > 0 &&
           messages.map((msg, i) => {
             const prevIndex = i ? i - 1 : i;
             return (
               <ChatMessage
                 key={i}
+                index={i}
                 text={msg.text}
                 name={msg.name}
                 timestamp={msg.createddate}
                 lastMsgTimestamp={messages[prevIndex].createddate}
                 image={msg.image_url}
+                setFirstDate={setFirstDate}
               />
             );
           })}
