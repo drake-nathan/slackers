@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const ChatMessage = ({ text, name, timestamp, image }) => {
+const ChatMessage = ({ text, name, timestamp, lastMsgTimestamp, image }) => {
   const date = new Date(timestamp);
+  const lastMsgDate = new Date(lastMsgTimestamp);
   const dateString = new Date(timestamp).toDateString();
   date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
   const offset = -480;
@@ -28,10 +29,16 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
     dateForShow = 'Today';
   }
 
+  const isNewDay = date.getDay() > lastMsgDate.getDay();
+
   return (
     <OuterContainer>
-      <HorizontalRule />
-      <DateSpan>{dateForShow}</DateSpan>
+      {isNewDay && (
+        <>
+          <HorizontalRule />
+          <DateSpan>{dateForShow}</DateSpan>
+        </>
+      )}
       <Container>
         <UserAvatar>
           <img src={image} alt="avatar" />
@@ -69,6 +76,7 @@ ChatMessage.propTypes = {
   text: PropTypes.string,
   name: PropTypes.string,
   timestamp: PropTypes.string,
+  lastMsgTimestamp: PropTypes.string,
   image: PropTypes.string,
 };
 

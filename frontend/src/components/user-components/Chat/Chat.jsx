@@ -152,15 +152,19 @@ function Chat({ getChannels }) {
       </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
-          messages.map((data, i) => (
-            <ChatMessage
-              key={i}
-              text={data.text}
-              name={data.name}
-              timestamp={data.createddate}
-              image={data.image_url}
-            />
-          ))}
+          messages.map((msg, i) => {
+            const prevIndex = i ? i - 1 : i;
+            return (
+              <ChatMessage
+                key={i}
+                text={msg.text}
+                name={msg.name}
+                timestamp={msg.createddate}
+                lastMsgTimestamp={messages[prevIndex].createddate}
+                image={msg.image_url}
+              />
+            );
+          })}
         <div ref={messagesEndRef} />
       </MessageContainer>
       <ChatInput
