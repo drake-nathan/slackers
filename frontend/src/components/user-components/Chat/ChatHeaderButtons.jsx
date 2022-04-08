@@ -109,14 +109,12 @@ const ChatHeaderButtons = ({
     <ButtonDiv>
       <GlobalStyles />
       {currentConversation && currentConversation.type && (
-        <Button title="Add People to Channel" onClick={handleAddUserClick}>
-          <AddIcon /> <PeopleIcon />
+        <Button onClick={handleAddUserClick}>
+          <AddIcon /> Users
         </Button>
       )}
       {currentConversation && currentConversation.type && (
-        <Button title="Leave Channel" onClick={handleLeaveClick}>
-          <ExitToAppIcon />
-        </Button>
+        <Button onClick={handleLeaveClick}>Leave</Button>
       )}
       {modal2 && nonUsers.length > 0 && (
         <Modal>
@@ -226,7 +224,7 @@ const Button = styled.button`
   color: white;
   background: #f7969e;
   border-radius: 4px;
-  width: 60px;
+  width: 80px;
   height: 32px;
   display: flex;
   padding: 2px;
@@ -238,6 +236,7 @@ const Button = styled.button`
   margin-right: 5px;
   cursor: pointer;
   transform: 0.4s ease-out;
+  box-sizing: border-box;
   &:hover {
     background-color: #d4838a;
   }
