@@ -14,7 +14,6 @@ const Sidebar = ({ dms, setDms, channels, setChannels, setAddDmEvent }) => {
   const [showModal, setShowModal] = useState(false);
   const [showDmModal, setShowDmModal] = useState(false);
   const history = useHistory();
-
   const goToChannel = (id) => {
     if (id) {
       history.push(`/user/${id}`);
