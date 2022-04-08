@@ -108,12 +108,16 @@ const ChatHeaderButtons = ({
   return (
     <ButtonDiv>
       <GlobalStyles />
-      <Button title="Add People to Channel" onClick={handleAddUserClick}>
-        <AddIcon /> <PeopleIcon />
-      </Button>
-      <Button title="Leave Channel" onClick={handleLeaveClick}>
-        <ExitToAppIcon />
-      </Button>
+      {currentConversation && currentConversation.type && (
+        <Button title="Add People to Channel" onClick={handleAddUserClick}>
+          <AddIcon /> <PeopleIcon />
+        </Button>
+      )}
+      {currentConversation && currentConversation.type && (
+        <Button title="Leave Channel" onClick={handleLeaveClick}>
+          <ExitToAppIcon />
+        </Button>
+      )}
       {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
