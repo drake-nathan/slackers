@@ -1,19 +1,10 @@
 /* eslint-disable camelcase */
 
 const { Pool } = require('pg');
-// const parser = require('pg-connection-string').parse;
+const parser = require('pg-connection-string').parse;
 
 // const client = new Client(parser(process.env.DATABASE_URL));
-const pool = (() => {
-  if (process.env.NODE_ENV !== 'production') {
-    return new Pool({
-      connectionString: `${process.env.DATABASE_URL}`,
-    });
-  }
-  return new Pool({
-    connectionString: `${process.env.DATABASE_URL}?sslmode=require`,
-  });
-})();
+const pool = new Pool(parser(process.env.DATABASE_URL));
 
 const strings = {};
 
