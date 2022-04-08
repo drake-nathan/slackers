@@ -27,7 +27,6 @@ function UserPage() {
       );
 
       const { data } = await request;
-
       if (data) {
         setChannels(data);
         history.push(`/user/${data[0].conversation_id}`);

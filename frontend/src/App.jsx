@@ -7,6 +7,7 @@ import { AuthProvider } from './context';
 import AllUsers from './components/user-components/AllUsers';
 
 // by wrapping our application in the custom authentication provider(AuthProvider) detailed in the context folder, this ensures that every component in our application has access to the context objects we created earlier.
+
 function App() {
   return (
     <AuthProvider>
