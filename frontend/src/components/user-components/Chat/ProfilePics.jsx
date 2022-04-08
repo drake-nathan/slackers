@@ -10,7 +10,6 @@ function ProfilePics({ pics, showPics, getPics }) {
   // This is to allow closing by clicking anywhere outside the modal
   useEffect(() => {
     const closeDropdown = (e) => {
-      console.log(e);
       if (e.path[1].localName !== 'button') {
         setModal1(false);
       }

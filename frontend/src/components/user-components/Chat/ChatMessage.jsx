@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const ChatMessage = ({ text, name, timestamp, image }) => {
   const date = new Date(timestamp);
@@ -7,31 +7,40 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
   date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
   const offset = -480;
   const estDate = new Date(date.getTime() + offset * 60 * 1000);
-  const timeString = estDate.toLocaleString('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
+  const timeString = estDate.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
     hour12: true,
   });
 
+  //Get today's date to compare with other dates
+  const todayDate = new Date().toDateString();
+  const todayArray = todayDate.split(' ')
+  const dateStringArray = dateString.split(' ');
+
+  let dateForShow = dateString;
+
+  if(todayArray[1] === dateStringArray[1] && todayArray[2] === dateStringArray[2] && todayArray[3] === dateStringArray[3]) {
+    dateForShow = "Today";
+  };
+
   return (
-    <OuterContainer>
-    <Container>
-      <UserAvatar>
-        <img src={image} alt="avatar" />
-      </UserAvatar>
-      <MessageContent>
-        <Name>
-          {name} 
-          <TimeSpan>{timeString}</TimeSpan>
-        </Name>
-        <Text>{text}</Text>
-      </MessageContent>
-    </Container>
-    <HorizontalRule />
-    <DateSpan>
-          {dateString} 
-        </DateSpan>
-        </OuterContainer>
+<OuterContainer>
+<HorizontalRule />
+       <DateSpan>{dateForShow}</DateSpan>
+<Container>
+  <UserAvatar>
+    <img src={image} alt='avatar' />
+  </UserAvatar>
+  <MessageContent>
+    <Name>
+      {name}
+      <TimeSpan>{timeString}</TimeSpan>
+    </Name>
+    <Text>{text}</Text>
+  </MessageContent>
+</Container>
+</OuterContainer>
   );
 
   // return (
@@ -70,12 +79,12 @@ const Container = styled.div`
 
 const OuterContainer = styled.div`
   width: 100%;
-`
+`;
 
 const HorizontalRule = styled.hr`
   width: 90%;
   margin: 2.4rem;
-`
+`;
 const TimeSpan = styled.span`
   font-size: 0.8rem;
   font-weight: 400;
@@ -90,12 +99,12 @@ const DateSpan = styled.p`
   width: 200px;
   margin: 0 auto;
   margin-top: -3.1rem;
-`
+`;
 const UserAvatar = styled.div`
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  border:none;
+  border-radius: 10px;
+  border: none;
   overflow: hidden;
   background-color: #e9eff6;
   // border: 1px solid;
