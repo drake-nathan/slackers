@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import AddBox from '@material-ui/icons/AddBox';
 import AddIcon from '@material-ui/icons/Add';
+import GlobalStyles from '../../globalStyles';
 
 import { getNonConvoUsers, addChannelUser } from '../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
@@ -59,6 +60,19 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
     setLeaveModal(!leaveModal);
   };
 
+  // This is to allow closing by clicking anywhere outside the modal
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      if (e.path[0].localName !== 'button') {
+        setLeaveModal(false);
+      }
+    };
+    document.body.addEventListener('click', closeDropdown);
+    return () => {
+      document.body.removeEventListener('click', closeDropdown);
+    };
+  }, []);
+
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <Imgs src={user.image_url} alt="user" />
@@ -71,6 +85,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 
   return (
     <ButtonDiv>
+      <GlobalStyles />
       <Button onClick={handleLeaveClick}>Leave</Button>
       <Button onClick={handleAddUserClick}>
         <AddIcon /> Users
@@ -89,20 +104,21 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
       {leaveModal && (
         <LeaveModal>
           <AddUserTitle>Are you sure?</AddUserTitle>
-          <button
-            onClick={() => setLeaveModal(!leaveModal)}
-            type="button"
-            className="btn btn-danger btn-sm"
-          >
-            No
-          </button>
-          <button
+          <Text>Leaving a channel may be permanent.</Text>
+          <LeaveBtn
             onClick={() => handleLeaveChannel()}
             type="button"
             className="btn btn-danger btn-sm"
           >
-            Yes
-          </button>
+            Leave Channel
+          </LeaveBtn>
+          <CancelBtn
+            onClick={() => setLeaveModal(!leaveModal)}
+            type="button"
+            className="btn btn-danger btn-sm"
+          >
+            CANCEL
+          </CancelBtn>
         </LeaveModal>
       )}
     </ButtonDiv>
@@ -133,27 +149,30 @@ const EmptyModal = styled.div`
   right: 80px;
   box-sizing: border-box;
   border-radius: 20px;
-  height: 100px;
-  overflow-y: auto;
+  height: 200px;
 `;
 
 const LeaveModal = styled.div`
   background-color: #1e1926;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   padding: 2rem 1rem;
   top: 100px;
   right: 100px;
   box-sizing: border-box;
   border-radius: 20px;
-  height: 200px;
-  overflow-y: auto;
+  height: 250px;
 `;
 
 const AddUserTitle = styled.div`
   color: white;
   align-items: center;
-  font-size: 30px;
+  font-size: 1.8rem;
   text-align: center;
+  margin-top: 1.4rem;
 `;
 
 const ButtonDiv = styled.div`
@@ -169,7 +188,7 @@ const Button = styled.button`
   width: 80px;
   height: 32px;
   display: flex;
-  font-size: 13px;
+  font-size: 1rem;
   font-weight: 500;
   align-items: center;
   border: none;
@@ -180,4 +199,57 @@ const Button = styled.button`
   &:hover {
     background-color: #d4838a;
   }
+`;
+
+const LeaveBtn = styled.button`
+  color: white;
+  background: #0063b2;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  width: 60%;
+  height: 32px;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  align-items: center;
+  border: none;
+  justify-content: center;
+  cursor: pointer;
+  transform: 0.4s ease-out;
+  &:hover {
+    border: 1px solid white;
+    border-offset: 10px;
+  }
+`;
+
+const CancelBtn = styled.button`
+  color: white;
+  background: red;
+  border-radius: 10px;
+  letter-spacing: 0.3px;
+  width: 60%;
+  height: 35px;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  font-size: 1rem;
+  font-weight: 700;
+  align-items: center;
+  border: none;
+  justify-content: center;
+  margin-bottom: 1.4rem;
+  cursor: pointer;
+  transform: 0.4s ease-out;
+  &:hover {
+    border: 1px solid white;
+  }
+`;
+
+const Text = styled.p`
+  color: white;
+  font-size: 1rem;
+  word-wrap: wrap;
 `;
