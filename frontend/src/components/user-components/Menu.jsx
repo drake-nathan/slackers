@@ -3,10 +3,18 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import ReactDom from 'react-dom';
 import { useAuthDispatch, logout } from '../../context';
+import GlobalStyles from '../../globalStyles';
 
-function Menu({ setAway }) {
+function Menu({ setAway, setShowModal }) {
   const dispatch = useAuthDispatch();
   const history = useHistory();
+
+  const modalRef = useRef();
+  const closeModal = (e) => {
+    if (e.target === modalRef.current) {
+      setShowModal(false);
+    }
+  };
 
   const username =
     JSON.parse(localStorage.getItem('currentUser')).user.name || '';
@@ -27,6 +35,7 @@ function Menu({ setAway }) {
   return ReactDom.createPortal(
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <Backdrop>
+      <GlobalStyles />
       <Container>
         <Name>{username}</Name>
         <BtnAway onClick={handleAway}>Set as away</BtnAway>
@@ -75,11 +84,11 @@ const Button = styled.button`
   margin-bottom: 1rem;
   color: white;
   font-weight: 600;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
   text-align: center;
   display: flex;
   justify-content: center;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   width: 90%;
   padding: 0.6rem 3.5rem;
   border-radius: 10px;
@@ -96,9 +105,8 @@ const Button = styled.button`
   }
 `;
 
-const Name = styled.h1`
-  font-size: 1rem;
-  font-weight: bold;
+const Name = styled.p`
+  font-weight: 700;
   color: white;
   padding: 1rem;
   text-align: center;
@@ -109,7 +117,6 @@ const Name = styled.h1`
 const BtnAway = styled.button`
   color: white;
   font-weight: 600;
-  font-size: 0.8rem;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -134,13 +141,12 @@ const BtnAway = styled.button`
 const BtnActive = styled.button`
   color: white;
   font-weight: 600;
-  font-size: 0.8rem;
   text-align: center;
   display: flex;
   justify-content: center;
   letter-spacing: 0.5px;
   width: 90%;
-  padding: 0.6rem 3.5rem;
+  padding: 0.6rem 2rem;
   margin-top: 2rem;
   border-radius: 10px;
   background: transparent;

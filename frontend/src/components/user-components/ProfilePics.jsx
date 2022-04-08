@@ -7,17 +7,26 @@ function ProfilePics({ pics, showPics, getPics }) {
   const { conversationId } = useParams();
   const [modal1, setModal1] = useState(false);
 
+  // This is to allow closing by clicking anywhere outside the modal
   useEffect(() => {
-    setModal1(false);
-  }, [conversationId]);
+    const closeDropdown = (e) => {
+      if (e.path[1].className !== 'sc-ehmTmK gRppqb') {
+        setModal1(false);
+      }
+    };
+    document.body.addEventListener('click', closeDropdown);
+    return () => {
+      document.body.removeEventListener('click', closeDropdown);
+    };
+  }, []);
 
   useEffect(() => {
     let cancel = false;
+    setModal1(false);
     getPics().then(() => {
       // eslint-disable-next-line no-useless-return
       if (cancel) return;
     });
-
     return () => {
       cancel = true;
     };

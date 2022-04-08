@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Menu from './Menu';
 import logoImg from '../../images/S.png';
@@ -6,6 +6,18 @@ import logoImg from '../../images/S.png';
 const Header = () => {
   const [menu, setMenu] = useState(false);
   const [away, setAway] = useState(false);
+
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      if (e.path[0].localName !== 'img') {
+        setMenu(false);
+      }
+    };
+    document.body.addEventListener('click', closeDropdown);
+    return () => {
+      document.body.removeEventListener('click', closeDropdown);
+    };
+  }, []);
 
   const handleLogout = () => {
     setMenu(!menu);
