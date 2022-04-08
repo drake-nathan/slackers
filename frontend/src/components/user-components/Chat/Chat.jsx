@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import ChatInput from './ChatInput';
-import ChatMessage from './ChatMessage';
+import ChatMessage, { HorizontalRule, DateSpan } from './ChatMessage';
 import ProfilePics from './ProfilePics';
 import ChatHeaderButtons from './ChatHeaderButtons';
 
@@ -156,6 +156,18 @@ function Chat({ getChannels, getDms, addDmEvent }) {
     }
   };
 
+  const renderFirstDate = () => {
+    let dateToUse = null;
+    if (messages.length) dateToUse = messages[0].createddate;
+    const dateString = new Date(dateToUse).toDateString();
+    return (
+      <>
+        <HorizontalRule />
+        <DateSpan>{dateToUse ? dateString : 'No Messages'}</DateSpan>
+      </>
+    );
+  };
+
   return (
     <Container>
       <ChatHeader>
@@ -169,6 +181,7 @@ function Chat({ getChannels, getDms, addDmEvent }) {
         />
       </ChatHeader>
       <MessageContainer>
+        {renderFirstDate()}
         {messages.length > 0 &&
           messages.map((msg, i) => {
             const prevIndex = i ? i - 1 : i;

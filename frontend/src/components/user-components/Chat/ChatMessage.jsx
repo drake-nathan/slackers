@@ -93,7 +93,7 @@ const OuterContainer = styled.div`
   width: 100%;
 `;
 
-const HorizontalRule = styled.hr`
+export const HorizontalRule = styled.hr`
   width: 90%;
   margin: 2.4rem;
 `;
@@ -103,7 +103,7 @@ const TimeSpan = styled.span`
   margin-left: 1.4rem;
 `;
 
-const DateSpan = styled.p`
+export const DateSpan = styled.p`
   text-align: center;
   border: 1px solid lightgrey;
   background-color: white;
