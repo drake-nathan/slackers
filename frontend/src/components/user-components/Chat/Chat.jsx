@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import ChatInput from './ChatInput';
-import ChatMessage from './ChatMessage';
+import ChatMessage, { HorizontalRule, DateSpan } from './ChatMessage';
 import ProfilePics from './ProfilePics';
 import ChatHeaderButtons from './ChatHeaderButtons';
 
@@ -21,7 +21,6 @@ function Chat({ getChannels }) {
   const [socket, setSocket] = useState(null);
   const [pics, setPics] = useState([]);
   const [showPics, setShowPics] = useState([]);
-  const [firstDate, setFirstDate] = useState(null);
 
   const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
@@ -144,6 +143,18 @@ function Chat({ getChannels }) {
     }
   };
 
+  const renderFirstDate = () => {
+    let dateToUse = null;
+    if (messages.length) dateToUse = messages[0].createddate;
+    const dateString = new Date(dateToUse).toDateString();
+    return (
+      <>
+        <HorizontalRule />
+        <DateSpan>{dateToUse ? dateString : 'No Messages'}</DateSpan>
+      </>
+    );
+  };
+
   return (
     <Container>
       <ChatHeader>
@@ -152,20 +163,18 @@ function Chat({ getChannels }) {
         <ChatHeaderButtons getPics={getPics} getChannels={getChannels} />
       </ChatHeader>
       <MessageContainer>
-        {firstDate}
+        {renderFirstDate()}
         {messages.length > 0 &&
           messages.map((msg, i) => {
             const prevIndex = i ? i - 1 : i;
             return (
               <ChatMessage
                 key={i}
-                index={i}
                 text={msg.text}
                 name={msg.name}
                 timestamp={msg.createddate}
                 lastMsgTimestamp={messages[prevIndex].createddate}
                 image={msg.image_url}
-                setFirstDate={setFirstDate}
               />
             );
           })}

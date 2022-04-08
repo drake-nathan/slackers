@@ -1,15 +1,7 @@
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const ChatMessage = ({
-  text,
-  name,
-  timestamp,
-  lastMsgTimestamp,
-  image,
-  index,
-  setFirstDate,
-}) => {
+const ChatMessage = ({ text, name, timestamp, lastMsgTimestamp, image }) => {
   const date = new Date(timestamp);
   const lastMsgDate = new Date(lastMsgTimestamp);
   const dateString = new Date(timestamp).toDateString();
@@ -38,15 +30,6 @@ const ChatMessage = ({
   }
 
   const isNewDay = date.getDay() > lastMsgDate.getDay();
-
-  if (index === 0) {
-    setFirstDate(
-      <>
-        <HorizontalRule />
-        <DateSpan>{dateForShow}</DateSpan>
-      </>
-    );
-  }
 
   return (
     <OuterContainer>
@@ -95,8 +78,6 @@ ChatMessage.propTypes = {
   timestamp: PropTypes.string,
   lastMsgTimestamp: PropTypes.string,
   image: PropTypes.string,
-  index: PropTypes.number,
-  setFirstDate: PropTypes.func,
 };
 
 export default ChatMessage;
@@ -112,7 +93,7 @@ const OuterContainer = styled.div`
   width: 100%;
 `;
 
-const HorizontalRule = styled.hr`
+export const HorizontalRule = styled.hr`
   width: 90%;
   margin: 2.4rem;
 `;
@@ -122,7 +103,7 @@ const TimeSpan = styled.span`
   margin-left: 1.4rem;
 `;
 
-const DateSpan = styled.p`
+export const DateSpan = styled.p`
   text-align: center;
   border: 1px solid lightgrey;
   background-color: white;
