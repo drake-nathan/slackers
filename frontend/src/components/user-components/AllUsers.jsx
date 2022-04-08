@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { getAllUsers } from '../../context/actions';
 import Header from './Header/Header';
 
+// eslint-disable-next-line react/prop-types
 const AllUsers = () => {
   const [allUsers, setAllUsers] = useState([]);
   const history = useHistory();
@@ -19,16 +20,13 @@ const AllUsers = () => {
       <HeaderContainer>
         <Header />
       </HeaderContainer>
-      <WorkSpaceContainer>
-        <Button onClick={goBack}>Back</Button>
-      </WorkSpaceContainer>
+      <Button onClick={goBack}>Back</Button>
       <PeopleContainer>
         {allUsers.map((user, index) => (
           <UserCard key={index}>
             <img src={user.image_url} alt="user" />
             <Name>{user.name}</Name>
             <span>
-              <AddToChannel>Add To Channel</AddToChannel>
               <SendDm>Send Dm</SendDm>
             </span>
           </UserCard>
