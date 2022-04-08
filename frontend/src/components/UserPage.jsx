@@ -6,6 +6,7 @@ import axios from 'axios';
 import Header from './user-components/Header/Header';
 import Sidebar from './user-components/Sidebar/Sidebar';
 import Chat from './user-components/Chat/Chat';
+import AllUsers from './user-components/AllUsers';
 
 function UserPage() {
   const history = useHistory();
