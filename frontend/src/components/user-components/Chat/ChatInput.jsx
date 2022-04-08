@@ -11,6 +11,12 @@ const ChatInput = ({ socket }) => {
   const submitMessage = (e) => {
     e.preventDefault();
 
+    if (!input) return;
+    if (input.trim().length === 0) {
+      setInput('');
+      return;
+    }
+
     try {
       socket.send(
         JSON.parse(localStorage.getItem('currentUser')).user.user_id,
