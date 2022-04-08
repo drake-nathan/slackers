@@ -96,6 +96,9 @@ io.on('connection', (socket) => {
       }
     });
   });
+  socket.on('add_to_channel', (conversationId, userId) => {
+    io.emit('user_added_to_channel', userId);
+  });
   socket.on('join_channel', (conversationId) => {
     if (!socket.rooms.has(conversationId)) {
       socket.join(conversationId);

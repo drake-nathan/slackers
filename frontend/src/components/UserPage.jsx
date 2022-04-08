@@ -75,7 +75,7 @@ function UserPage() {
         />
         <Switch>
           <Route path="/user/:conversationId">
-            <Chat getChannels={getChannels} />
+            <Chat getChannels={getChannels} getDms={getDms} />
           </Route>
         </Switch>
       </Main>

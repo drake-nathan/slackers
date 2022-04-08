@@ -10,7 +10,7 @@ import GlobalStyles from '../../../globalStyles';
 import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
-const ChatHeaderButtons = ({ getPics, getChannels }) => {
+const ChatHeaderButtons = ({ getPics, getChannels, socket }) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
@@ -49,6 +49,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 
   const handleNonUserClick = (userId) => {
     addChannelUser(conversationId, userId);
+    socket.emit('add_to_channel', conversationId, userId);
     getNonConvoUsers(conversationId).then((res) => {
       setNonUsers(res);
       getPics();
@@ -142,6 +143,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 ChatHeaderButtons.propTypes = {
   getPics: PropTypes.func,
   getChannels: PropTypes.func,
+  socket: PropTypes.object,
 };
 
 export default ChatHeaderButtons;
