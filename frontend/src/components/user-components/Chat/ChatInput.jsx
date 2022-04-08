@@ -52,7 +52,7 @@ export default ChatInput;
 const Container = styled.div`
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 24px;
+  margin-bottom: -40px;
 `;
 
 const InputContainer = styled.div`
