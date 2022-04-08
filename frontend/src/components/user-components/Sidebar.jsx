@@ -36,78 +36,83 @@ const Sidebar = ({ dms, setDms, channels, setChannels }) => {
 
   return (
     <Container>
-      <WorkSpaceContainer>
-        <Name>
-          <h2>
-            <strong>Parsity Students</strong>
-          </h2>
-        </Name>
-      </WorkSpaceContainer>
-      <WorkSpaceContainer>
-        <h3>
-          <strong>
-            <a href="/people">
-              <PeopleIcon style={{ marginRight: '4px' }} /> People
-            </a>
-          </strong>
-        </h3>
-      </WorkSpaceContainer>
-      <ChannelsContainer>
-        {showModal ? (
-          <Modal
-            setShowModal={setShowModal}
-            setChannels={setChannels}
-            channels={channels}
-          />
-        ) : null}
+      <InnerContainer>
         <WorkSpaceContainer>
-          <Chat style={{ marginRight: '8px' }} />
-          <h3>
-            <strong>Channels</strong>
-          </h3>
-          <AddButton>
-            <AddIcon style={{ marginLeft: '-158%' }} onClick={handleAddClick} />
-          </AddButton>
+          <Name>
+            <h2>
+              <strong>Parsity Students</strong>
+            </h2>
+          </Name>
         </WorkSpaceContainer>
-        <ChannelsList>
-          {channels.map((channel, i) => (
-            <Channel
-              onClick={() => handleChannelClick(channel)}
-              tabIndex={1}
-              key={i}
-            >
-              # {`${channel.name}`}
-            </Channel>
-          ))}
-        </ChannelsList>
-        {showDmModal ? (
-          <AddDmModal
-            setShowDmModal={setShowDmModal}
-            setDms={setDms}
-            dms={dms}
-          />
-        ) : null}
-        <ChannelsList>
-          {dms.map((dm, i) => (
-            <Channel
-              onClick={() => handleChannelClick(dm)}
-              tabIndex={1}
-              key={i}
-            >
-              # {dm.name}
-            </Channel>
-          ))}
-        </ChannelsList>
-        <WorkSpaceContainerBottom>
-          <Send style={{ marginRight: '8px' }} />
+        <WorkSpaceContainer>
           <h3>
-            <strong>DMs</strong>
+            <strong>
+              <a href="/people">
+                <PeopleIcon style={{ marginRight: '4px' }} /> People
+              </a>
+            </strong>
           </h3>
-          <AddButton onClick={handleAddDmClick}>
-            <AddIcon />
-          </AddButton>
-        </WorkSpaceContainerBottom>
-      </ChannelsContainer>
+        </WorkSpaceContainer>
+        <ChannelsContainer>
+          {showModal ? (
+            <Modal
+              setShowModal={setShowModal}
+              setChannels={setChannels}
+              channels={channels}
+            />
+          ) : null}
+          <WorkSpaceContainer>
+            <Chat style={{ marginRight: '8px' }} />
+            <h3>
+              <strong>Channels</strong>
+            </h3>
+            <AddButton>
+              <AddIcon
+                style={{ marginLeft: '-158%' }}
+                onClick={handleAddClick}
+              />
+            </AddButton>
+          </WorkSpaceContainer>
+          <ChannelsList>
+            {channels.map((channel, i) => (
+              <Channel
+                onClick={() => handleChannelClick(channel)}
+                tabIndex={1}
+                key={i}
+              >
+                # {`${channel.name}`}
+              </Channel>
+            ))}
+          </ChannelsList>
+          {showDmModal ? (
+            <AddDmModal
+              setShowDmModal={setShowDmModal}
+              setDms={setDms}
+              dms={dms}
+            />
+          ) : null}
+          <ChannelsList>
+            {dms.map((dm, i) => (
+              <Channel
+                onClick={() => handleChannelClick(dm)}
+                tabIndex={1}
+                key={i}
+              >
+                # {dm.name}
+              </Channel>
+            ))}
+          </ChannelsList>
+          <WorkSpaceContainerBottom>
+            <Send style={{ marginRight: '8px' }} />
+            <h3>
+              <strong>DMs</strong>
+            </h3>
+            <AddButton onClick={handleAddDmClick}>
+              <AddIcon />
+            </AddButton>
+          </WorkSpaceContainerBottom>
+        </ChannelsContainer>
+      </InnerContainer>
     </Container>
   );
 };
@@ -123,6 +128,12 @@ export default Sidebar;
 
 const Container = styled.div`
   background: #0063b2;
+`;
+
+const InnerContainer = styled.div`
+  max-height: 99vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const WorkSpaceContainer = styled.div`
@@ -193,8 +204,6 @@ const NewChannelContainer = styled.div`
 const ChannelsList = styled.div`
   margin-top: 16px;
   margin-bottom: 12px;
-  max-height: 30vh;
-  overflow-y: auto;
 `;
 
 const Channel = styled.div`
