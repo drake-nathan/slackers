@@ -17,7 +17,6 @@ const ChatInput = ({ socket }) => {
         input,
         conversationId
       );
-      console.log(conversationId);
     } catch (error) {
       console.log(error);
     }

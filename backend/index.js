@@ -75,7 +75,7 @@ io.on('connection', (socket) => {
       values: [userId, conversationId, message, SQLDate()],
     };
     const userQuery = {
-      text: `SELECT name, email FROM slacker_users WHERE user_id=$1;`,
+      text: `SELECT name, email, image_url FROM slacker_users WHERE user_id=$1;`,
       values: [userId],
     };
 
