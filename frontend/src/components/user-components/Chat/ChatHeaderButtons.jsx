@@ -10,7 +10,12 @@ import GlobalStyles from '../../../globalStyles';
 import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
-const ChatHeaderButtons = ({ getPics, getChannels, socket }) => {
+const ChatHeaderButtons = ({
+  currentConversation,
+  getPics,
+  getChannels,
+  socket,
+}) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
@@ -101,10 +106,14 @@ const ChatHeaderButtons = ({ getPics, getChannels, socket }) => {
   return (
     <ButtonDiv>
       <GlobalStyles />
-      <Button onClick={handleLeaveClick}>Leave</Button>
-      <Button onClick={handleAddUserClick}>
-        <AddIcon /> Users
-      </Button>
+      {currentConversation && currentConversation.type !== 'dm' && (
+        <Button onClick={handleLeaveClick}>Leave</Button>
+      )}
+      {currentConversation && currentConversation.type !== 'dm' && (
+        <Button onClick={handleAddUserClick}>
+          <AddIcon /> Users
+        </Button>
+      )}
       {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
@@ -141,6 +150,7 @@ const ChatHeaderButtons = ({ getPics, getChannels, socket }) => {
 };
 
 ChatHeaderButtons.propTypes = {
+  currentConversation: PropTypes.object,
   getPics: PropTypes.func,
   getChannels: PropTypes.func,
   socket: PropTypes.object,

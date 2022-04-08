@@ -156,6 +156,7 @@ function Chat({ getChannels, getDms }) {
         <Channel>{getChannelStuff()}</Channel>
         <ProfilePics pics={pics} showPics={showPics} getPics={getPics} />
         <ChatHeaderButtons
+          currentConversation={currentConversation}
           getPics={getPics}
           getChannels={getChannels}
           socket={socket}
