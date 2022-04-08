@@ -13,8 +13,25 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
     hour12: true,
   });
 
+  // Get today's date to compare with other dates
+  const todayDate = new Date().toDateString();
+  const todayArray = todayDate.split(' ');
+  const dateStringArray = dateString.split(' ');
+
+  let dateForShow = dateString;
+
+  if (
+    todayArray[1] === dateStringArray[1] &&
+    todayArray[2] === dateStringArray[2] &&
+    todayArray[3] === dateStringArray[3]
+  ) {
+    dateForShow = 'Today';
+  }
+
   return (
     <OuterContainer>
+      <HorizontalRule />
+      <DateSpan>{dateForShow}</DateSpan>
       <Container>
         <UserAvatar>
           <img src={image} alt="avatar" />
@@ -27,8 +44,6 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
           <Text>{text}</Text>
         </MessageContent>
       </Container>
-      <HorizontalRule />
-      <DateSpan>{dateString}</DateSpan>
     </OuterContainer>
   );
 
@@ -92,7 +107,7 @@ const DateSpan = styled.p`
 const UserAvatar = styled.div`
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: 10px;
   border: none;
   overflow: hidden;
   background-color: #e9eff6;
