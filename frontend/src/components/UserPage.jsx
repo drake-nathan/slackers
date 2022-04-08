@@ -11,6 +11,7 @@ function UserPage() {
   const history = useHistory();
   const [channels, setChannels] = useState([]);
   const [dms, setDms] = useState([]);
+  const [addDmEvent, setAddDmEvent] = useState(null);
 
   const getChannels = async () => {
     const token = localStorage.getItem('token');
@@ -72,10 +73,15 @@ function UserPage() {
           dms={dms}
           setDms={setDms}
           setChannels={setChannels}
+          setAddDmEvent={setAddDmEvent}
         />
         <Switch>
           <Route path="/user/:conversationId">
-            <Chat getChannels={getChannels} />
+            <Chat
+              getChannels={getChannels}
+              getDms={getDms}
+              addDmEvent={addDmEvent}
+            />
           </Route>
         </Switch>
       </Main>

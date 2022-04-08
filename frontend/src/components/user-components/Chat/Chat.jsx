@@ -10,7 +10,7 @@ import ChatMessage from './ChatMessage';
 import ProfilePics from './ProfilePics';
 import ChatHeaderButtons from './ChatHeaderButtons';
 
-function Chat({ getChannels }) {
+function Chat({ getChannels, getDms, addDmEvent }) {
   const { conversationId } = useParams();
   const channelIdRef = useRef(null);
   channelIdRef.current = conversationId;
@@ -24,6 +24,7 @@ function Chat({ getChannels }) {
 
   const ROOT_URL = process.env.REACT_APP_ROOT_SERVER_URL;
 
+  const userObj = JSON.parse(localStorage.getItem('currentUser')).user;
   const token = localStorage.getItem('token');
   const headerConfig = {
     headers: { Authorization: `Bearer ${token}` },
@@ -91,10 +92,22 @@ function Chat({ getChannels }) {
           setMessages((mgs) => [...mgs, data]);
         }
       });
+      deadSocket.on('user_added_to_channel', (user) => {
+        if (userObj.user_id === user) {
+          getChannels();
+          getDms();
+        }
+      });
       deadSocket.emit('join_channel', channelIdRef.current);
       setSocket(deadSocket);
     });
   };
+
+  useEffect(() => {
+    if (socket && socket.connected && addDmEvent) {
+      socket.emit('add_to_channel', addDmEvent.dmId, addDmEvent.userId);
+    }
+  }, [addDmEvent]);
 
   useEffect(() => {
     if (socket) {
@@ -108,8 +121,8 @@ function Chat({ getChannels }) {
     const connection = io(process.env.REACT_APP_ROOT_SERVER_URL);
     socketPreConnectSetup(connection);
     return () => {
-      socket.off();
-      socket.disconnect();
+      connection.off();
+      connection.disconnect();
     };
   }, []);
 
@@ -148,7 +161,12 @@ function Chat({ getChannels }) {
       <ChatHeader>
         <Channel>{getChannelStuff()}</Channel>
         <ProfilePics pics={pics} showPics={showPics} getPics={getPics} />
-        <ChatHeaderButtons getPics={getPics} getChannels={getChannels} />
+        <ChatHeaderButtons
+          currentConversation={currentConversation}
+          getPics={getPics}
+          getChannels={getChannels}
+          socket={socket}
+        />
       </ChatHeader>
       <MessageContainer>
         {messages.length > 0 &&
@@ -178,6 +196,8 @@ function Chat({ getChannels }) {
 
 Chat.propTypes = {
   getChannels: PropTypes.func,
+  getDms: PropTypes.func,
+  addDmEvent: PropTypes.func,
 };
 
 export default Chat;

@@ -12,7 +12,12 @@ import GlobalStyles from '../../../globalStyles';
 import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
 import { Modal, List, ListItem, Imgs, Name } from './ProfilePics';
 
-const ChatHeaderButtons = ({ getPics, getChannels }) => {
+const ChatHeaderButtons = ({
+  currentConversation,
+  getPics,
+  getChannels,
+  socket,
+}) => {
   const { conversationId } = useParams();
   const [nonUsers, setNonUsers] = useState([]);
   const [modal2, setModal2] = useState(false);
@@ -51,6 +56,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 
   const handleNonUserClick = (userId) => {
     addChannelUser(conversationId, userId);
+    socket.emit('add_to_channel', conversationId, userId);
     getNonConvoUsers(conversationId).then((res) => {
       setNonUsers(res);
       getPics();
@@ -102,12 +108,16 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   return (
     <ButtonDiv>
       <GlobalStyles />
-      <Button title="Add People to Channel" onClick={handleAddUserClick}>
-        <AddIcon /> <PeopleIcon />
-      </Button>
-      <Button title="Leave Channel" onClick={handleLeaveClick}>
-        <ExitToAppIcon />
-      </Button>
+      {currentConversation && currentConversation.type && (
+        <Button title="Add People to Channel" onClick={handleAddUserClick}>
+          <AddIcon /> <PeopleIcon />
+        </Button>
+      )}
+      {currentConversation && currentConversation.type && (
+        <Button title="Leave Channel" onClick={handleLeaveClick}>
+          <ExitToAppIcon />
+        </Button>
+      )}
       {modal2 && nonUsers.length > 0 && (
         <Modal>
           <AddUserTitle>Add Users</AddUserTitle>
@@ -144,8 +154,10 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
 };
 
 ChatHeaderButtons.propTypes = {
+  currentConversation: PropTypes.object,
   getPics: PropTypes.func,
   getChannels: PropTypes.func,
+  socket: PropTypes.object,
 };
 
 export default ChatHeaderButtons;
