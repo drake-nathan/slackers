@@ -60,7 +60,7 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
     setLeaveModal(!leaveModal);
   };
 
-  // This is to allow closing by clicking anywhere outside the modal
+  // This is to allow closing of the Leave Btn by clicking anywhere outside the modal
   useEffect(() => {
     const closeDropdown = (e) => {
       if (e.path[0].localName !== 'button') {
@@ -72,6 +72,20 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
       document.body.removeEventListener('click', closeDropdown);
     };
   }, []);
+
+    // This is to allow closing of the Add User Btn by clicking anywhere outside the modal. I know repetitive code - ugh!
+    useEffect(() => {
+      const closeDropdown = (e) => {
+        console.log(e)
+        if (e.path[0].localName !== 'button') {
+          setModal2(false);
+        }
+      };
+      document.body.addEventListener('click', closeDropdown);
+      return () => {
+        document.body.removeEventListener('click', closeDropdown);
+      };
+    }, []);
 
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
@@ -110,14 +124,14 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
           <LeaveBtn
             onClick={handleLeaveChannel}
             type="button"
-            className="btn btn-danger btn-sm"
+            // className="btn btn-danger btn-sm"
           >
             Leave Channel
           </LeaveBtn>
           <CancelBtn
             onClick={() => setLeaveModal(!leaveModal)}
             type="button"
-            className="btn btn-danger btn-sm"
+            // className="btn btn-danger btn-sm"
           >
             CANCEL
           </CancelBtn>
