@@ -11,13 +11,18 @@ const ChatInput = ({ socket }) => {
   const submitMessage = (e) => {
     e.preventDefault();
 
+    if (!input) return;
+    if (input.trim().length === 0) {
+      setInput('');
+      return;
+    }
+
     try {
       socket.send(
         JSON.parse(localStorage.getItem('currentUser')).user.user_id,
         input,
         conversationId
       );
-      console.log(conversationId);
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +57,7 @@ export default ChatInput;
 const Container = styled.div`
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 24px;
+  margin-bottom: -40px;
 `;
 
 const InputContainer = styled.div`

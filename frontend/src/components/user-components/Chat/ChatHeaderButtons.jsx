@@ -5,6 +5,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import AddBox from '@material-ui/icons/AddBox';
 import AddIcon from '@material-ui/icons/Add';
+import PeopleIcon from '@material-ui/icons/People';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GlobalStyles from '../../../globalStyles';
 
 import { getNonConvoUsers, addChannelUser } from '../../../context/actions';
@@ -26,7 +28,6 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const handleAddUserClick = async () => {
     getNonConvoUsers(conversationId).then((res) => setNonUsers(res));
     setModal2(!modal2);
-    console.log(nonUsers);
   };
 
   const handleLeaveChannel = async () => {
@@ -89,11 +90,11 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   const nonUserMap = nonUsers.map((user, i) => (
     <ListItem key={i} userId={user.user_id}>
       <InnerRow>
-      <Imgs src={user.image_url} alt="user" />
-      <Name>{user.name}</Name>
-      <AddButton>
-        <AddBox onClick={() => handleNonUserClick(user.user_id)} />
-      </AddButton>
+        <Imgs src={user.image_url} alt="user" />
+        <Name>{user.name}</Name>
+        <AddButton>
+          <AddBox onClick={() => handleNonUserClick(user.user_id)} />
+        </AddButton>
       </InnerRow>
     </ListItem>
   ));
@@ -101,9 +102,11 @@ const ChatHeaderButtons = ({ getPics, getChannels }) => {
   return (
     <ButtonDiv>
       <GlobalStyles />
-      <Button onClick={handleLeaveClick}>Leave</Button>
-      <Button onClick={handleAddUserClick}>
-        <AddIcon /> Users
+      <Button title="Add People to Channel" onClick={handleAddUserClick}>
+        <AddIcon /> <PeopleIcon />
+      </Button>
+      <Button title="Leave Channel" onClick={handleLeaveClick}>
+        <ExitToAppIcon />
       </Button>
       {modal2 && nonUsers.length > 0 && (
         <Modal>
@@ -146,7 +149,6 @@ ChatHeaderButtons.propTypes = {
 };
 
 export default ChatHeaderButtons;
-
 
 const InnerRow = styled.div`
   width: 100%;
@@ -205,15 +207,17 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-right: 25px;
 `;
 
 const Button = styled.button`
   color: white;
   background: #f7969e;
   border-radius: 4px;
-  width: 80px;
+  width: 60px;
   height: 32px;
   display: flex;
+  padding: 2px;
   font-size: 1rem;
   font-weight: 500;
   align-items: center;

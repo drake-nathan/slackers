@@ -13,13 +13,20 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
     hour12: true,
   });
 
+<<<<<<< HEAD
   //Get today's date to compare with other dates
   const todayDate = new Date().toDateString();
   const todayArray = todayDate.split(' ')
+=======
+  // Get today's date to compare with other dates
+  const todayDate = new Date().toDateString();
+  const todayArray = todayDate.split(' ');
+>>>>>>> 6db6779eb5213c90d39415a89ee0b297784bff3d
   const dateStringArray = dateString.split(' ');
 
   let dateForShow = dateString;
 
+<<<<<<< HEAD
   if(todayArray[1] === dateStringArray[1] && todayArray[2] === dateStringArray[2] && todayArray[3] === dateStringArray[3]) {
     dateForShow = "Today";
   };
@@ -41,6 +48,33 @@ const ChatMessage = ({ text, name, timestamp, image }) => {
   </MessageContent>
 </Container>
 </OuterContainer>
+=======
+  if (
+    todayArray[1] === dateStringArray[1] &&
+    todayArray[2] === dateStringArray[2] &&
+    todayArray[3] === dateStringArray[3]
+  ) {
+    dateForShow = 'Today';
+  }
+
+  return (
+    <OuterContainer>
+      <HorizontalRule />
+      <DateSpan>{dateForShow}</DateSpan>
+      <Container>
+        <UserAvatar>
+          <img src={image} alt="avatar" />
+        </UserAvatar>
+        <MessageContent>
+          <Name>
+            {name}
+            <TimeSpan>{timeString}</TimeSpan>
+          </Name>
+          <Text>{text}</Text>
+        </MessageContent>
+      </Container>
+    </OuterContainer>
+>>>>>>> 6db6779eb5213c90d39415a89ee0b297784bff3d
   );
 
   // return (
