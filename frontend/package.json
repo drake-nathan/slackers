@@ -19,7 +19,7 @@
     "date-fns-tz": "^1.3.3",
     "dayjs": "^1.11.0",
     "hamburger-react": "^2.4.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.2.2",
