@@ -53,23 +53,6 @@ const ChatMessage = ({ text, name, timestamp, lastMsgTimestamp, image }) => {
       </Container>
     </OuterContainer>
   );
-
-  // return (
-  //   <Container>
-  //     <UserAvatar>
-  //       <img src={image} alt="avatar" />
-  //     </UserAvatar>
-  //     <MessageContent>
-  //       <Name>
-  //         {name}
-  //         <span>
-  //           {dateString} {timeString}
-  //         </span>
-  //       </Name>
-  //       <Text>{text}</Text>
-  //     </MessageContent>
-  //   </Container>
-  // );
 };
 
 ChatMessage.propTypes = {

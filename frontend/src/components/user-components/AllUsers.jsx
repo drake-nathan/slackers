@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { getAllUsers } from '../../context/actions';
+import Header from './Header/Header';
 
 const AllUsers = () => {
   const [allUsers, setAllUsers] = useState([]);
@@ -17,34 +18,33 @@ const AllUsers = () => {
     },
   };
 
-  const getDms = async () => {
-    const token = localStorage.getItem('token');
+  // const getDms = async () => {
+  //   const token = localStorage.getItem('token');
 
-    try {
-      const request = axios.get(
-        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/dms`,
-        headerConfig
-      );
+  //   try {
+  //     const request = axios.get(
+  //       `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/dms`,
+  //       headerConfig
+  //     );
 
-      const { data } = await request;
-      if (data) {
-        setDms(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     const { data } = await request;
+  //     if (data) {
+  //       setDms(data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     getAllUsers().then((res) => {
-      console.log('users');
       setAllUsers(res);
     });
 
-    getDms().then((res) => {
-      console.log(res);
-      // setDms(res)
-    });
+    // getDms().then((res) => {
+    //   console.log(res);
+    //   // setDms(res)
+    // });
   }, []);
 
   const history = useHistory();
@@ -62,7 +62,6 @@ const AllUsers = () => {
 
       const { data, status } = await dmRequest;
       if (status === 200) {
-        // history.push('/user')
         history.push(`/user/${data.conversation_id}`);
       } else {
         return null;
@@ -90,26 +89,36 @@ const AllUsers = () => {
     }
   };
 
+  const goBack = () => {
+    history.push(`/user`);
+  };
+
   return (
-    <Container>
-      {allUsers.map((user, index) => (
-        <UserCard key={index}>
-          <img src={user.image_url} alt="user" />
-          <Name>{user.name}</Name>
-          <span>
-            <SendDm onClick={() => handleAddDmClick(user.user_id)}>
-              Send Dm
-            </SendDm>
-          </span>
-        </UserCard>
-      ))}
-    </Container>
+    <>
+      <HeaderContainer>
+        <Header />
+      </HeaderContainer>
+      <Button onClick={goBack}>Back</Button>
+      <PeopleContainer>
+        {allUsers.map((user, index) => (
+          <UserCard key={index}>
+            <img src={user.image_url} alt="user" />
+            <Name>{user.name}</Name>
+            <span>
+              <SendDm onClick={() => handleAddDmClick(user.user_id)}>
+                Send Dm
+              </SendDm>
+            </span>
+          </UserCard>
+        ))}
+      </PeopleContainer>
+    </>
   );
 };
 
 export default AllUsers;
 
-const Container = styled.div`
+const PeopleContainer = styled.div`
   display: grid;
   gap: 2.5rem;
   grid-template-columns: repeat(4, 1fr);
@@ -122,7 +131,7 @@ const UserCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px;
+  margin-left: 5px;
   font-weight: 600;
   background-color: #fff;
   border-radius: 10px;
@@ -138,25 +147,37 @@ const UserCard = styled.div`
   }
 `;
 
+const HeaderContainer = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-rows: 38px minmax(0, 1fr);
+`;
+
+const Button = styled.button`
+  color: white;
+  background: #f7969e;
+  border-radius: 4px;
+  width: 60px;
+  height: 32px;
+  display: flex;
+  padding: 2px;
+  font-size: 1rem;
+  font-weight: 500;
+  align-items: center;
+  border: none;
+  justify-content: center;
+  margin-left: 26px;
+  margin-top: 26px;
+  cursor: pointer;
+  transform: 0.4s ease-out;
+  &:hover {
+    background-color: #d4838a;
+  }
+`;
+
 const Name = styled.div`
   padding-bottom: 12px;
   padding-top: 2px;
-`;
-
-const AddToChannel = styled.button`
-  color: #f7969e;
-  background: white;
-  border-radius: 2px;
-  border-radius: 4px;
-  border: solid 1px #f7969e;
-  justify-content: center;
-  cursor: pointer;
-  margin-bottom: 12px;
-
-  &:hover {
-    background: #f7969e;
-    color: white;
-  }
 `;
 
 const SendDm = styled.button`
@@ -168,6 +189,7 @@ const SendDm = styled.button`
   justify-content: center;
   cursor: pointer;
   margin-left: 6px;
+  margin-bottom: 12px;
 
   &:hover {
     background: #f7969e;
