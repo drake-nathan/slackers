@@ -1,11 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { getAllUsers } from '../../context/actions';
 
 const AllUsers = () => {
   const [allUsers, setAllUsers] = useState([]);
+  const [dms, setDms] = useState([]);
 
-  getAllUsers().then((res) => setAllUsers(res));
+  const userInfoObj = JSON.parse(localStorage.getItem('currentUser'));
+
+  const headerConfig = {
+    headers: {
+      Authorization: `Bearer ${userInfoObj.auth_token}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const getDms = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const request = axios.get(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/dms`,
+        headerConfig
+      );
+
+      const { data } = await request;
+      if (data) {
+        setDms(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers().then((res) => {
+      console.log('users');
+      setAllUsers(res);
+    });
+
+    getDms().then((res) => {
+      console.log(res);
+      // setDms(res)
+    });
+  }, []);
+
+  const history = useHistory();
+
+  const postNewDm = async (userId) => {
+    const body = { userToDm: userId };
+
+    // update end point for adding channel
+    try {
+      const dmRequest = axios.post(
+        `${process.env.REACT_APP_ROOT_SERVER_URL}/api/me/dms`,
+        body,
+        headerConfig
+      );
+
+      const { data, status } = await dmRequest;
+      if (status === 200) {
+        // history.push('/user')
+        history.push(`/user/${data.conversation_id}`);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  };
+
+  const handleAddDmClick = (userId) => {
+    let conv = '';
+    const existingDm = dms.find((dm) => {
+      if (dm.user_id === userId) {
+        conv = dm.conversation_id;
+        return true;
+      }
+      return false;
+    });
+
+    if (existingDm) {
+      history.push(`/user/${conv}`);
+    } else {
+      postNewDm(userId);
+    }
+  };
 
   return (
     <Container>
@@ -13,6 +96,11 @@ const AllUsers = () => {
         <UserCard key={index}>
           <img src={user.image_url} alt="user" />
           <Name>{user.name}</Name>
+          <span>
+            <SendDm onClick={() => handleAddDmClick(user.user_id)}>
+              Send Dm
+            </SendDm>
+          </span>
         </UserCard>
       ))}
     </Container>
