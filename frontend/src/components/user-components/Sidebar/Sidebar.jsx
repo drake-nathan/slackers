@@ -37,13 +37,13 @@ const Sidebar = ({ dms, setDms, channels, setChannels, setAddDmEvent }) => {
   return (
     <Container>
       <InnerContainer>
-        <WorkSpaceContainer>
+        <WorkSpaceContainerTop>
           <Name>
             <h2>
               <strong>Parsity Students</strong>
             </h2>
           </Name>
-        </WorkSpaceContainer>
+        </WorkSpaceContainerTop>
         <WorkSpaceContainer>
           <h3>
             <strong>
@@ -136,6 +136,21 @@ const InnerContainer = styled.div`
   max-height: 99vh;
   overflow-y: auto;
   overflow-x: hidden;
+`;
+
+const WorkSpaceContainerTop = styled.div`
+  color: white;
+  height: 79px;
+  display: flex;
+  align-items: center;
+  padding-left: 19px;
+  justify-content: left;
+  border-bottom: 1px solid rgba(250, 250, 250, 0.4);
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
 `;
 
 const WorkSpaceContainer = styled.div`
